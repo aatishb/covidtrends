@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>COVID-19 Trends</title>
+
+  <script src="libraries/plotly.min.js"></script>
+  <script src="libraries/vue.js"></script>
+  <link rel="stylesheet" type="text/css" href="normalize.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+
+  <div id="root">
+
+    <!--
+    <div id="title">
+      <h1>COVID-19 Trends</h1>
+    </div>
+    -->
+
+    <div id="nav">
+
+      <div class="navelement">
+        <button @click="play">Play</button>
+      </div>
+
+      <div class="navelement">
+        <button @click="pause">Pause</button>
+      </div>
+
+      <div class="navelement">
+        {{dates[day - 1]}}
+      </div>
+
+      <div class="navelement" id="slidercontainer">
+        <input v-if="dates.length > 8" type="range" min="8" :max="dates.length" step="1" v-model="day" id="slider"></input>
+      </div>
+
+      <div class="navelement">
+
+        <select v-model="selectedData">
+          <option v-for="d in whichData" v-bind:value="d">
+            {{ d }}
+          </option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <div id="middle">
+
+      <div id="graph-container">
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :days="day" :selected-data="selectedData"></graph>
+      </div>
+
+      <div id="select">
+        <h2>Countries</h2>
+        <p>Countries with at least {{minCasesInCountry}} COVID-19 {{selectedData.toLowerCase()}}:</p>
+        <ul style="padding-top: 0.5rem;">
+          <li v-for="country in countries">
+            <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
+            <label :for="country">{{country}}</label>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div id="bottom">
+      <h2>What is this?</h2>
+      <p>At the moment, this is a prototype of a covid dataviz.</p>
+
+      <p>Some other words TK. </p>
+    </div>
+
+
+
+  </div>
+
+  <!-- page code -->
+  <script src="vue-definitions.js"></script>
+
+</body>
+</html>
