@@ -30,10 +30,11 @@
       </div>
 
       <div class="navelement">
-        {{dates[day - 1]}}
+        <h2>{{dates[day - 1]}}</h2>
       </div>
 
       <div class="navelement" id="slidercontainer">
+        <p>Use slider or left/right arrow key to navigate data day by day. Hover over graph for more info.</p>
         <input v-if="dates.length > 8" type="range" min="8" :max="dates.length" step="1" v-model="day" id="slider"></input>
       </div>
 

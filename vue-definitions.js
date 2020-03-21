@@ -79,7 +79,7 @@ Vue.component('graph', {
     initLayout() {
 
       this.layout = {
-        title: 'Covid Trends (' + this.dates[this.days - 1] + '): Every Dot is a Day',
+        title: 'Trajectory of COVID-19 (' + this.dates[this.days - 1] + ')',
         showlegend: false,
         xaxis: {
           title: 'Total ' + this.selectedData,
@@ -87,7 +87,7 @@ Vue.component('graph', {
           autorange: true,
         },
         yaxis: {
-          title: 'Recent ' + this.selectedData + ' (Past Week)',
+          title: 'New Weekly ' + this.selectedData,
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           autorange: true,
         },
@@ -106,14 +106,18 @@ Vue.component('graph', {
         x: e.cases,
         y: e.slope,
         name: e.country,
+        text: this.dates,
         mode: 'markers+lines',
         type: 'scatter',
+        marker: {
+          size: 2,
+          color: 'rgba(0,0,0,0.3)'
+        },
         line: {
           color: 'rgba(0,0,0,0.15)'
         },
-        marker: {
-          size: 6
-        }
+        hoverinfo:'x+y+text',
+        hovertemplate: "%{text}<br>Weekly Cases: %{y:,}<br>Total Cases:%{x:,}",
       })
       );
 
@@ -128,7 +132,9 @@ Vue.component('graph', {
         marker: {
           size: 6,
           color: 'rgba(220, 20, 20, 1)'
-        }
+        },
+        hovertemplate: "Weekly Cases: %{y:,}<br>Total Cases:%{x:,}",
+
       })
       );
 

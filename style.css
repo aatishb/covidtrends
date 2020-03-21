@@ -64,11 +64,17 @@ p {
   margin: auto;
 }
 
+.navelement > h2 {
+  margin-bottom: 0;
+  margin: auto;
+}
+
 #slidercontainer {
   flex: 7;
 }
 
 #slider {
+  padding-top: 1rem;
   width: 100%;
   min-width: 200px;
 }
