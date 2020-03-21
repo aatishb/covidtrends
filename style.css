@@ -109,6 +109,7 @@ p {
   flex: 1;
   border-left: 1px solid black;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 #select > h2 {
