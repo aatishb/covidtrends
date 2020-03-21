@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'days', 'selectedData'],
+  props: ['data', 'dates', 'days', 'selectedData', 'scale'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -9,9 +9,7 @@ Vue.component('graph', {
 
     makeGraph() {
       Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true});
-
       this.$refs.graph.on('plotly_hover', this.onHoverOn).on('plotly_unhover', this.onHoverOff);
-
       this.update();
     },
 
@@ -81,17 +79,17 @@ Vue.component('graph', {
     initLayout() {
 
       this.layout = {
-        title: 'COVID-19 Trends (' + this.dates[this.days - 1] +')',
+        title: 'Covid Trends (' + this.dates[this.days - 1] + '): Every Dot is a Day',
         showlegend: false,
         xaxis: {
-          title: 'Total '+this.selectedData,
-          type: 'log',
-          range: [1.69, 5]
+          title: 'Total ' + this.selectedData,
+          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
+          autorange: true,
         },
         yaxis: {
-          title: 'Recent '+this.selectedData+' (Past Week)',
-          type: 'log',
-          range: [1, 5]
+          title: 'Recent ' + this.selectedData + ' (Past Week)',
+          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
+          autorange: true,
         },
         hovermode: 'closest',
         font: {
@@ -105,8 +103,8 @@ Vue.component('graph', {
     initTraces() {
 
       let traces1 = this.data.map((e,i) => ({
-        x: [],
-        y: [],
+        x: e.cases,
+        y: e.slope,
         name: e.country,
         mode: 'markers+lines',
         type: 'scatter',
@@ -120,8 +118,8 @@ Vue.component('graph', {
       );
 
       let traces2 = this.data.map((e,i) => ({
-        x: [],
-        y: [],
+        x: [e.cases[e.cases.length - 1]],
+        y: [e.slope[e.slope.length - 1]],
         text: e.country,
         name: e.country,
         mode: 'markers+text',
@@ -147,6 +145,12 @@ Vue.component('graph', {
 
   watch: {
 
+    scale() {
+      this.initTraces();
+      this.initLayout();
+      this.makeGraph();
+    },
+
     days() {
       this.initLayout();
       this.update();
@@ -162,6 +166,8 @@ Vue.component('graph', {
 
   data() {
     return {
+      xrange: [],
+      yrange: [],
       traces: [],
       traceCount: [],
       traceIndices: [],
@@ -236,7 +242,7 @@ let app = new Vue({
           myData.push({
             country: country,
             cases: arr.map(e => e >= this.minCasesInCountry ? e : NaN),
-            slope: slope,
+            slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
           });
 
         }
@@ -278,6 +284,10 @@ let app = new Vue({
       this.selectedCountries = [];
     },
 
+    changeScale() {
+      this.selectedScale = (this.selectedScale + 1) % 2;
+    }
+
   },
 
   data: {
@@ -290,6 +300,10 @@ let app = new Vue({
 
     day: NaN,
 
+    scale: ['Logarithmic Scale', 'Linear Scale'],
+
+    selectedScale: 'Logarithmic Scale',
+
     minCasesInCountry: 50,
 
     dates: [],
@@ -298,7 +312,7 @@ let app = new Vue({
 
     countries: [],
 
-    selectedCountries: ['US', 'China', 'India', 'Iran', 'Italy', 'Korea, South', 'Japan', 'France', 'Canada'],
+    selectedCountries: ['US', 'China', 'India', 'Iran', 'Italy', 'Korea, South', 'Japan'],
 
   }
 

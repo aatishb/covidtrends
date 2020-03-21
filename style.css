@@ -82,8 +82,19 @@ p {
 }
 
 #graph-container {
+  position: relative;
   flex: 6;
   min-height: min-content; /* ugh */
+}
+
+#scale {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+#scale > select {
+  margin: 0.25rem;
 }
 
 #select {
@@ -105,4 +116,14 @@ p {
   padding: 1rem;
   min-height: min-content; /* ugh */
   overflow-y: scroll;
+}
+
+button {
+  padding: 0.75rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+}
+
+.navelement > button {
+  font-size: 1.25rem;
 }

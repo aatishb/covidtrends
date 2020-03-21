@@ -52,7 +52,15 @@
     <div id="middle">
 
       <div id="graph-container">
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :days="day" :selected-data="selectedData"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :days="day" :selected-data="selectedData" :scale="selectedScale"></graph>
+
+        <div id="scale">
+          <select v-model="selectedScale">
+            <option v-for="s in scale" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div id="select">
