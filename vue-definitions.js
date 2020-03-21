@@ -192,6 +192,22 @@ let app = new Vue({
     this.pullData(this.selectedData);
   },
 
+  created: function() {
+    window.addEventListener('keydown', e => {
+
+      console.log(e);
+
+      if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
+        this.day = Math.max(this.day - 1, 8);
+      }
+
+      else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
+        this.day = Math.min(this.day + 1, this.dates.length)
+      }
+    });
+  },
+
+
   watch: {
     selectedData() {
       this.pullData(this.selectedData);
@@ -303,6 +319,8 @@ let app = new Vue({
     whichData: ['Confirmed Cases', 'Deaths'],
 
     selectedData: 'Confirmed Cases',
+
+    sliderSelected: false,
 
     day: NaN,
 
