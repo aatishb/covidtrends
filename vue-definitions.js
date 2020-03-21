@@ -85,11 +85,17 @@ Vue.component('graph', {
           title: 'Total ' + this.selectedData,
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           autorange: true,
+          titlefont: {
+            color: 'rgba(255,40,40,1)'
+          },
         },
         yaxis: {
           title: 'New Weekly ' + this.selectedData,
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           autorange: true,
+          titlefont: {
+            color: 'rgba(255,40,40,1)'
+          },
         },
         hovermode: 'closest',
         font: {
