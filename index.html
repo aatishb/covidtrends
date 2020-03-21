@@ -64,6 +64,8 @@
             <label :for="country">{{country}}</label>
           </li>
         </ul>
+        <button @click="selectAll">Select All</button>
+        <button @click="deselectAll">Deselect All</button>
       </div>
 
     </div>
@@ -71,6 +73,8 @@
     <div id="bottom">
       <h2>What is this?</h2>
       <p>At the moment, this is a prototype of a covid dataviz.</p>
+
+      <p>Data Source: Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">Github</a></p>
 
       <p>Some other words TK. </p>
     </div>

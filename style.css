@@ -21,7 +21,6 @@ h1 {
 }
 
 h2 {
-  text-align:center;
   margin:0px;
   font-weight:700;
   font-size: 1.8rem;
@@ -94,6 +93,10 @@ p {
   flex: 1;
   border-left: 1px solid black;
   overflow-y: scroll;
+}
+
+#select > h2 {
+  text-align: center;
 }
 
 #bottom {

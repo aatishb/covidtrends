@@ -3,13 +3,40 @@ Vue.component('graph', {
 
   props: ['data', 'dates', 'days', 'selectedData'],
 
-  template: '<div ref="graph" style="height: 100%;"></div>',
+  template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
   methods: {
 
     makeGraph() {
       Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true});
+
+      this.$refs.graph.on('plotly_hover', this.onHoverOn).on('plotly_unhover', this.onHoverOff);
+
       this.update();
+    },
+
+    onHoverOn(data) {
+
+        let curveNumber = data.points[0].curveNumber;
+        let name = this.traces[curveNumber].name;
+
+        this.traceIndices = this.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
+
+        let update = {'line':{color: 'rgba(255,40,40,1)'}};
+
+        for (let i of this.traceIndices) {
+          Plotly.restyle(this.$refs.graph, update, [i]);
+        }
+
+    },
+
+    onHoverOff(data) {
+
+        let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
+        for (let i of this.traceIndices) {
+          Plotly.restyle(this.$refs.graph, update, [i]);
+        }
+
     },
 
     update() {
@@ -37,17 +64,17 @@ Vue.component('graph', {
 
       this.traceCount = new Array(this.traces.length).fill(0).map((e,i) => i);
 
-      let ad1 = this.data.map((e,i) => ({
+      let traces1 = this.data.map(e => ({
         x: e.cases.slice(0, this.days),
         y: e.slope.slice(0, this.days)
       }));
 
-      let ad2 = {
-        x: ad1.map(e => e.x[e.x.length - 1]),
-        y: ad1.map(e => e.y[e.y.length - 1])
-      };
+      let traces2 = this.data.map(e => ({
+        x: [e.cases[this.days - 1]],
+        y: [e.slope[this.days - 1]]
+      }));
 
-      this.animationData = [...ad1, ad2];
+      this.animationData = [...traces1, ...traces2];
 
     },
 
@@ -59,12 +86,12 @@ Vue.component('graph', {
         xaxis: {
           title: 'Total '+this.selectedData,
           type: 'log',
-          range: [1.699, 5]
+          range: [1.69, 5]
         },
         yaxis: {
           title: 'Recent '+this.selectedData+' (Past Week)',
           type: 'log',
-          range: [1.699, 5]
+          range: [1, 5]
         },
         hovermode: 'closest',
         font: {
@@ -77,32 +104,37 @@ Vue.component('graph', {
 
     initTraces() {
 
-      let myTrace = this.data.map(e => ({
+      let traces1 = this.data.map((e,i) => ({
         x: [],
         y: [],
         name: e.country,
-        mode: 'lines+text',
+        mode: 'markers+lines',
         type: 'scatter',
         line: {
           color: 'rgba(0,0,0,0.15)'
+        },
+        marker: {
+          size: 6
         }
       })
       );
 
-      myTrace.push({
+      let traces2 = this.data.map((e,i) => ({
         x: [],
         y: [],
-        text: this.data.map(e => e.country),
+        text: e.country,
+        name: e.country,
         mode: 'markers+text',
-        type: 'scatter',
+        legendgroup: i,
         textposition: 'top left',
         marker: {
-          size: 8,
+          size: 6,
           color: 'rgba(220, 20, 20, 1)'
         }
       })
+      );
 
-      this.traces = myTrace;
+      this.traces = [...traces1, ...traces2];
     }
 
   },
@@ -132,6 +164,7 @@ Vue.component('graph', {
     return {
       traces: [],
       traceCount: [],
+      traceIndices: [],
       animationData: []
     }
   }
@@ -202,7 +235,7 @@ let app = new Vue({
 
           myData.push({
             country: country,
-            cases: arr,
+            cases: arr.map(e => e >= this.minCasesInCountry ? e : NaN),
             slope: slope,
           });
 
@@ -232,11 +265,18 @@ let app = new Vue({
 
       if (this.day < this.dates.length && !this.paused) {
         this.day++;
-        setTimeout(this.increment, 50);
+        setTimeout(this.increment, 200);
       }
 
     },
 
+    selectAll() {
+      this.selectedCountries = this.countries;
+    },
+
+    deselectAll() {
+      this.selectedCountries = [];
+    },
 
   },
 
@@ -258,7 +298,7 @@ let app = new Vue({
 
     countries: [],
 
-    selectedCountries: ['US', 'China', 'India', 'Iran', 'Italy', 'France', 'Germany', 'Korea, South', 'Japan', 'Singapore', 'Spain', 'United Kingdom', 'Australia', 'Malaysia', 'Pakistan', 'Canada'],
+    selectedCountries: ['US', 'China', 'India', 'Iran', 'Italy', 'Korea, South', 'Japan', 'France', 'Canada'],
 
   }
 
