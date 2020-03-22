@@ -81,10 +81,6 @@ p > last-child {
   margin-bottom: 0;
 }
 
-#explainer > p {
-  margin-top: 1rem;
-}
-
 #content {
   display: flex;
   flex-direction: row;
