@@ -64,9 +64,21 @@ p > last-child {
 
 
 #header {
-  padding: 1rem;
   color: white;
   background-color: #30475e;
+  position: relative;
+}
+
+#explainer {
+  padding: 1rem;
+}
+
+#explainer h2 {
+  margin-bottom: 0;
+}
+
+#words {
+  margin-top: 1rem;
 }
 
 #content {
@@ -135,4 +147,12 @@ p > last-child {
 
 svg {
   fill: #fe346e;
+}
+
+#hide {
+  font-size: 1rem;
+  padding: 0.5rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

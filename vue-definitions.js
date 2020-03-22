@@ -335,6 +335,15 @@ let app = new Vue({
 
     changeScale() {
       this.selectedScale = (this.selectedScale + 1) % 2;
+    },
+
+    hide() {
+      console.log('button pressed');
+      if (this.hideSetting == 'Hide') {
+        this.hideSetting = 'Show';
+      } else {
+        this.hideSetting = 'Hide';
+      }
     }
 
   },
@@ -364,6 +373,8 @@ let app = new Vue({
     covidData: [],
 
     countries: [],
+
+    hideSetting: 'Hide',
 
     selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'Korea, South', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
 
