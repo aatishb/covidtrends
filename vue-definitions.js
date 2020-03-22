@@ -20,7 +20,7 @@ Vue.component('graph', {
 
         this.traceIndices = this.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
 
-        let update = {'line':{color: 'rgba(255,40,40,1)'}};
+        let update = {'line':{color: 'rgba(254, 52, 110,,1)'}};
 
         for (let i of this.traceIndices) {
           Plotly.restyle(this.$refs.graph, update, [i]);
@@ -86,7 +86,8 @@ Vue.component('graph', {
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           autorange: true,
           titlefont: {
-            color: 'rgba(255,40,40,1)'
+            size: 18,
+            color: 'rgba(254, 52, 110,1)'
           },
         },
         yaxis: {
@@ -94,13 +95,14 @@ Vue.component('graph', {
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           autorange: true,
           titlefont: {
-            color: 'rgba(255,40,40,1)'
+            size: 18,
+            color: 'rgba(254, 52, 110,1)'
           },
         },
         hovermode: 'closest',
         font: {
                 color: "black",
-                size: 18
+                size: 12
               },
       };
 
@@ -113,11 +115,11 @@ Vue.component('graph', {
         y: e.slope,
         name: e.country,
         text: this.dates,
-        mode: 'markers+lines',
+        mode: 'lines',
         type: 'scatter',
         marker: {
           size: 2,
-          color: 'rgba(0,0,0,0.3)'
+          color: 'rgba(0,0,0,0.15)'
         },
         line: {
           color: 'rgba(0,0,0,0.15)'
@@ -137,7 +139,7 @@ Vue.component('graph', {
         textposition: 'top left',
         marker: {
           size: 6,
-          color: 'rgba(220, 20, 20, 1)'
+          color: 'rgba(254, 52, 110, 1)'
         },
         hovertemplate: "Weekly Cases: %{y:,}<br>Total Cases:%{x:,}",
 
@@ -201,8 +203,6 @@ let app = new Vue({
   created: function() {
     window.addEventListener('keydown', e => {
 
-      console.log(e);
-
       if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
         this.day = Math.max(this.day - 1, 8);
       }
@@ -227,6 +227,16 @@ let app = new Vue({
   },
 
   methods: {
+
+    myMax() { //https://stackoverflow.com/a/12957522
+      var par = []
+      for (var i = 0; i < arguments.length; i++) {
+          if (!isNaN(arguments[i])) {
+              par.push(arguments[i]);
+          }
+      }
+      return Math.max.apply(Math, par);
+    },
 
     pullData(selectedData) {
 
@@ -276,9 +286,7 @@ let app = new Vue({
         }
       }
 
-      this.covidData = myData.filter(e => e.cases[e.cases.length - 1] >= this.minCasesInCountry)
-        .sort((a,b) => a.cases[a.cases.length - 1] < b.cases[b.cases.length - 1]);
-
+      this.covidData = myData.filter(e => this.myMax(...e.cases) >= this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
 
     },

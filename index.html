@@ -18,55 +18,60 @@
       <h1>COVID-19 Trends</h1>
     </div>
     -->
+        <div id="top">
+          <h2>What is this?</h2>
 
-    <div id="nav">
+          <p>This interactive graph charts the trajectory of COVID-19 across the globe. Use the slider or +/- keys to see daily changes. Hover over the graph for more info.</p>
 
-      <div class="navelement">
-        <button @click="play">Play</button>
-      </div>
+          <p>The horizontal axis is the total number of {{selectedData.toLowerCase()}}, the vertical axis represents the new weekly {{selectedData.toLowerCase()}}.</p>
 
-      <div class="navelement">
-        <button @click="pause">Pause</button>
-      </div>
-
-      <div class="navelement">
-        <h2>{{dates[day - 1]}}</h2>
-      </div>
-
-      <div class="navelement" id="slidercontainer">
-        <p>Use slider or -/+ keys to see daily changes. Hover over graph for more info.</p>
-        <input v-if="dates.length > 8" type="range" min="8" :max="dates.length" step="1" v-model="day" id="slider"></input>
-      </div>
-
-      <div class="navelement">
-
-        <select v-model="selectedData">
-          <option v-for="d in whichData" v-bind:value="d">
-            {{ d }}
-          </option>
-        </select>
-
-      </div>
-
-    </div>
+        </div>
 
     <div id="middle">
 
-      <div id="graph-container">
+      <div id="middle-left">
+
+
+
         <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :days="day" :selected-data="selectedData" :scale="selectedScale"></graph>
 
-        <div id="scale">
-          <select v-model="selectedScale">
-            <option v-for="s in scale" v-bind:value="s">
-              {{ s }}
-            </option>
-          </select>
+
+        <div id="nav">
+
+          <div class="navelement">
+            <button @click="play">Play</button>
+          </div>
+
+          <div class="navelement">
+            <h2>{{dates[day - 1]}}</h2>
+          </div>
+
+          <div class="navelement" id="slidercontainer">
+            <input v-if="dates.length > 8" type="range" min="8" :max="dates.length" step="1" v-model="day" id="slider"></input>
+          </div>
+
+          <div class="navelement">
+            <select v-model="selectedScale">
+              <option v-for="s in scale" v-bind:value="s">
+                {{ s }}
+              </option>
+            </select>
+          </div>
+
         </div>
+
       </div>
 
-      <div id="select">
+      <div id="middle-right">
         <h2>Countries</h2>
-        <p>Countries with at least {{minCasesInCountry}} COVID-19 {{selectedData.toLowerCase()}}:</p>
+        <p>Countries with at least {{minCasesInCountry}}
+          <select v-model="selectedData">
+            <option v-for="d in whichData" v-bind:value="d">
+              {{ d }}
+            </option>
+          </select>
+        </p>
+
         <ul style="padding-top: 0.5rem;">
           <li v-for="country in countries">
             <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
@@ -77,17 +82,13 @@
         <button @click="deselectAll">Deselect All</button>
       </div>
 
+
     </div>
 
-    <div id="bottom">
-      <h2>What is this?</h2>
-      <p>At the moment, this is a prototype of a covid dataviz.</p>
-
-      <p>Data Source: Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">Github</a></p>
-
-      <p>Some other words TK. </p>
-    </div>
-
+  <div id="bottom">
+    <h2>Credits</h2>
+          <p>Data Source: <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a></p>
+  </div>
 
 
   </div>

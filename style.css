@@ -35,10 +35,10 @@ h3 {
 
 h1, h2, h3 {
   line-height: 1.1;
-  color: '#222';
 }
 
 p {
+  padding-bottom: 0.5rem;
 }
 
 #root {
@@ -51,8 +51,59 @@ p {
   flex: 1;
 }
 
-#nav {
+
+#top {
   flex: 1;
+  padding: 1rem;
+  color: white;
+  background-color: #3A506B;
+}
+
+#middle {
+  flex: 9;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+}
+
+#middle h2 {
+  color: #fe346e;
+}
+
+#bottom {
+  flex: 1;
+  padding: 1rem;
+  color: white;
+  background-color: #3A506B;
+}
+
+#bottom a {
+  color: #FDEA9D;
+}
+
+
+#middle-left {
+  position: relative;
+  flex: 6;
+  display: flex;
+  flex-direction: column;
+}
+
+#middle-right {
+  background-color: #fcf8e8;
+  padding: 1rem;
+  min-height: min-content;
+  min-width: 10rem;
+  flex: 1;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+#middle-right > h2 {
+  text-align: center;
+}
+
+#nav {
   display: flex;
   flex-direction: row;
 }
@@ -70,7 +121,6 @@ p {
 }
 
 #slidercontainer {
-  flex: 7;
 }
 
 #slider {
@@ -78,51 +128,6 @@ p {
   min-width: 200px;
 }
 
-#middle {
-  border-top: 1px solid black;
-  flex: 9;
-  display: flex;
-  flex-direction: row;
-  overflow: auto;
-}
-
-#graph-container {
-  position: relative;
-  flex: 6;
-  min-height: min-content; /* ugh */
-}
-
-#scale {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-#scale > select {
-  margin: 0.25rem;
-}
-
-#select {
-  padding: 1rem;
-  min-height: min-content;
-  min-width: 10rem;
-  flex: 1;
-  border-left: 1px solid black;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-}
-
-#select > h2 {
-  text-align: center;
-}
-
-#bottom {
-  border-top: 1px solid black;
-  flex: 2;
-  padding: 1rem;
-  min-height: min-content; /* ugh */
-  overflow-y: scroll;
-}
 
 button {
   padding: 0.75rem;
