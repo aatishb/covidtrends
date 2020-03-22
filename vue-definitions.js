@@ -298,11 +298,11 @@ let app = new Vue({
           this.day = 7;
         }
         this.paused = false;
-        this.icon = '/icons/pause.svg';
+        this.icon = 'icons/pause.svg';
         this.increment();
       } else {
         this.paused = true;
-        this.icon = '/icons/play.svg';
+        this.icon = 'icons/play.svg';
       }
 
     },
@@ -320,7 +320,7 @@ let app = new Vue({
         }
       } else if (this.day == this.dates.length) {
         this.paused = true;
-        this.icon = '/icons/play.svg';
+        this.icon = 'icons/play.svg';
       }
 
     },
@@ -351,7 +351,7 @@ let app = new Vue({
 
     day: NaN,
 
-    icon: '/icons/play.svg',
+    icon: 'icons/play.svg',
 
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
