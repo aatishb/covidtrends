@@ -377,7 +377,7 @@ let app = new Vue({
 
     countries: [],
 
-    hideSetting: 'Hide',
+    hideSetting: 'Show',
 
     selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'Korea, South', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
 

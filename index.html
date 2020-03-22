@@ -17,20 +17,21 @@
       <div id="explainer">
         <h2>What is this?</h2>
 
-        <div id="words" v-if="hideSetting == 'Hide'">
-          <p>This interactive graph plots the trajectory of global COVID-19  {{selectedData.toLowerCase().split(' ').slice(-1)[0]}}. Use the slider or +/- keys to see daily changes. Hover over the graph for more info.</p>
+        <p>This interactive graph plots the trajectory of global COVID-19  {{selectedData.toLowerCase().split(' ').slice(-1)[0]}}. Use the slider or +/- keys to see daily changes. Hover over the graph for more info.</p>
 
-          <p>The graph plots the number of <b>new</b> {{selectedData.toLowerCase()}} in the past week, versus the <b>total</b> number of {{selectedData.toLowerCase()}}.</p>
+        <div id="words" v-if="hideSetting == 'Hide'">
+
+          <p>The graph plots the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}}.</p>
 
           <p>Exponential growth follows a straight line on this graph, and the slope of the line is the growth rate.</p>
 
-          <p>Notice that most countries follow a similar straight line path on this graph, indicating that the growth rate is similar across countries.</p>
+          <p>Notice that most countries follow a similar straight line path on this graph, indicating that the growth rate is similar across countries. We're all in this together.</p>
 
         </div>
 
       </div>
 
-      <div id="hide"><a @click="hide">{{hideSetting}}</a></div>
+      <div id="hide"><a @click="hide">{{hideSetting == 'Show' ? 'Read More' : 'Hide'}}</a></div>
 
     </div>
 

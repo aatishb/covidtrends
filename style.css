@@ -43,6 +43,10 @@ b {
   font-weight: bold;
 }
 
+i {
+  font-style: italic;
+}
+
 p {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
@@ -77,7 +81,7 @@ p > last-child {
   margin-bottom: 0;
 }
 
-#words {
+#explainer > p {
   margin-top: 1rem;
 }
 
