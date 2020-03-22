@@ -331,7 +331,10 @@ let app = new Vue({
     },
 
     pause() {
-      this.paused = true;
+      if(! this.paused) {
+        this.paused = true;
+        this.icon = 'icons/play.svg';
+      }
     },
 
     increment() {

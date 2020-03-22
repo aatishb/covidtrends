@@ -58,7 +58,7 @@
           </div>
 
           <div class="navelement">
-            <select v-model="selectedScale" @mousedown="paused = true">
+            <select v-model="selectedScale" @mousedown="pause">
               <option v-for="s in scale" v-bind:value="s">
                 {{ s }}
               </option>
@@ -77,7 +77,7 @@
       <div id="right-column">
         <h2>Countries</h2>
         <p>Countries with at least {{minCasesInCountry}}
-          <select v-model="selectedData" @mousedown="paused = true">
+          <select v-model="selectedData" @mousedown="pause">
             <option v-for="d in whichData" v-bind:value="d">
               {{ d }}
             </option>
