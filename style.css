@@ -10,6 +10,8 @@ body {
   line-height: 1.5;
   font-weight: 400;
   color: '#444';
+
+  text-rendering: optimizeLegibility;
 }
 
 
@@ -37,7 +39,17 @@ h1, h2, h3 {
   line-height: 1.1;
 }
 
+b {
+  font-weight: bold;
+}
+
 p {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+p > last-child {
+  margin-bottom: 0;
 }
 
 #root {

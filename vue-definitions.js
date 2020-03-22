@@ -91,7 +91,7 @@ Vue.component('graph', {
           },
         },
         yaxis: {
-          title: 'New Weekly ' + this.selectedData,
+          title: 'New ' + this.selectedData + ' (in the Past Week)',
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           autorange: true,
           titlefont: {
