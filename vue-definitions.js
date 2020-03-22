@@ -278,6 +278,11 @@ let app = new Vue({
 
       let countriesToLeaveOut = ['Cruise Ship'];
 
+      let renameCountries = {
+        'Taiwan*': 'Taiwan',
+        'Korea, South': 'South Korea'
+      };
+
       let countries = data.map(e => e["Country/Region"]);
       countries = this.removeRepeats(countries);
 
@@ -299,6 +304,10 @@ let app = new Vue({
         if (!countriesToLeaveOut.includes(country)) {
 
           let slope = arr.map((e,i,a) => e - a[i - 7]);
+
+          if (Object.keys(renameCountries).includes(country)) {
+            country = renameCountries[country];
+          }
 
           myData.push({
             country: country,
@@ -398,7 +407,7 @@ let app = new Vue({
 
     isHidden: true,
 
-    selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'Korea, South', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
+    selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'South Korea', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
 
 
 
