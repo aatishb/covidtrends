@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'days', 'selectedData', 'scale'],
+  props: ['data', 'dates', 'days', 'selectedData', 'scale', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -158,6 +158,10 @@ Vue.component('graph', {
   },
 
   watch: {
+
+    resize() {
+      Plotly.Plots.resize(this.$refs.graph);
+    },
 
     scale() {
       this.initTraces();
@@ -338,7 +342,6 @@ let app = new Vue({
     },
 
     hide() {
-      console.log('button pressed');
       if (this.hideSetting == 'Hide') {
         this.hideSetting = 'Show';
       } else {
