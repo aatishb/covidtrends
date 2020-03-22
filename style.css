@@ -49,11 +49,14 @@ i {
 
 p {
   font-size: 1.1rem;
-  margin-bottom: 0.5rem;
 }
 
-p > last-child {
-  margin-bottom: 0;
+#words > p {
+  margin-top: 0.5rem;
+}
+
+#explainer > p:first-child {
+  margin-top: 0;
 }
 
 #root {
@@ -68,9 +71,13 @@ p > last-child {
 
 
 #header {
-  color: white;
+  color: lightgoldenrodyellow;
   background-color: #30475e;
   position: relative;
+}
+
+#header a {
+  text-decoration: underline;
 }
 
 #explainer {

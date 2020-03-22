@@ -8,9 +8,19 @@ Vue.component('graph', {
   methods: {
 
     makeGraph() {
-      Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true});
+
+      Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true}).then(e => {
+          if (this.firstTime) {
+            this.$emit('graph-mounted')
+            this.firstTime = false;
+          }
+        });
+
       this.$refs.graph.on('plotly_hover', this.onHoverOn).on('plotly_unhover', this.onHoverOff);
-      this.update();
+
+      if (!this.firstTime) {
+        this.update();
+      }
     },
 
     onHoverOn(data) {
@@ -114,9 +124,10 @@ Vue.component('graph', {
         x: e.cases,
         y: e.slope,
         name: e.country,
-        text: this.dates,
+        text: this.dates.map(f => e.country + '<br>' + f),
         mode: 'lines',
         type: 'scatter',
+        legendgroup: i,
         marker: {
           size: 2,
           color: 'rgba(0,0,0,0.15)'
@@ -125,7 +136,7 @@ Vue.component('graph', {
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
       })
       );
 
@@ -141,7 +152,7 @@ Vue.component('graph', {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: 'Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}',
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
 
       })
       );
@@ -189,7 +200,8 @@ Vue.component('graph', {
       traces: [],
       traceCount: [],
       traceIndices: [],
-      animationData: []
+      animationData: [],
+      firstTime: true
     }
   }
 
@@ -207,13 +219,20 @@ let app = new Vue({
   created: function() {
     window.addEventListener('keydown', e => {
 
-      if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
+      if ((e.key == ' ') && this.dates.length > 0) {
+        this.play();
+      }
+
+      else if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
+        this.paused = true;
         this.day = Math.max(this.day - 1, 8);
       }
 
       else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
+        this.paused = true;
         this.day = Math.min(this.day + 1, this.dates.length)
       }
+
     });
   },
 
@@ -320,7 +339,7 @@ let app = new Vue({
       if (this.day < this.dates.length) {
         if (!this.paused) {
           this.day++;
-          setTimeout(this.increment, 200);
+          setTimeout(this.increment, 150);
         }
       } else if (this.day == this.dates.length) {
         this.paused = true;
@@ -341,12 +360,9 @@ let app = new Vue({
       this.selectedScale = (this.selectedScale + 1) % 2;
     },
 
-    hide() {
-      if (this.hideSetting == 'Hide') {
-        this.hideSetting = 'Show';
-      } else {
-        this.hideSetting = 'Hide';
-      }
+    toggleHide() {
+      console.log('toggle hide setting');
+      this.isHidden = !this.isHidden;
     }
 
   },
@@ -377,7 +393,7 @@ let app = new Vue({
 
     countries: [],
 
-    hideSetting: 'Show',
+    isHidden: true,
 
     selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'Korea, South', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
 
