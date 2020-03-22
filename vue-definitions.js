@@ -79,7 +79,7 @@ Vue.component('graph', {
     initLayout() {
 
       this.layout = {
-        title: 'Trajectory of COVID-19 (' + this.dates[this.days - 1] + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.days - 1] + ')',
         showlegend: false,
         xaxis: {
           title: 'Total ' + this.selectedData,

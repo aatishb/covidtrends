@@ -18,18 +18,14 @@
       <h1>COVID-19 Trends</h1>
     </div>
     -->
-        <div id="top">
-          <h2>What is this?</h2>
+    <div id="header">
+      <p>This interactive graph plots the trajectory of global COVID-19 cases. Use the slider or +/- keys to see daily changes. Hover over the graph for more info.</p>
 
-          <p>This interactive graph charts the trajectory of COVID-19 across the globe. Use the slider or +/- keys to see daily changes. Hover over the graph for more info.</p>
+    </div>
 
-          <p>The horizontal axis is the total number of {{selectedData.toLowerCase()}}, the vertical axis represents the new weekly {{selectedData.toLowerCase()}}.</p>
+    <div id="content">
 
-        </div>
-
-    <div id="middle">
-
-      <div id="middle-left">
+      <div id="left-column">
 
 
 
@@ -60,9 +56,14 @@
 
         </div>
 
+
+        <div id="footer">
+          Created by <a href="https://aatishb.com/">Aatish Bhatia</a> (<a href="https://github.com/aatishb/covidtrends">Github Page</a>). Data Source: <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>. </a>
+        </div>
+
       </div>
 
-      <div id="middle-right">
+      <div id="right-column">
         <h2>Countries</h2>
         <p>Countries with at least {{minCasesInCountry}}
           <select v-model="selectedData">
@@ -85,10 +86,6 @@
 
     </div>
 
-  <div id="bottom">
-    <h2>Credits</h2>
-          <p>Data Source: <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a></p>
-  </div>
 
 
   </div>
