@@ -373,7 +373,6 @@ let app = new Vue({
     },
 
     toggleHide() {
-      console.log('toggle hide setting');
       this.isHidden = !this.isHidden;
     }
 

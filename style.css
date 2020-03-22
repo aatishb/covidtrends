@@ -93,6 +93,7 @@ p {
   flex-direction: row;
   flex-grow: 1;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #content h2 {
@@ -109,9 +110,8 @@ p {
   flex: 1;
   background-color: #fcf8e8;
   padding: 1rem;
-  min-height: min-content;
   min-width: 10rem;
-  overflow-y: scroll;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 
