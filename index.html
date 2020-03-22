@@ -54,7 +54,7 @@
           </div>
 
           <div class="navelement" id="slidercontainer">
-            <input v-if="dates.length > 8" type="range" min="8" :max="dates.length" step="1" v-model="day" id="slider"></input>
+            <input v-if="dates.length > 8" type="range" min="8" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause"></input>
           </div>
 
           <div class="navelement">
