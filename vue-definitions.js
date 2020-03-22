@@ -125,7 +125,7 @@ Vue.component('graph', {
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo:'x+y+text',
-        hovertemplate: "%{text}<br>Weekly Cases: %{y:,}<br>Total Cases:%{x:,}",
+        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}',
       })
       );
 
@@ -141,7 +141,7 @@ Vue.component('graph', {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: "Weekly Cases: %{y:,}<br>Total Cases:%{x:,}",
+        hovertemplate: 'Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}',
 
       })
       );
@@ -293,9 +293,17 @@ let app = new Vue({
 
     play() {
 
-      this.paused = false;
-      this.day = 7;
-      this.increment();
+      if (this.paused) {
+        if (this.day == this.dates.length) {
+          this.day = 7;
+        }
+        this.paused = false;
+        this.icon = '/icons/pause.svg';
+        this.increment();
+      } else {
+        this.paused = true;
+        this.icon = '/icons/play.svg';
+      }
 
     },
 
@@ -305,9 +313,14 @@ let app = new Vue({
 
     increment() {
 
-      if (this.day < this.dates.length && !this.paused) {
-        this.day++;
-        setTimeout(this.increment, 200);
+      if (this.day < this.dates.length) {
+        if (!this.paused) {
+          this.day++;
+          setTimeout(this.increment, 200);
+        }
+      } else if (this.day == this.dates.length) {
+        this.paused = true;
+        this.icon = '/icons/play.svg';
       }
 
     },
@@ -328,7 +341,7 @@ let app = new Vue({
 
   data: {
 
-    paused: false,
+    paused: true,
 
     whichData: ['Confirmed Cases', 'Deaths'],
 
@@ -337,6 +350,8 @@ let app = new Vue({
     sliderSelected: false,
 
     day: NaN,
+
+    icon: '/icons/play.svg',
 
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
@@ -350,7 +365,9 @@ let app = new Vue({
 
     countries: [],
 
-    selectedCountries: ['US', 'China', 'India', 'Iran', 'Italy', 'Korea, South', 'Japan'],
+    selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'Korea, South', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
+
+
 
   }
 

@@ -94,7 +94,6 @@ p {
   padding-right: 1rem;
   padding-top: 0.25rem;
   padding-bottom: 0.5rem;
-  text-align: center;
 }
 
 #nav {
@@ -122,10 +121,6 @@ p {
   min-width: 200px;
 }
 
-button {
-  font-size: 1rem;
-}
-
-.navelement > button {
-  font-size: 1.25rem;
+svg {
+  fill: #fe346e;
 }
