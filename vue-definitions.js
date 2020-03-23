@@ -297,7 +297,7 @@ let app = new Vue({
         let arr = [];
 
         for (let date of dates) {
-          let sum = countryData.map(e => parseInt(e[date])).reduce((a,b) => a+b);
+          let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
           arr.push(sum);
         }
 
