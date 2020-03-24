@@ -9,6 +9,9 @@ Vue.component('graph', {
 
     makeGraph() {
 
+      this.updateTraces();
+      this.updateLayout();
+
       Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true}).then(e => {
           if (this.firstTime) {
             this.$emit('graph-mounted')
@@ -18,19 +21,15 @@ Vue.component('graph', {
 
       this.$refs.graph.on('plotly_hover', this.onHoverOn).on('plotly_unhover', this.onHoverOff);
 
-      if (!this.firstTime) {
-        this.update();
-      }
     },
 
     onHoverOn(data) {
 
         let curveNumber = data.points[0].curveNumber;
         let name = this.traces[curveNumber].name;
-
         this.traceIndices = this.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
 
-        let update = {'line':{color: 'rgba(254, 52, 110,,1)'}};
+        let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
 
         for (let i of this.traceIndices) {
           Plotly.restyle(this.$refs.graph, update, [i]);
@@ -41,84 +40,14 @@ Vue.component('graph', {
     onHoverOff(data) {
 
         let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
+
         for (let i of this.traceIndices) {
           Plotly.restyle(this.$refs.graph, update, [i]);
         }
 
     },
 
-    update() {
-
-        this.updateXY();
-
-        Plotly.animate(this.$refs.graph, {
-          data: this.animationData,
-          traces: this.traceCount,
-          layout: this.layout
-        }, {
-          transition: {
-            duration: 0
-          },
-          frame: {
-            // must be >= transition duration
-            duration: 0,
-            redraw: true
-          }
-        });
-
-    },
-
-    updateXY() {
-
-      this.traceCount = new Array(this.traces.length).fill(0).map((e,i) => i);
-
-      let traces1 = this.data.map(e => ({
-        x: e.cases.slice(0, this.days),
-        y: e.slope.slice(0, this.days)
-      }));
-
-      let traces2 = this.data.map(e => ({
-        x: [e.cases[this.days - 1]],
-        y: [e.slope[this.days - 1]]
-      }));
-
-      this.animationData = [...traces1, ...traces2];
-
-    },
-
-    initLayout() {
-
-      this.layout = {
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.days - 1] + ')',
-        showlegend: false,
-        xaxis: {
-          title: 'Total ' + this.selectedData,
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          autorange: true,
-          titlefont: {
-            size: 18,
-            color: 'rgba(254, 52, 110,1)'
-          },
-        },
-        yaxis: {
-          title: 'New ' + this.selectedData + ' (in the Past Week)',
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          autorange: true,
-          titlefont: {
-            size: 18,
-            color: 'rgba(254, 52, 110,1)'
-          },
-        },
-        hovermode: 'closest',
-        font: {
-                color: "black",
-                size: 12
-              },
-      };
-
-    },
-
-    initTraces() {
+    updateTraces() {
 
       let traces1 = this.data.map((e,i) => ({
         x: e.cases,
@@ -158,13 +87,103 @@ Vue.component('graph', {
       );
 
       this.traces = [...traces1, ...traces2];
-    }
+      this.traceCount =  new Array(this.traces.length).fill(0).map((e,i) => i);
+
+      this.filteredCases = Array.prototype.concat(...this.data.map(e => e.cases)).filter(e => !isNaN(e));
+      this.filteredSlope =  Array.prototype.concat(...this.data.map(e => e.slope)).filter(e => !isNaN(e));
+
+    },
+
+    updateLayout() {
+
+      let xrange = this.xrange();
+      let yrange = this.yrange();
+
+      this.layout = {
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.days - 1] + ')',
+        showlegend: false,
+        xaxis: {
+          title: 'Total ' + this.selectedData,
+          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
+          range: xrange,
+          titlefont: {
+            size: 18,
+            color: 'rgba(254, 52, 110,1)'
+          },
+        },
+        yaxis: {
+          title: 'New ' + this.selectedData + ' (in the Past Week)',
+          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
+          range: yrange,
+          titlefont: {
+            size: 18,
+            color: 'rgba(254, 52, 110,1)'
+          },
+        },
+        hovermode: 'closest',
+        font: {
+                color: "black",
+                size: 12
+              },
+      };
+
+    },
+
+
+    updateAnimation() {
+
+        let traces1 = this.data.map(e => ({
+          x: e.cases.slice(0, this.days),
+          y: e.slope.slice(0, this.days)
+        }));
+
+        let traces2 = this.data.map(e => ({
+          x: [e.cases[this.days - 1]],
+          y: [e.slope[this.days - 1]]
+        }));
+
+        Plotly.animate(this.$refs.graph, {
+          data: [...traces1, ...traces2],
+          traces: this.traceCount,
+          layout: this.layout
+        }, {
+          transition: {
+            duration: 0
+          },
+          frame: {
+            // must be >= transition duration
+            duration: 0,
+            redraw: true
+          }
+        });
+
+    },
+
+    xrange() {
+      let xmax = Math.max(...this.filteredCases, 50);
+
+      if (this.scale == 'Logarithmic Scale') {
+        return [1, Math.ceil(Math.log10(xmax))]
+      } else {
+        return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
+      }
+
+    },
+
+    yrange() {
+      let ymax = Math.max(...this.filteredSlope, 50);
+
+      if (this.scale == 'Logarithmic Scale') {
+        return [1, Math.ceil(Math.log10(ymax))]
+      } else {
+        return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+      }
+
+    },
 
   },
 
   mounted() {
-    this.initTraces();
-    this.initLayout();
     this.makeGraph();
   },
 
@@ -175,33 +194,34 @@ Vue.component('graph', {
     },
 
     scale() {
-      this.initTraces();
-      this.initLayout();
       this.makeGraph();
     },
 
-    days() {
-      this.initLayout();
-      this.update();
+    days(newDay, oldDay) {
+      if (parseInt(newDay) !== parseInt(oldDay)) {
+        this.updateLayout();
+        this.updateAnimation();
+      }
     },
 
     data() {
-      this.initTraces();
-      this.initLayout();
       this.makeGraph();
     }
 
   },
 
+  computed: {
+  },
+
   data() {
     return {
-      xrange: [],
-      yrange: [],
+      filteredCases: [],
+      filteredSlope: [],
       traces: [],
+      layout: {},
+      firstTime: true,
       traceCount: [],
-      traceIndices: [],
-      animationData: [],
-      firstTime: true
+      traceIndices: []
     }
   }
 
@@ -240,12 +260,6 @@ let app = new Vue({
   watch: {
     selectedData() {
       this.pullData(this.selectedData);
-    }
-  },
-
-  computed: {
-    filteredCovidData() {
-      return this.covidData.filter(e => this.selectedCountries.includes(e.country));
     }
   },
 
@@ -351,7 +365,7 @@ let app = new Vue({
       if (this.day < this.dates.length) {
         if (!this.paused) {
           this.day++;
-          setTimeout(this.increment, 150);
+          setTimeout(this.increment, 350);
         }
       } else if (this.day == this.dates.length) {
         this.paused = true;
@@ -375,6 +389,14 @@ let app = new Vue({
     toggleHide() {
       this.isHidden = !this.isHidden;
     }
+
+  },
+
+  computed: {
+
+    filteredCovidData() {
+      return this.covidData.filter(e => this.selectedCountries.includes(e.country));
+    },
 
   },
 
