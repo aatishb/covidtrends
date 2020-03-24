@@ -8,7 +8,7 @@ Vue.component('graph', {
   methods: {
 
     makeGraph() {
-
+      this.autosetRange = true;
       this.updateTraces();
       this.updateLayout();
 
@@ -19,7 +19,26 @@ Vue.component('graph', {
           }
         });
 
-      this.$refs.graph.on('plotly_hover', this.onHoverOn).on('plotly_unhover', this.onHoverOff);
+      this.$refs.graph.on('plotly_hover', this.onHoverOn)
+        .on('plotly_unhover', this.onHoverOff)
+        .on('plotly_relayout', this.onLayoutChange);
+
+      this.updateAnimation();
+    },
+
+    onLayoutChange(data) {
+
+      if (data['xaxis.autorange'] && data['yaxis.autorange']) { // by default, override plotly autorange
+        data['xaxis.autorange'] = false;
+        data['yaxis.autorange'] = false;
+        this.autosetRange = true;
+        this.updateLayout();
+        this.updateAnimation();
+      } else if (data['xaxis.range[0]']) { // if range set manually
+        this.autosetRange = false; // then use the manual range
+        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
+        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
+      }
 
     },
 
@@ -96,8 +115,11 @@ Vue.component('graph', {
 
     updateLayout() {
 
-      let xrange = this.xrange();
-      let yrange = this.yrange();
+      if (this.autosetRange) {
+        this.setxrange();
+        this.setyrange();
+        this.autosetRange = false;
+      }
 
       this.layout = {
         title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.days - 1] + ')',
@@ -105,7 +127,7 @@ Vue.component('graph', {
         xaxis: {
           title: 'Total ' + this.selectedData,
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: xrange,
+          range: this.xrange,
           titlefont: {
             size: 18,
             color: 'rgba(254, 52, 110,1)'
@@ -114,7 +136,7 @@ Vue.component('graph', {
         yaxis: {
           title: 'New ' + this.selectedData + ' (in the Past Week)',
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: yrange,
+          range: this.yrange,
           titlefont: {
             size: 18,
             color: 'rgba(254, 52, 110,1)'
@@ -159,24 +181,24 @@ Vue.component('graph', {
 
     },
 
-    xrange() {
+    setxrange() {
       let xmax = Math.max(...this.filteredCases, 50);
 
       if (this.scale == 'Logarithmic Scale') {
-        return [1, Math.ceil(Math.log10(xmax))]
+        this.xrange = [1, Math.ceil(Math.log10(1.5*xmax))]
       } else {
-        return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
+        this.xrange = [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
       }
 
     },
 
-    yrange() {
+    setyrange() {
       let ymax = Math.max(...this.filteredSlope, 50);
 
       if (this.scale == 'Logarithmic Scale') {
-        return [1, Math.ceil(Math.log10(ymax))]
+        this.yrange = [1, Math.ceil(Math.log10(ymax))]
       } else {
-        return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+        this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
       }
 
     },
@@ -221,7 +243,10 @@ Vue.component('graph', {
       layout: {},
       firstTime: true,
       traceCount: [],
-      traceIndices: []
+      traceIndices: [],
+      xrange: [],
+      yrange: [],
+      autosetRange: true
     }
   }
 
@@ -365,7 +390,7 @@ let app = new Vue({
       if (this.day < this.dates.length) {
         if (!this.paused) {
           this.day++;
-          setTimeout(this.increment, 350);
+          setTimeout(this.increment, 200);
         }
       } else if (this.day == this.dates.length) {
         this.paused = true;
