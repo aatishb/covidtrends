@@ -41,7 +41,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :days.number="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" v-on:graph-mounted="play"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="play"></graph>
 
         <div id="nav">
 

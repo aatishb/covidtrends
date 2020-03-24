@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'days', 'selectedData', 'scale', 'resize'],
+  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -27,6 +27,8 @@ Vue.component('graph', {
     },
 
     onLayoutChange(data) {
+
+      //console.log('layout change detected');
 
       if (data['xaxis.autorange'] && data['yaxis.autorange']) { // by default, override plotly autorange
         data['xaxis.autorange'] = false;
@@ -115,6 +117,8 @@ Vue.component('graph', {
 
     updateLayout() {
 
+      //console.log('layout updated');
+
       if (this.autosetRange) {
         this.setxrange();
         this.setyrange();
@@ -122,7 +126,7 @@ Vue.component('graph', {
       }
 
       this.layout = {
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.days - 1] + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
         showlegend: false,
         xaxis: {
           title: 'Total ' + this.selectedData,
@@ -155,13 +159,13 @@ Vue.component('graph', {
     updateAnimation() {
 
         let traces1 = this.data.map(e => ({
-          x: e.cases.slice(0, this.days),
-          y: e.slope.slice(0, this.days)
+          x: e.cases.slice(0, this.day),
+          y: e.slope.slice(0, this.day)
         }));
 
         let traces2 = this.data.map(e => ({
-          x: [e.cases[this.days - 1]],
-          y: [e.slope[this.days - 1]]
+          x: [e.cases[this.day - 1]],
+          y: [e.slope[this.day - 1]]
         }));
 
         Plotly.animate(this.$refs.graph, {
@@ -212,22 +216,25 @@ Vue.component('graph', {
   watch: {
 
     resize() {
+      //console.log('resize detected');
       Plotly.Plots.resize(this.$refs.graph);
     },
 
     scale() {
-      this.makeGraph();
+      //console.log('scale change detected', this.scale);
+       this.makeGraph();
     },
 
-    days(newDay, oldDay) {
-      if (parseInt(newDay) !== parseInt(oldDay)) {
-        this.updateLayout();
-        this.updateAnimation();
-      }
+    day(newDay, oldDay) {
+      //console.log('day change detected', oldDay, newDay);
+      this.updateLayout();
+      this.updateAnimation();
     },
 
     data() {
+      //console.log('data change detected');
       this.makeGraph();
+      this.$emit('update:day', this.dates.length);
     }
 
   },
@@ -246,7 +253,7 @@ Vue.component('graph', {
       traceIndices: [],
       xrange: [],
       yrange: [],
-      autosetRange: true
+      autosetRange: true,
     }
   }
 
@@ -328,7 +335,7 @@ let app = new Vue({
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
 
-      this.day = this.dates.length;
+      //this.day = this.dates.length;
 
       let myData = [];
       for (let country of countries){
@@ -435,7 +442,7 @@ let app = new Vue({
 
     sliderSelected: false,
 
-    day: NaN,
+    day: 8,
 
     icon: 'icons/play.svg',
 
