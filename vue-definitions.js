@@ -362,6 +362,16 @@ let app = new Vue({
       return Math.max.apply(Math, par);
     },
 
+    myMin() {
+      var par = []
+      for (var i = 0; i < arguments.length; i++) {
+          if (!isNaN(arguments[i])) {
+              par.push(arguments[i]);
+          }
+      }
+      return Math.min.apply(Math, par);
+    },
+
     pullData(selectedData) {
 
       if (selectedData == 'Confirmed Cases') {
@@ -429,7 +439,7 @@ let app = new Vue({
 
       if (this.paused) {
         if (this.day == this.dates.length) {
-          this.day = 7;
+          this.day = this.minDay;
         }
         this.paused = false;
         this.icon = 'icons/pause.svg';
@@ -504,6 +514,10 @@ let app = new Vue({
     filteredCovidData() {
       return this.covidData.filter(e => this.selectedCountries.includes(e.country));
     },
+
+    minDay() {
+      return this.myMin(...this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)));
+    }
 
   },
 
