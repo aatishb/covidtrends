@@ -238,12 +238,11 @@ Vue.component('graph', {
 
         this.makeGraph();
 
-        // don't do this the first time the data changes
-        if (this.dataChanged) {
+        if (!this.firstDataChange) {
           this.$emit('update:day', this.dates.length);
+          this.firstDataChange = false;
         }
 
-        this.dataChanged = true;
     }
 
   },
@@ -264,7 +263,7 @@ Vue.component('graph', {
       yrange: [],
       autosetRange: true,
       graphMounted: false,
-      dataChanged: false,
+      firstDataChange: true,
     }
   }
 
@@ -342,10 +341,11 @@ let app = new Vue({
       this.pullData(this.selectedData);
     },
 
-    dates() {
-      if (this.graphMounted && this.autoplay) {
-        //console.log('autoplaying');
+    graphMounted() {
+      if (this.graphMounted && this.autoplay && this.minDay > 0) {
+        this.day = this.minDay;
         this.play();
+        this.autoplay = false; // disable autoplay on first play
       }
     }
   },
@@ -435,8 +435,6 @@ let app = new Vue({
     },
 
     play() {
-      this.autoplay = false; // disable autoplay on first play
-
       if (this.paused) {
         if (this.day == this.dates.length) {
           this.day = this.minDay;
@@ -516,7 +514,12 @@ let app = new Vue({
     },
 
     minDay() {
-      return this.myMin(...this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)));
+      let minDay = this.myMin(...this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)));
+      if (isFinite(minDay) && !isNaN(minDay)){
+        return minDay;
+      } else {
+        return NaN;
+      }
     }
 
   },

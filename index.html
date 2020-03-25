@@ -43,7 +43,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="minDay > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
         <div id="nav">
 
@@ -56,7 +56,7 @@
           </div>
 
           <div class="navelement" id="slidercontainer">
-            <input v-if="minDay" type="range" min="minDay" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause"></input>
+            <input v-if="minDay > 0" type="range" :min="minDay" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause"></input>
           </div>
 
           <div class="navelement">
@@ -94,7 +94,7 @@
         </ul>
         <button @click="selectAll">Select All</button>
         <button @click="deselectAll">Deselect All</button>
-        <button @click="createURL">Create URL</button>
+        <button @click="createURL" @mousedown="pause">Create URL</button>
       </div>
 
 
