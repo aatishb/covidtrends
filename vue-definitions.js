@@ -70,16 +70,18 @@ Vue.component('graph', {
 
     updateTraces() {
 
+      let showDailyMarkers = this.data.length <= 2;
+
       let traces1 = this.data.map((e,i) => ({
         x: e.cases,
         y: e.slope,
         name: e.country,
         text: this.dates.map(f => e.country + '<br>' + f),
-        mode: 'lines',
+        mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
         marker: {
-          size: 2,
+          size: 4,
           color: 'rgba(0,0,0,0.15)'
         },
         line: {
@@ -311,7 +313,7 @@ let app = new Vue({
 
       if (selectedData == 'Confirmed Cases') {
        Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", this.processData);
-      } else if (selectedData == 'Deaths') {
+      } else if (selectedData == 'Reported Deaths') {
        Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", this.processData);
       }
     },
@@ -436,7 +438,7 @@ let app = new Vue({
 
     paused: true,
 
-    whichData: ['Confirmed Cases', 'Deaths'],
+    whichData: ['Confirmed Cases', 'Reported Deaths'],
 
     selectedData: 'Confirmed Cases',
 
