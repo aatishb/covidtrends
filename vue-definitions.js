@@ -233,16 +233,14 @@ Vue.component('graph', {
       this.updateAnimation();
     },
 
+    selectedData() {
+      //console.log('selected data change detected');
+      this.$emit('update:day', this.dates.length);
+    },
+
     data() {
       //console.log('data change detected');
-
-        this.makeGraph();
-
-        if (!this.firstDataChange) {
-          this.$emit('update:day', this.dates.length);
-          this.firstDataChange = false;
-        }
-
+      this.makeGraph();
     }
 
   },
@@ -256,14 +254,12 @@ Vue.component('graph', {
       filteredSlope: [],
       traces: [],
       layout: {},
-      firstTime: true,
       traceCount: [],
       traceIndices: [],
       xrange: [],
       yrange: [],
       autosetRange: true,
       graphMounted: false,
-      firstDataChange: true,
     }
   }
 
@@ -342,7 +338,12 @@ let app = new Vue({
     },
 
     graphMounted() {
+      //console.log('minDay', this.minDay);
+      //console.log('autoPlay', this.autoplay);
+      //console.log('graphMounted', this.graphMounted);
+
       if (this.graphMounted && this.autoplay && this.minDay > 0) {
+        //console.log('autoplaying');
         this.day = this.minDay;
         this.play();
         this.autoplay = false; // disable autoplay on first play
@@ -436,12 +437,15 @@ let app = new Vue({
 
     play() {
       if (this.paused) {
+
         if (this.day == this.dates.length) {
           this.day = this.minDay;
         }
+
         this.paused = false;
         this.icon = 'icons/pause.svg';
         this.increment();
+
       } else {
         this.paused = true;
         this.icon = 'icons/play.svg';
@@ -460,14 +464,16 @@ let app = new Vue({
        //console.log('day', this.day);
        //console.log('incrementing');
 
-      if (this.day < this.dates.length) {
+      if (this.day == this.dates.length || this.minDay < 0) {
+        this.day = this.dates.length;
+        this.paused = true;
+        this.icon = 'icons/play.svg';
+      }
+      else if (this.day < this.dates.length) {
         if (!this.paused) {
           this.day++;
           setTimeout(this.increment, 200);
         }
-      } else if (this.day == this.dates.length) {
-        this.paused = true;
-        this.icon = 'icons/play.svg';
       }
 
     },
@@ -518,7 +524,7 @@ let app = new Vue({
       if (isFinite(minDay) && !isNaN(minDay)){
         return minDay;
       } else {
-        return NaN;
+        return -1;
       }
     }
 
