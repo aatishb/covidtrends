@@ -3,6 +3,8 @@
 <head>
   <title>Covid Trends</title>
 
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
   <script src="libraries/plotly.min.js"></script>
   <script src="libraries/vue.js"></script>
   <link rel="stylesheet" type="text/css" href="normalize.css">
@@ -41,7 +43,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="play"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
         <div id="nav">
 
@@ -92,6 +94,7 @@
         </ul>
         <button @click="selectAll">Select All</button>
         <button @click="deselectAll">Deselect All</button>
+        <button @click="createURL">Create URL</button>
       </div>
 
 

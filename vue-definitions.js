@@ -13,9 +13,9 @@ Vue.component('graph', {
       this.updateLayout();
 
       Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true}).then(e => {
-          if (this.firstTime) {
+          if (!this.graphMounted) {
             this.$emit('graph-mounted')
-            this.firstTime = false;
+            this.graphMounted = true;
           }
         });
 
@@ -202,7 +202,7 @@ Vue.component('graph', {
       let ymax = Math.max(...this.filteredSlope, 50);
 
       if (this.scale == 'Logarithmic Scale') {
-        this.yrange = [1, Math.ceil(Math.log10(ymax))]
+        this.yrange = [1, Math.ceil(Math.log10(1.25*ymax))]
       } else {
         this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
       }
@@ -235,8 +235,15 @@ Vue.component('graph', {
 
     data() {
       //console.log('data change detected');
-      this.makeGraph();
-      this.$emit('update:day', this.dates.length);
+
+        this.makeGraph();
+
+        // don't do this the first time the data changes
+        if (this.dataChanged) {
+          this.$emit('update:day', this.dates.length);
+        }
+
+        this.dataChanged = true;
     }
 
   },
@@ -256,6 +263,8 @@ Vue.component('graph', {
       xrange: [],
       yrange: [],
       autosetRange: true,
+      graphMounted: false,
+      dataChanged: false,
     }
   }
 
@@ -271,6 +280,43 @@ let app = new Vue({
   },
 
   created: function() {
+
+    let url = window.location.href.split('?');
+
+    if (url.length > 1) {
+
+      let urlParameters = new URLSearchParams(url[1]);
+
+      if (urlParameters.has('scale')) {
+
+        let myScale = urlParameters.get('scale').toLowerCase();
+
+        if (myScale == 'log') {
+          this.selectedScale = 'Logarithmic Scale';
+        } else if (myScale == 'linear') {
+          this.selectedScale = 'Linear Scale';
+        }
+      }
+
+      if (urlParameters.has('data')) {
+        let myData = urlParameters.get('data').toLowerCase();
+        if (myData == 'cases') {
+          this.selectedData = 'Confirmed Cases';
+        } else if (myData == 'deaths') {
+          this.selectedData = 'Reported Deaths';
+        }
+
+      }
+
+      if (urlParameters.has('country')) {
+        this.selectedCountries = urlParameters.getAll('country');
+      }
+
+    } else {
+      this.selectedData = 'Confirmed Cases';
+      this.selectedScale = 'Logarithmic Scale';
+    }
+
     window.addEventListener('keydown', e => {
 
       if ((e.key == ' ') && this.dates.length > 0) {
@@ -294,6 +340,13 @@ let app = new Vue({
   watch: {
     selectedData() {
       this.pullData(this.selectedData);
+    },
+
+    dates() {
+      if (this.graphMounted && this.autoplay) {
+        //console.log('autoplaying');
+        this.play();
+      }
     }
   },
 
@@ -372,6 +425,7 @@ let app = new Vue({
     },
 
     play() {
+      this.autoplay = false; // disable autoplay on first play
 
       if (this.paused) {
         if (this.day == this.dates.length) {
@@ -395,6 +449,8 @@ let app = new Vue({
     },
 
     increment() {
+       //console.log('day', this.day);
+       //console.log('incrementing');
 
       if (this.day < this.dates.length) {
         if (!this.paused) {
@@ -422,7 +478,24 @@ let app = new Vue({
 
     toggleHide() {
       this.isHidden = !this.isHidden;
-    }
+    },
+
+    createURL() {
+      let url = 'https://aatishb.com/covidtrends/'
+
+      url = url + '?scale=' + (this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear');
+
+      url = url + '&data=' + (this.selectedData == 'Confirmed Cases' ? 'cases' : 'deaths');
+
+      for (let country of this.countries) {
+        if (this.selectedCountries.includes(country)) {
+          url += '&country=' + country;
+        }
+      }
+
+      alert('Here\'s a custom URL to pull up this view:\n' + url);
+
+    },
 
   },
 
@@ -440,17 +513,17 @@ let app = new Vue({
 
     whichData: ['Confirmed Cases', 'Reported Deaths'],
 
-    selectedData: 'Confirmed Cases',
+    selectedData: '',
 
     sliderSelected: false,
 
-    day: 8,
+    day: 7,
 
     icon: 'icons/play.svg',
 
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
-    selectedScale: 'Logarithmic Scale',
+    selectedScale: '',
 
     minCasesInCountry: 50,
 
@@ -464,7 +537,9 @@ let app = new Vue({
 
     selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'South Korea', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
 
+    graphMounted: false,
 
+    autoplay: true,
 
   }
 
