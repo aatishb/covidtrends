@@ -135,7 +135,7 @@ Vue.component('graph', {
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.xrange,
           titlefont: {
-            size: 18,
+            size: 24,
             color: 'rgba(254, 52, 110,1)'
           },
         },
@@ -144,14 +144,15 @@ Vue.component('graph', {
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.yrange,
           titlefont: {
-            size: 18,
+            size: 24,
             color: 'rgba(254, 52, 110,1)'
           },
         },
         hovermode: 'closest',
         font: {
+                family: 'Open Sans',
                 color: "black",
-                size: 12
+                size: 18
               },
       };
 

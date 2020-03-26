@@ -17,9 +17,11 @@ body {
 
 h1 {
   margin:0px; /* was 20 px */
-  text-align:center;
+  margin-bottom: 1rem;
+  /*
+  text-align:center;*/
   font-weight:100;
-  font-size:3rem;
+  font-size:2.25rem;
 }
 
 h2 {
@@ -51,12 +53,30 @@ p {
   font-size: 1.1rem;
 }
 
-#words > p {
-  margin-top: 0.5rem;
+#logowrapper {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  min-width: 10rem;
 }
 
-#explainer > p:first-child {
-  margin-top: 0;
+#logowrapper a {
+  text-decoration: none; /* no underline */
+  color: white;
+}
+
+#logowrapper h1 {
+  text-align: center;
+}
+
+#logos {
+}
+
+#logos > a:first-child {
+  margin-right: 0.75rem;
 }
 
 #root {
@@ -69,23 +89,32 @@ p {
   flex: 1;
 }
 
-
 #header {
   color: white;
-  background-color: #721b65;
+  background-color: ;
+  background-image: linear-gradient(to bottom, #2c003e, #721b65); /*#512b58*/
   position: relative;
-}
-
-#header a {
-  text-decoration: underline;
+  display: flex;
+  padding: 0.75rem;
 }
 
 #explainer {
-  padding: 1rem;
+  flex: 6;
+  padding-right: 2rem;
+  text-align: justify;
 }
 
-#explainer h2 {
-  margin-bottom: 0;
+#explainer a {
+  text-decoration: underline;
+  color: lightgoldenrodyellow;
+}
+
+#explainer p {
+  margin-top: 0.5rem;
+}
+
+#explainer > p:first-child {
+  margin-top: 0.35rem;
 }
 
 #content {

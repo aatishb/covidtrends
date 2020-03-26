@@ -18,24 +18,35 @@
   <div id="root">
 
     <div id="header">
-      <div id="explainer">
 
-        <p>This interactive graph charts the trajectory of global COVID-19  {{selectedData.toLowerCase().split(' ').slice(-1)[0]}}. <a v-if="isHidden" @click="toggleHide">Learn more.</a></p>
+        <div id="explainer">
+          <p>This interactive shows the growth of global COVID-19 cases or deaths. The goal of this graph is to emphasize deviations from exponential growth. Here, exponential growth is displayed as a straight line sloping upwards.  <i><b>Note:</b> The x-axis of this graph is not time</i>, as you might be used to, but is instead the total number of cases or deaths.</p>
 
-        <div id="words" v-if="!isHidden">
+          <p v-if="isHidden"><a @click="toggleHide">Read more.</a></p>
 
-          <p>The graph plots the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}}.</p>
+          <span v-if="!isHidden">
+            <p>The graph plots the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}}.</p>
 
-          <p>When plotted in this way, exponential growth is displayed as a straight line. (And the slope of this line represents the growth rate.)</p>
+            <p>When plotted in this way, exponential growth is displayed as a straight line. (And the slope of this line represents the growth rate.)</p>
 
-          <p>Notice that most countries follow a similar straight line path, indicating that the growth rate is similar across countries. <i>We're all in this together.</i></p>
+            <p>Notice that most countries follow a similar straight line path, indicating that the growth rate is similar across countries. <i>We're all in this together.</i></p>
 
-          <p><b>Tips:</b> Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom into graph, doubleclick to zoom back out. Use dropdown menus to switch between Confirmed Cases &harr; Reported Deaths, or between a logarithmic &harr; linear scale. And don't forget to wash your hands!</p>
+            <p><b>Tips:</b> Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom in, doubleclick to zoom back out. And don't forget to wash your hands!</p>
 
+            <a id="hide" @click="toggleHide">Hide</a>
+          </span>
         </div>
 
-      </div>
-      <span v-if="!isHidden" id="hide"><a @click="toggleHide">Hide</a></span>
+        <div id="logowrapper">
+
+          <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
+
+          <div id="logos">
+            <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></img></a>
+            <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></img></a>
+          </div>
+        </div>
+
 
     </div>
 
