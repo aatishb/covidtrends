@@ -6,7 +6,7 @@ html, body {
 
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size:1.2em;
+  font-size:1em;
   line-height: 1.5;
   font-weight: 400;
   color: '#444';
@@ -71,8 +71,8 @@ p {
 
 
 #header {
-  color: lightgoldenrodyellow;
-  background-color: #30475e;
+  color: white;
+  background-color: #721b65;
   position: relative;
 }
 
@@ -104,27 +104,43 @@ p {
   flex: 6;
   display: flex;
   flex-direction: column;
+  padding: 1rem;
 }
 
 #right-column {
   flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
   background-color: #fcf8e8;
   padding: 1rem;
   min-width: 10rem;
+
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-#right-column > h2 {
+#right-column > div {
+  margin-bottom: 2rem;
+}
+
+#right-column > div:last-child {
+  margin-bottom: 0;
+}
+
+#countries {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#right-column h2 {
+  font-size: 1.5rem;
   text-align: center;
 }
 
 #footer {
   font-size: 0.75em;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.5rem;
 }
 
 #nav {
@@ -162,4 +178,46 @@ svg {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+#buttonwrapper {
+  width: 100%;
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+}
+
+button {
+  padding: 0.3rem;
+  margin: auto;
+  font-size: 1rem;
+
+  text-align: center;
+  text-decoration: none;
+
+  transition-duration: 0.4s;
+
+  background-color: #fe346e;
+  color: lightgoldenrodyellow;
+  border: 0.125rem solid #fe346e;
+  border-radius: 0.25rem;
+}
+
+button:hover {
+  background-color: #b80d57;
+  border: 0.125rem solid #b80d57;
+  color: lightgoldenrodyellow;
+}
+
+#countries button {
+  margin-top: 0.5rem;
+}
+
+select {
+  min-width: 12rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  width: 100%;
 }

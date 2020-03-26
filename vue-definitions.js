@@ -12,7 +12,7 @@ Vue.component('graph', {
       this.updateTraces();
       this.updateLayout();
 
-      Plotly.newPlot(this.$refs.graph, this.traces, this.layout, {responsive: true}).then(e => {
+      Plotly.newPlot(this.$refs.graph, this.traces, this.layout, this.config).then(e => {
           if (!this.graphMounted) {
             this.$emit('graph-mounted')
             this.graphMounted = true;
@@ -260,6 +260,16 @@ Vue.component('graph', {
       yrange: [],
       autosetRange: true,
       graphMounted: false,
+      config: {
+          responsive: true,
+          toImageButtonOptions: {
+            format: 'png', // one of png, svg, jpeg, webp
+            filename: 'Covid Trends',
+            height: 800,
+            width: 1200,
+            scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+          }
+        },
     }
   }
 
@@ -307,9 +317,6 @@ let app = new Vue({
         this.selectedCountries = urlParameters.getAll('country');
       }
 
-    } else {
-      this.selectedData = 'Confirmed Cases';
-      this.selectedScale = 'Logarithmic Scale';
     }
 
     window.addEventListener('keydown', e => {
@@ -495,21 +502,58 @@ let app = new Vue({
     },
 
     createURL() {
-      let url = 'https://aatishb.com/covidtrends/'
+      let baseUrl = 'https://aatishb.com/covidtrends/?';
 
-      url = url + '?scale=' + (this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear');
+      let queryUrl = new URLSearchParams();
 
-      url = url + '&data=' + (this.selectedData == 'Confirmed Cases' ? 'cases' : 'deaths');
+      if (this.selectedScale == 'Linear Scale') {
+        queryUrl.append('scale', 'linear');
+      }
+
+      if (this.selectedData == 'Reported Deaths') {
+        queryUrl.append('data', 'deaths');
+      }
 
       for (let country of this.countries) {
         if (this.selectedCountries.includes(country)) {
-          url += '&country=' + country;
+        queryUrl.append('country', country);
         }
       }
 
-      alert('Here\'s a custom URL to pull up this view:\n' + url);
+      let url = baseUrl + queryUrl.toString();
+
+      window.history.replaceState( {} , 'Covid Trends', '/?'+queryUrl.toString() );
+
+      this.copyToClipboard(url);
+      //alert('Here\'s a custom URL to pull up this view:\n' + url);
+
 
     },
+
+    // code to copy a string to the clipboard
+    // from https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f
+    copyToClipboard(str) {
+      const el = document.createElement('textarea');  // Create a <textarea> element
+      el.value = str;                                 // Set its value to the string that you want copied
+      el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+      document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+      const selected =
+        document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+          ? document.getSelection().getRangeAt(0)     // Store selection if found
+          : false;                                    // Mark as false to know no selection existed before
+      el.select();                                    // Select the <textarea> content
+      document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+      document.body.removeChild(el);                  // Remove the <textarea> element
+      if (selected) {                                 // If a selection existed before copying
+        document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+        document.getSelection().addRange(selected);   // Restore the original selection
+      }
+
+      this.copied = true;
+      setTimeout(() => this.copied = false, 2500);
+    }
 
   },
 
@@ -534,9 +578,9 @@ let app = new Vue({
 
     paused: true,
 
-    whichData: ['Confirmed Cases', 'Reported Deaths'],
+    dataTypes: ['Confirmed Cases', 'Reported Deaths'],
 
-    selectedData: '',
+    selectedData: 'Confirmed Cases',
 
     sliderSelected: false,
 
@@ -546,7 +590,7 @@ let app = new Vue({
 
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
-    selectedScale: '',
+    selectedScale: 'Logarithmic Scale',
 
     minCasesInCountry: 50,
 
@@ -563,6 +607,8 @@ let app = new Vue({
     graphMounted: false,
 
     autoplay: true,
+
+    copied: false,
 
   }
 

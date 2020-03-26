@@ -48,7 +48,8 @@
         <div id="nav">
 
           <div class="navelement">
-            <img @click="play" :src="this.icon" style="width: 3rem;">
+            <img v-if="paused" @click="play" src="icons/play.svg" style="width: 3rem;">
+            <img v-if="!paused" @click="play" src="icons/pause.svg" style="width: 3rem;">
           </div>
 
           <div class="navelement">
@@ -77,24 +78,54 @@
       </div>
 
       <div id="right-column">
-        <h2>Countries</h2>
-        <p>Countries with at least {{minCasesInCountry}}
+
+        <div>
+          <h2>Customize</h2>
+
           <select v-model="selectedData" @mousedown="pause">
-            <option v-for="d in whichData" v-bind:value="d">
+            <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
             </option>
           </select>
-        </p>
 
-        <ul style="padding-top: 0.5rem;">
-          <li v-for="country in countries">
-            <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
-            <label :for="country">{{country}}</label>
-          </li>
-        </ul>
-        <button @click="selectAll">Select All</button>
-        <button @click="deselectAll">Deselect All</button>
-        <button @click="createURL" @mousedown="pause">Create URL</button>
+          <select v-model="selectedScale" @mousedown="pause">
+            <option v-for="s in scale" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
+
+        </div>
+
+        <div id="countries">
+
+          <h2>Countries</h2>
+
+          <p>Countries with at least {{minCasesInCountry}} {{selectedData}}</p>
+
+          <div id="buttonwrapper">
+            <button @click="deselectAll">Deselect All</button>
+            <button @click="selectAll">Select All</button>
+          </div>
+
+          <ul style="padding-top: 0.5rem;">
+            <li v-for="country in countries">
+              <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
+              <label :for="country">{{country}}</label>
+            </li>
+          </ul>
+
+
+        </div>
+
+        <div>
+
+          <div id="buttonwrapper">
+            <button @click="createURL" @mousedown="pause">{{copied ? 'Link Copied to Clipboard!' : 'Create Shareable Link'}}</button>
+          </div>
+
+        </div>
+
+
       </div>
 
 
