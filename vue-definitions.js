@@ -152,7 +152,7 @@ Vue.component('graph', {
         font: {
                 family: 'Open Sans',
                 color: "black",
-                size: 18
+                size: 14
               },
       };
 
