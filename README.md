@@ -14,6 +14,6 @@ Notice that most countries follow a similar straight line path, indicating that 
 
 This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19). Huge thanks to them for making this invaluable data source publicly available.
 
-**With thanks to Upasana Roy, Connie Sun, Henry Reich, Arkarup Banerjee, Ritwick Ghosh, Ann Bybee-Finley, Nicky Case, Mustafa Paksoy, and Shekhar Bhatia for their very helpful feedback & suggestions!** Any mistakes or omissions are mine.
+**With thanks to Upasana Roy, Connie Sun, Henry Reich, Arkarup Banerjee, Ritwick Ghosh, Ann Bybee-Finley, Nicky Case, Mustafa Paksoy, Shekhar Bhatia, and Igor Kholopov for their very helpful feedback & suggestions!** Any mistakes or omissions are mine.
 
 Created using [Plotly.js](https://plot.ly/javascript/) and [Vue.js](https://vuejs.org/)
