@@ -283,6 +283,7 @@ let app = new Vue({
 
   mounted() {
     this.pullData(this.selectedData);
+    this.selectSome(this.selectedData);
   },
 
   created: function() {
@@ -310,6 +311,8 @@ let app = new Vue({
           this.selectedData = 'Confirmed Cases';
         } else if (myData == 'deaths') {
           this.selectedData = 'Reported Deaths';
+        } else if (myData == 'cases-us') {
+          this.selectedData = 'Confirmed Cases (US)';
         }
 
       }
@@ -342,6 +345,7 @@ let app = new Vue({
 
   watch: {
     selectedData() {
+      this.selectSome(this.selectedData);
       this.pullData(this.selectedData);
     },
 
@@ -387,11 +391,27 @@ let app = new Vue({
        Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", this.processData);
       } else if (selectedData == 'Reported Deaths') {
        Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", this.processData);
+      } else if (selectedData == 'Confirmed Cases (US)') {
+       Plotly.d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv", this.processUSData);
       }
     },
 
     removeRepeats(array) {
       return [...new Set(array)];
+    },
+    
+    nytDateFix(date) {
+    	let tmp = date.split("-");
+    	return `${tmp[1]}/${tmp[2]}/${tmp[0].substr(2)}`;
+    },
+    
+    processUSData(data) {
+    	let recastData = {};
+    	data.forEach(e => {
+    		let st = recastData[e.state]  = (recastData[e.state] || {"Country/Region": e.state});
+    		st[this.nytDateFix(e.date)] = parseInt(e.cases);
+    	});
+    	return this.processData(Object.values(recastData));
     },
 
     processData(data) {
@@ -485,6 +505,20 @@ let app = new Vue({
       }
 
     },
+    
+    selectSome(selectedData) {
+      let intlDefault = ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'South Korea', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'];
+      let usDefault = ['New York', 'New Jersey', 'California', 'Louisiana', 'Colorado', 'Ohio', 'District of Columbia', 'Hawaii', 'Nebraska', 'Montana'];
+      if (selectedData == 'Confirmed Cases' || selectedData == 'Reported Deaths') {
+       if (this.countries.includes("Australia") && this.selectedCountries.length > 0)
+         return;
+       this.selectedCountries = intlDefault;
+      } else if (selectedData == 'Confirmed Cases (US)') {
+       if (this.countries.includes("New York") && this.selectedCountries.length > 0)
+         return;
+       this.selectedCountries = usDefault;
+      }
+    },
 
     selectAll() {
       this.selectedCountries = this.countries;
@@ -513,6 +547,10 @@ let app = new Vue({
 
       if (this.selectedData == 'Reported Deaths') {
         queryUrl.append('data', 'deaths');
+      }
+
+      if (this.selectedData == 'Confirmed Cases (US)') {
+        queryUrl.append('data', 'cases-us');
       }
 
       for (let country of this.countries) {
@@ -579,7 +617,7 @@ let app = new Vue({
 
     paused: true,
 
-    dataTypes: ['Confirmed Cases', 'Reported Deaths'],
+    dataTypes: ['Confirmed Cases', 'Reported Deaths', 'Confirmed Cases (US)',],
 
     selectedData: 'Confirmed Cases',
 
@@ -603,7 +641,7 @@ let app = new Vue({
 
     isHidden: true,
 
-    selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'South Korea', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
+    selectedCountries: [],
 
     graphMounted: false,
 
