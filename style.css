@@ -49,7 +49,7 @@ i {
 }
 
 p {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 #logowrapper {
@@ -112,6 +112,7 @@ p {
 
 #explainer p {
   margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
 
 #explainer > p:first-child {
@@ -172,7 +173,7 @@ p {
 }
 
 #footer {
-  font-size: 0.75em;
+  font-size: 0.75rem;
 }
 
 #nav {

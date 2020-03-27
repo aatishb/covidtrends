@@ -20,16 +20,13 @@
     <div id="header">
 
         <div id="explainer">
-          <p>This interactive shows the growth of global COVID-19 cases or deaths. In this graph, exponential growth is displayed as a straight line sloping upwards. So this view emphasizes deviations from exponential growth. <i><b>Note:</b> The x-axis of this graph is not time</i>, as you might be used to, but is instead the total number of cases or deaths. <span v-if="isHidden"><a @click="toggleHide">Read more.</a></span></p>
+          <p>This interactive charts the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth! <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Read more.</a></span></p>
 
           <span v-if="!isHidden">
-            <p>The graph plots the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}}.</p>
 
-            <p>When plotted in this way, exponential growth is displayed as a straight line. (And the slope of this line represents the growth rate.)</p>
+            <p><i><b>Note:</b> The x-axis of this graph is not time</i>, but is instead the total number of cases or deaths.</p>
 
-            <p>Notice that most countries follow a similar straight line path, indicating that the growth rate is similar across countries. <i>We're all in this together.</i></p>
-
-            <p><b>Tips:</b> Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom in, doubleclick to zoom back out. And don't forget to wash your hands!</p>
+            <p><b>Tips:</b> Press Space (or the play button) to Play/Pause. Press +/- keys (or drag the slider) to see daily changes. Hover over the graph for more info. Drag your mouse to zoom in, doubleclick to zoom back out. And don't forget to wash your hands!</p>
 
             <a id="hide" @click="toggleHide">Hide</a>
           </span>
