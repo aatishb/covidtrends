@@ -396,7 +396,7 @@ let app = new Vue({
 
     processData(data) {
 
-      let countriesToLeaveOut = ['Cruise Ship'];
+      let countriesToLeaveOut = ['Cruise Ship', 'Diamond Princess'];
 
       let renameCountries = {
         'Taiwan*': 'Taiwan',
