@@ -17,7 +17,6 @@ body {
 
 h1 {
   margin:0px; /* was 20 px */
-  margin-bottom: 1rem;
   /*
   text-align:center;*/
   font-weight:100;
@@ -59,6 +58,7 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   min-width: 10rem;
 }
@@ -73,6 +73,7 @@ p {
 }
 
 #logos {
+  margin-top:1rem;
 }
 
 #logos > a:first-child {
@@ -91,7 +92,6 @@ p {
 
 #header {
   color: white;
-  background-color: ;
   background-image: linear-gradient(to bottom, #2c003e, #721b65); /*#512b58*/
   position: relative;
   display: flex;
@@ -114,14 +114,15 @@ p {
 }
 
 #explainer > p:first-child {
-  margin-top: 0.35rem;
+  margin-top: 0;
 }
 
 #content {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  overflow: auto;
+
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -146,7 +147,7 @@ p {
   padding: 1rem;
   min-width: 10rem;
 
-  overflow: auto;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -159,7 +160,8 @@ p {
 }
 
 #countries {
-  overflow: auto;
+
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -249,4 +251,9 @@ select {
   font-size: 1rem;
   padding: 0.5rem;
   width: 100%;
+  margin-top: 0.5rem;
+}
+
+select:first-child {
+  margin-top: 0;
 }

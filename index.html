@@ -20,9 +20,9 @@
     <div id="header">
 
         <div id="explainer">
-          <p>This interactive shows the growth of global COVID-19 cases or deaths. The goal of this graph is to emphasize deviations from exponential growth. Here, exponential growth is displayed as a straight line sloping upwards.  <i><b>Note:</b> The x-axis of this graph is not time</i>, as you might be used to, but is instead the total number of cases or deaths.</p>
+          <p>This interactive shows the growth of global COVID-19 cases or deaths. The goal here is to emphasize deviations from exponential growth. In this graph, exponential growth is displayed as a straight line sloping upwards.  <i><b>Note:</b> The x-axis of this graph is not time</i>, as you might be used to, but is instead the total number of cases or deaths. <span v-if="isHidden"><a @click="toggleHide">Read more.</a></span></p>
 
-          <p v-if="isHidden"><a @click="toggleHide">Read more.</a></p>
+
 
           <span v-if="!isHidden">
             <p>The graph plots the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}}.</p>
@@ -41,10 +41,11 @@
 
           <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
 
-          <div id="logos">
+          <div v-if="!isHidden" id="logos">
             <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></img></a>
             <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></img></a>
           </div>
+
         </div>
 
 
