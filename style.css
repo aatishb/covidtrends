@@ -96,6 +96,7 @@ p {
   position: relative;
   display: flex;
   padding: 0.75rem;
+  flex-shrink: 0
 }
 
 #explainer {

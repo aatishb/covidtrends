@@ -20,9 +20,7 @@
     <div id="header">
 
         <div id="explainer">
-          <p>This interactive shows the growth of global COVID-19 cases or deaths. The goal here is to emphasize deviations from exponential growth. In this graph, exponential growth is displayed as a straight line sloping upwards.  <i><b>Note:</b> The x-axis of this graph is not time</i>, as you might be used to, but is instead the total number of cases or deaths. <span v-if="isHidden"><a @click="toggleHide">Read more.</a></span></p>
-
-
+          <p>This interactive shows the growth of global COVID-19 cases or deaths. In this graph, exponential growth is displayed as a straight line sloping upwards. So this view emphasizes deviations from exponential growth. <i><b>Note:</b> The x-axis of this graph is not time</i>, as you might be used to, but is instead the total number of cases or deaths. <span v-if="isHidden"><a @click="toggleHide">Read more.</a></span></p>
 
           <span v-if="!isHidden">
             <p>The graph plots the number of <b><i>new</i></b> {{selectedData.toLowerCase()}} in the past week, versus the <b><i>total</i></b> number of {{selectedData.toLowerCase()}}.</p>
