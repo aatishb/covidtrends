@@ -389,10 +389,13 @@ let app = new Vue({
 
       if (selectedData == 'Confirmed Cases') {
        Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", this.processData);
+       this.region = "Countries";
       } else if (selectedData == 'Reported Deaths') {
        Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", this.processData);
+       this.region = "Countries";
       } else if (selectedData == 'Confirmed Cases (US)') {
        Plotly.d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv", this.processUSData);
+       this.region = "States";
       }
     },
 
@@ -620,6 +623,8 @@ let app = new Vue({
     dataTypes: ['Confirmed Cases', 'Reported Deaths', 'Confirmed Cases (US)',],
 
     selectedData: 'Confirmed Cases',
+    
+    region: "Countries",
 
     sliderSelected: false,
 
