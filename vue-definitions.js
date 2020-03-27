@@ -523,7 +523,7 @@ let app = new Vue({
 
       let url = baseUrl + queryUrl.toString();
 
-      window.history.replaceState( {} , 'Covid Trends', '/?'+queryUrl.toString() );
+      window.history.replaceState( {} , 'Covid Trends', '?'+queryUrl.toString() );
 
       this.copyToClipboard(url);
       //alert('Here\'s a custom URL to pull up this view:\n' + url);
