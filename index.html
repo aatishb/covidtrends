@@ -100,6 +100,12 @@
             </option>
           </select>
 
+          <select v-model="selectedRegion" @mousedown="pause">
+            <option v-for="s in region" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
+
           <select v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
@@ -110,9 +116,9 @@
 
         <div id="countries">
 
-          <h2>Countries</h2>
+          <h2>{{regionType}}</h2>
 
-          <p>Countries with at least {{minCasesInCountry}} {{selectedData}}</p>
+          <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
           <div id="buttonwrapper">
             <button @click="deselectAll">Deselect All</button>
