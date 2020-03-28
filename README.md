@@ -4,7 +4,7 @@ This is an [interactive graph / animation](https://aatishb.com/covidtrends/) tha
 
 The graph plots the number of new confirmed cases in the past week, versus the total number of confirmed cases.
 
-When plotted in this way, exponential growth is displayed as a straight line. (And the slope of this line represents the growth rate.)
+When plotted in this way, exponential growth is displayed as a straight line.
 
 Notice that most countries follow a similar straight line path, indicating that the growth rate is similar across countries. We're all in this together.
 
