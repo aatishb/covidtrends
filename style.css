@@ -259,3 +259,11 @@ select {
 select:first-child {
   margin-top: 0;
 }
+
+#nodata {
+  height: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
