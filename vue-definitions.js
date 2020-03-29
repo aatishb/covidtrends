@@ -1,3 +1,5 @@
+const perCapitaScale = 100_000;
+
 // custom graph component
 Vue.component('graph', {
 
@@ -72,6 +74,8 @@ Vue.component('graph', {
 
       let showDailyMarkers = this.data.length <= 2;
 
+      let unitStr = this.selectedUnit === "Absolute" ? "" : ` per ${perCapitaScale.toLocaleString()}`;
+
       let traces1 = this.data.map((e,i) => ({
         x: e.cases,
         y: e.slope,
@@ -88,7 +92,7 @@ Vue.component('graph', {
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData + unitStr + ': %{x:,}<br>Weekly ' + this.selectedData + unitStr +': %{y:,}<extra></extra>',
       })
       );
 
@@ -104,7 +108,7 @@ Vue.component('graph', {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData + unitStr + ': %{x:,}<br>Weekly ' + this.selectedData + unitStr + ': %{y:,}<extra></extra>',
 
       })
       );
@@ -241,8 +245,7 @@ Vue.component('graph', {
 
     selectedUnit() {
       console.log('selectedUnit: ' + this.selectedUnit);
-      // this.makeGraph();
-      // this.pullData(this.selectedData);
+      this.makeGraph();
     },
 
     data() {
@@ -361,6 +364,10 @@ let app = new Vue({
       this.pullData(this.selectedData);
     },
 
+    selectedUnit() {
+      this.pullData(this.selectedData);
+    },
+
     graphMounted() {
       //console.log('minDay', this.minDay);
       //console.log('autoPlay', this.autoplay);
@@ -454,19 +461,21 @@ let app = new Vue({
             }
 
             let locID = locIDMapping[country];
-            let countryPop = popByCountry.find(x => {
+            let countryStats = popByCountry.find(x => {
               if (locID === undefined) {
                 return x.Location.toLowerCase().startsWith(country.toLowerCase());
               } else {
                 return x.LocID == locID;
               }
             });
-            console.log(country + " [" + countryPop.Location + "] population: " + countryPop.PopTotal);
+            // console.log(country + " [" + countryStats.Location + "] population: " + countryStats.PopTotal);
 
-            let cases = arr.map(e => e >= appObj.minCasesInCountry ? e : NaN);
-            let slope = arr.map((e,i,a) => e - a[i - 7]).map((e,i) => arr[i] >= appObj.minCasesInCountry ? e : NaN);
-
-            console.log(appObj.selectedUnit);
+            let scaledArr = arr;
+            if (appObj.selectedUnit === "Per Capita") {
+              scaledArr = arr.map(e => e / countryStats.PopTotal * perCapitaScale);
+            }
+            let cases = scaledArr.map(e => e >= appObj.minCasesInCountry ? e : NaN);
+            let slope = scaledArr.map((e,i,a) => e - a[i - 7]).map((e,i) => arr[i] >= appObj.minCasesInCountry ? e : NaN);
 
             myData.push({country: country, cases: cases, slope: slope});
   
@@ -630,7 +639,7 @@ let app = new Vue({
 
     units: ['Absolute', 'Per Capita'],
 
-    selectedUnit: 'Absolute',
+    selectedUnit: 'Per Capita',
     
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
