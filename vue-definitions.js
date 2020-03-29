@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize'],
+  props: ['data', 'dates', 'day', 'selectedData', 'selectedUnit', 'scale', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -239,6 +239,12 @@ Vue.component('graph', {
       this.$emit('update:day', this.dates.length);
     },
 
+    selectedUnit() {
+      console.log('selectedUnit: ' + this.selectedUnit);
+      // this.makeGraph();
+      // this.pullData(this.selectedData);
+    },
+
     data() {
       //console.log('data change detected');
       this.makeGraph();
@@ -301,6 +307,16 @@ let app = new Vue({
           this.selectedScale = 'Logarithmic Scale';
         } else if (myScale == 'linear') {
           this.selectedScale = 'Linear Scale';
+        }
+      }
+
+      if (urlParameters.has('unit')) {
+        let myUnit = urlParameters.get('unit').toLowerCase();
+
+        if (myUnit == 'per+capita') {
+          this.selectedUnit = "Per Capita";
+        } else if (myUnit == 'absolute') {
+          this.selectedUnit = "Absolute";
         }
       }
 
@@ -395,52 +411,71 @@ let app = new Vue({
     },
 
     processData(data) {
+      let appObj = this;
 
-      let countriesToLeaveOut = ['Cruise Ship', 'Diamond Princess'];
-
-      let renameCountries = {
-        'Taiwan*': 'Taiwan',
-        'Korea, South': 'South Korea'
-      };
-
-      let countries = data.map(e => e["Country/Region"]);
-      countries = this.removeRepeats(countries);
-
-      let dates = Object.keys(data[0]).slice(4);
-      this.dates = dates;
-
-      //this.day = this.dates.length;
-
-      let myData = [];
-      for (let country of countries){
-        let countryData = data.filter(e => e["Country/Region"] == country);
-        let arr = [];
-
-        for (let date of dates) {
-          let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
-          arr.push(sum);
-        }
-
-        if (!countriesToLeaveOut.includes(country)) {
-
-          let slope = arr.map((e,i,a) => e - a[i - 7]);
-
-          if (Object.keys(renameCountries).includes(country)) {
-            country = renameCountries[country];
+      // TODO: consider fetching this directly from the web source
+      Plotly.d3.csv("./data/WPP2019_TotalPopulationBySex-2.csv", function(rawPopData) {
+        let popByCountry = rawPopData.filter(function(x) { return x.Time == 2020 && x.Variant == 'Medium'; });
+        // FIXME: is Kosovo in the database? if so, where?
+        popByCountry.push({Location: "Kosovo", PopTotal: 1_831_000});
+        // Cruise ships obviously aren't in the database
+        popByCountry.push({Location:"MS Zaandam", PopTotal: 1_829});
+        // fallback to manual location ID mappings for cases where the databases don't match up in terms of country names
+        let locIDMapping =
+          {"Cote d'Ivoire":384,"South Korea":408,"Moldova":498,"Taiwan":158,"Tanzania":834,"US":840,"Congo (Kinshasa)":180,"Congo (Brazzaville)":178,
+           "Vietnam":418,"Laos":418,"West Bank and Gaza":275,"Burma":104};
+        let countriesToLeaveOut = ['Cruise Ship', 'Diamond Princess'];
+        
+        let renameCountries = {
+          'Taiwan*': 'Taiwan',
+          'Korea, South': 'South Korea'
+        };
+  
+        let countries = data.map(e => e["Country/Region"]);
+        countries = appObj.removeRepeats(countries);
+  
+        let dates = Object.keys(data[0]).slice(4);
+        appObj.dates = dates;
+  
+        let myData = [];
+        for (let country of countries){
+          let countryData = data.filter(e => e["Country/Region"] == country);
+          let arr = [];
+  
+          for (let date of dates) {
+            let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
+            arr.push(sum);
           }
+          
+          if (!countriesToLeaveOut.includes(country)) {
+            
+            if (Object.keys(renameCountries).includes(country)) {
+              country = renameCountries[country];
+            }
 
-          myData.push({
-            country: country,
-            cases: arr.map(e => e >= this.minCasesInCountry ? e : NaN),
-            slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
-          });
+            let locID = locIDMapping[country];
+            let countryPop = popByCountry.find(x => {
+              if (locID === undefined) {
+                return x.Location.toLowerCase().startsWith(country.toLowerCase());
+              } else {
+                return x.LocID == locID;
+              }
+            });
+            console.log(country + " [" + countryPop.Location + "] population: " + countryPop.PopTotal);
 
+            let cases = arr.map(e => e >= appObj.minCasesInCountry ? e : NaN);
+            let slope = arr.map((e,i,a) => e - a[i - 7]).map((e,i) => arr[i] >= appObj.minCasesInCountry ? e : NaN);
+
+            console.log(appObj.selectedUnit);
+
+            myData.push({country: country, cases: cases, slope: slope});
+  
+          }
         }
-      }
-
-      this.covidData = myData.filter(e => this.myMax(...e.cases) >= this.minCasesInCountry);
-      this.countries = this.covidData.map(e => e.country).sort();
-
+  
+        appObj.covidData = myData.filter(e => appObj.myMax(...e.cases) >= appObj.minCasesInCountry);
+        appObj.countries = appObj.covidData.map(e => e.country).sort();
+      });
     },
 
     play() {
@@ -509,6 +544,10 @@ let app = new Vue({
 
       if (this.selectedScale == 'Linear Scale') {
         queryUrl.append('scale', 'linear');
+      }
+
+      if (this.selectedUnit == 'Per Capita') {
+        queryUrl.append('unit', 'per+capita');
       }
 
       if (this.selectedData == 'Reported Deaths') {
@@ -589,6 +628,10 @@ let app = new Vue({
 
     icon: 'icons/play.svg',
 
+    units: ['Absolute', 'Per Capita'],
+
+    selectedUnit: 'Absolute',
+    
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
     selectedScale: 'Logarithmic Scale',
