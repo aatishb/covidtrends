@@ -350,6 +350,10 @@ let app = new Vue({
       this.pullData(this.selectedData);
     },
 
+    perCapita() {
+      this.pullData(this.selectedData);
+    },
+
     graphMounted() {
       //console.log('minDay', this.minDay);
       //console.log('autoPlay', this.autoplay);

@@ -107,9 +107,11 @@
           </select>
 		  
 		  <label>Rolling window (days):</label>
-
           <input type="number" v-model="timeWindow" @mousedown="pause" min="1" max="50">
-  
+		  
+		  <br>
+          <input type="checkbox" v-model="perCapita">
+          <label>Per capita</label>
         </div>
 
         <div id="countries">
