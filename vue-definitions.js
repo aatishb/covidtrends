@@ -328,7 +328,7 @@ let app = new Vue({
 
       else if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
         this.paused = true;
-        this.day = Math.max(this.day - 1, 8);
+        this.day = Math.max(this.day - 1, this.timeWindow + 1);
       }
 
       else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
@@ -610,7 +610,7 @@ let app = new Vue({
         }
 
         if (!countriesToLeaveOut.includes(country)) {
-          let slope = arr.map((e,i,a) => e - a[i - 7]);
+          let slope = arr.map((e,i,a) => e - a[i - this.timeWindow]);
 
           if (Object.keys(renameCountries).includes(country)) {
             country = renameCountries[country];
@@ -771,6 +771,8 @@ let app = new Vue({
     selectedData: 'Confirmed Cases',
 
     sliderSelected: false,
+	
+	timeWindow: 7,
 
     day: 7,
 
