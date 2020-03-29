@@ -392,15 +392,21 @@ let app = new Vue({
     },
 
     pullData(selectedData, selectedRegion) {
-      let url;
-      if (selectedData == 'Confirmed Cases') {
-       url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
-      } else if (selectedData == 'Reported Deaths') {
-       url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
-      } else {
-        return;
+      if (selectedRegion != 'United States') {
+        let url;
+        if (selectedData == 'Confirmed Cases') {
+         url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
+        } else if (selectedData == 'Reported Deaths') {
+         url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
+        } else {
+          return;
+        }
+        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion));
+      } else { // selectedRegion == 'United States'
+        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
+        const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion));
       }
-      Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion));
     },
 
     removeRepeats(array) {
@@ -481,6 +487,20 @@ let app = new Vue({
         if (!this.selectedCountries.includes(notableCountry)) {
           this.selectedCountries.push(notableCountry);
         }
+      }
+    },
+
+    preprocessNYTData(data, type) {
+      let recastData = {};
+      data.forEach(e => {
+        let st = recastData[e.state]  = (recastData[e.state] || {"Province/State": e.state, "Country/Region": "United States", "Lat": null, "Long": null});
+        st[fixNYTDate(e.date)] = parseInt(e[type]);
+      });
+      return Object.values(recastData);
+
+      function fixNYTDate(date) {
+        let tmp = date.split("-");
+        return `${tmp[1]}/${tmp[2]}/${tmp[0].substr(2)}`;
       }
     },
 
@@ -627,7 +647,7 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    region: ['World', 'China', 'Australia', 'Canada'],
+    region: ['World', 'United States', 'China', 'Australia', 'Canada'],
 
     selectedRegion: "World",
 
