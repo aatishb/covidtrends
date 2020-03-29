@@ -399,7 +399,7 @@ let app = new Vue({
     },
 
     pullData(selectedData, selectedRegion, didRegionChange) {
-      if (selectedRegion != 'United States') {
+      if (selectedRegion != 'US') {
         let url;
         if (selectedData == 'Confirmed Cases') {
          url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
@@ -409,7 +409,7 @@ let app = new Vue({
           return;
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, didRegionChange));
-      } else { // selectedRegion == 'United States'
+      } else { // selectedRegion == 'US'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, didRegionChange));
@@ -490,7 +490,7 @@ let app = new Vue({
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
-      const notableCountries = ['China', 'India', 'United States', // Top 3 by population
+      const notableCountries = ['China', 'India', 'US', // Top 3 by population
           'South Korea', 'Singapore', 'Japan', // Observed success so far
           'Canada', 'Australia']; // These appear in the region selector
       if (didRegionChange) {
@@ -501,7 +501,7 @@ let app = new Vue({
     preprocessNYTData(data, type) {
       let recastData = {};
       data.forEach(e => {
-        let st = recastData[e.state]  = (recastData[e.state] || {"Province/State": e.state, "Country/Region": "United States", "Lat": null, "Long": null});
+        let st = recastData[e.state]  = (recastData[e.state] || {"Province/State": e.state, "Country/Region": "US", "Lat": null, "Long": null});
         st[fixNYTDate(e.date)] = parseInt(e[type]);
       });
       return Object.values(recastData);
@@ -651,7 +651,7 @@ let app = new Vue({
         case 'World':
           return 'Countries';
         case 'Australia':
-        case 'United States':
+        case 'US':
           return 'States';
         case 'China':
         case 'Canada':
@@ -670,7 +670,7 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'United States', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
 
     selectedRegion: "World",
 
