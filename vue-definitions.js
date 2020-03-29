@@ -316,7 +316,7 @@ let app = new Vue({
 
       if (urlParameters.has('region')) {
         let myRegion = urlParameters.get('region');
-        if (this.region.includes(myRegion)) {
+        if (this.regions.includes(myRegion)) {
           this.selectedRegion = myRegion;
         }
       }
@@ -670,7 +670,7 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    region: ['World', 'United States', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'United States', 'China', 'Australia', 'Canada'],
 
     selectedRegion: "World",
 
