@@ -203,7 +203,7 @@ Vue.component('graph', {
       let ymax = Math.max(...this.filteredSlope, 50);
 
       if (this.scale == 'Logarithmic Scale') {
-        this.yrange = [1, Math.ceil(Math.log10(1.5*ymax))]
+        this.yrange = [0, Math.ceil(Math.log10(1.5*ymax))]
       } else {
         this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
       }
