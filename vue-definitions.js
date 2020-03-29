@@ -192,7 +192,7 @@ Vue.component('graph', {
       let xmax = Math.max(...this.filteredCases, 50);
 
       if (this.scale == 'Logarithmic Scale') {
-        this.xrange = [1, Math.ceil(Math.log10(1.5*xmax))]
+        this.xrange = [0, Math.ceil(Math.log10(1.1*xmax))]
       } else {
         this.xrange = [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
       }
@@ -203,7 +203,7 @@ Vue.component('graph', {
       let ymax = Math.max(...this.filteredSlope, 50);
 
       if (this.scale == 'Logarithmic Scale') {
-        this.yrange = [1, Math.ceil(Math.log10(1.5*ymax))]
+        this.yrange = [-1, Math.ceil(Math.log10(1.1*ymax))]
       } else {
         this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
       }
