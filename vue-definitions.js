@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize', 'timeWindow'],
+  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize', 'timeWindow', 'isPerCapita'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -127,11 +127,12 @@ Vue.component('graph', {
         this.autosetRange = false;
       }
 
+      let labelSuffix = this.isPerCapita ?' per million' : '';
       this.layout = {
         title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
         showlegend: false,
         xaxis: {
-          title: 'Total ' + this.selectedData + ' per million',
+          title: 'Total ' + this.selectedData + labelSuffix,
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.xrange,
           titlefont: {
@@ -140,7 +141,7 @@ Vue.component('graph', {
           },
         },
         yaxis: {
-          title: 'New ' + this.selectedData + ' per million (in the Past ' + this.timeWindow + ' days)',
+          title: 'New ' + this.selectedData + labelSuffix + ' (in the Past ' + this.timeWindow + ' days)',
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.yrange,
           titlefont: {
@@ -610,7 +611,7 @@ let app = new Vue({
 
         for (let date of dates) {
           let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
-          arr.push(sum * 1000000 / contrySize);
+           arr.push(this.perCapita ? sum * 1000000 / contrySize: sum);
         }
 
         if (!countriesToLeaveOut.includes(country)) {
@@ -803,6 +804,8 @@ let app = new Vue({
     autoplay: true,
 
     copied: false,
+	
+	perCapita: true,
 
   }
 

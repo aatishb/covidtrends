@@ -55,7 +55,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" :time-window="timeWindow" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" :time-window="timeWindow" :is-per-capita="perCapita" @graph-mounted="graphMounted = true"></graph>
 
         <div id="nav">
 
