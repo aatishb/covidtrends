@@ -637,15 +637,15 @@ let app = new Vue({
     regionType() {
       switch (this.selectedRegion) {
         case 'World':
-          return 'Country';
+          return 'Countries';
         case 'Australia':
         case 'United States':
-          return 'State';
+          return 'States';
         case 'China':
         case 'Canada':
-          return 'Province';
+          return 'Provinces';
         default:
-          return 'Region';
+          return 'Regions';
       }
     }
   },
