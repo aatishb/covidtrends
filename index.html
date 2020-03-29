@@ -20,7 +20,7 @@
     <div id="header">
 
         <div id="explainer">
-          <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week vs. the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Learn more.</a></span></p>
+          <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past {{timeWindow}} days vs. the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Learn more.</a></span></p>
 
           <span v-if="!isHidden">
 
@@ -55,7 +55,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" :time-window="timeWindow" @graph-mounted="graphMounted = true"></graph>
 
         <div id="nav">
 
@@ -69,7 +69,7 @@
           </div>
 
           <div class="navelement" id="slidercontainer">
-            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause"></input>
+            <input v-if="dates.length > timeWindow" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause"></input>
           </div>
 
           <div class="navelement">
@@ -105,7 +105,11 @@
               {{ s }}
             </option>
           </select>
+		  
+		  <label>Rolling window (days):</label>
 
+          <input type="number" v-model="timeWindow" @mousedown="pause" min="1" max="50">
+  
         </div>
 
         <div id="countries">

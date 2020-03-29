@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize'],
+  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize', 'timeWindow'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -88,7 +88,7 @@ Vue.component('graph', {
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>' + this.selectedData +' in the last ' + this.timeWindow + ' days: %{y:,}<extra></extra>',
       })
       );
 
@@ -104,7 +104,7 @@ Vue.component('graph', {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>' + this.selectedData +' in the last ' + this.timeWindow + ' days: %{y:,}<extra></extra>',
 
       })
       );
@@ -140,7 +140,7 @@ Vue.component('graph', {
           },
         },
         yaxis: {
-          title: 'New ' + this.selectedData + ' per million (in the Past Week)',
+          title: 'New ' + this.selectedData + ' per million (in the Past ' + this.timeWindow + ' days)',
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.yrange,
           titlefont: {
@@ -342,6 +342,10 @@ let app = new Vue({
 
   watch: {
     selectedData() {
+      this.pullData(this.selectedData);
+    },
+
+    timeWindow() {
       this.pullData(this.selectedData);
     },
 
@@ -774,7 +778,7 @@ let app = new Vue({
 	
 	timeWindow: 7,
 
-    day: 7,
+    day: 1,
 
     icon: 'icons/play.svg',
 
