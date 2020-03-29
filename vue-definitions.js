@@ -282,7 +282,7 @@ let app = new Vue({
   el: '#root',
 
   mounted() {
-    this.pullData(this.selectedData, this.selectedRegion);
+    this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ true);
   },
 
   created: function() {
@@ -349,11 +349,11 @@ let app = new Vue({
 
   watch: {
     selectedData() {
-      this.pullData(this.selectedData, this.selectedRegion);
+      this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ false);
     },
 
     selectedRegion() {
-      this.pullData(this.selectedData, this.selectedRegion);
+      this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ true);
     },
 
     minDay() {
@@ -398,7 +398,7 @@ let app = new Vue({
       return Math.min.apply(Math, par);
     },
 
-    pullData(selectedData, selectedRegion) {
+    pullData(selectedData, selectedRegion, didRegionChange) {
       if (selectedRegion != 'United States') {
         let url;
         if (selectedData == 'Confirmed Cases') {
@@ -408,11 +408,11 @@ let app = new Vue({
         } else {
           return;
         }
-        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion));
+        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, didRegionChange));
       } else { // selectedRegion == 'United States'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion));
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, didRegionChange));
       }
     },
 
@@ -443,7 +443,7 @@ let app = new Vue({
           .map(e => ({...e, region: e["Province/State"]}));
     },
 
-    processData(data, selectedRegion) {
+    processData(data, selectedRegion, didRegionChange) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
 
@@ -493,7 +493,9 @@ let app = new Vue({
       const notableCountries = ['China', 'India', 'United States', // Top 3 by population
           'South Korea', 'Singapore', 'Japan', // Observed success so far
           'Canada', 'Australia']; // These appear in the region selector
-      this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+      if (didRegionChange) {
+        this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+      }
     },
 
     preprocessNYTData(data, type) {
