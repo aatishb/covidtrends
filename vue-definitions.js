@@ -314,6 +314,13 @@ let app = new Vue({
 
       }
 
+      if (urlParameters.has('region')) {
+        let myRegion = urlParameters.get('region');
+        if (this.region.includes(myRegion)) {
+          this.selectedRegion = myRegion;
+        }
+      }
+
       if (urlParameters.has('country')) {
         this.selectedCountries = urlParameters.getAll('country');
       }
@@ -575,6 +582,10 @@ let app = new Vue({
 
       if (this.selectedData == 'Reported Deaths') {
         queryUrl.append('data', 'deaths');
+      }
+
+      if (this.selectedRegion != 'World') {
+        queryUrl.append('region', this.selectedRegion);
       }
 
       for (let country of this.countries) {
