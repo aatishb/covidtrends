@@ -780,7 +780,7 @@ let app = new Vue({
 
     selectedScale: 'Linear Scale',
 
-    minCasesInCountry: 50,
+    minCasesInCountry: 1,
 
     dates: [],
 
