@@ -480,9 +480,10 @@ let app = new Vue({
         }
       }
 
-      this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry).sort((a, b) => b.maxCases - a.maxCases);
-      this.countries = this.covidData.map(e => e.country);
-      this.selectedCountries = this.countries.slice(0, 15);
+      this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
+      this.countries = this.covidData.map(e => e.country).sort();
+      const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 15).map(e => e.country);
+      this.selectedCountries = this.countries.filter(e => topCountries.includes(e));
       for (const notableCountry of ['China', 'South Korea', 'Japan', 'Singapore', 'Qatar']) {
         if (!this.selectedCountries.includes(notableCountry)) {
           this.selectedCountries.push(notableCountry);
