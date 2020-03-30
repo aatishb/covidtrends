@@ -4,8 +4,6 @@
   "files": [
     "README.md"
   ],
-  "imageSize": 100,
-  "commit": true,
   "contributors": [
     {
       "login": "aatishb",
@@ -21,9 +19,5 @@
       "profile": "https://www.professormoose.com/",
       "contributions": []
     }
-  ],
-  "repoType": "github",
-  "repoHost": "https://github.com",
-  "contributorsPerLine": 7,
-  "skipCi": true
+  ]
 }
