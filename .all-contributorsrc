@@ -1,0 +1,29 @@
+{
+  "projectName": "Covidtrends",
+  "projectOwner": "Aatish Bhatia",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "aatishb",
+      "name": "Aatish Bhatia",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1878638?s=460&u=dd99116206186be4e588bf7b19f4e32530ac1100&v=4",
+      "profile": "https://aatishb.com/",
+      "contributions": []
+    },
+    {
+      "login": "mustpax",
+      "name": "Mustafa Paksoy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/22178?s=460&u=3092d3ecc9af9576ded99d8fe45b82242c00738d&v=4",
+      "profile": "https://www.professormoose.com/",
+      "contributions": []
+    }
+  ],
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "contributorsPerLine": 7,
+  "skipCi": true
+}
