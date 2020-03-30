@@ -324,6 +324,8 @@ let app = new Vue({
           this.selectedData = 'Confirmed Cases';
         } else if (myData == 'deaths') {
           this.selectedData = 'Reported Deaths';
+        } else if (myData == 'recovered') {
+          this.selectedData = 'Recovered';
         }
       }
 
@@ -596,7 +598,7 @@ let app = new Vue({
 
     dataTypes: ['Confirmed Cases', 'Reported Deaths', 'Recovered'],
 
-    selectedData: 'Confirmed Cases',
+    selectedData: 'Recovered',
 
     sliderSelected: false,
 
@@ -619,21 +621,13 @@ let app = new Vue({
     isHidden: true,
 
     selectedCountries: [
-      'Australia',
-      'Canada',
       'China',
       'France',
       'Germany',
-      'Iran',
       'Italy',
-      'Japan',
-      'South Korea',
       'Spain',
-      'Switzerland',
       'US',
       'United Kingdom',
-      'India',
-      'Pakistan'
     ],
 
     graphMounted: false,
