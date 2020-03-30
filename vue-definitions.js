@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize'],
+  props: ['data', 'dates', 'day', 'selectedData', 'selectedRegion', 'scale', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -236,6 +236,11 @@ Vue.component('graph', {
 
     selectedData() {
       //console.log('selected data change detected');
+      this.$emit('update:day', this.dates.length);
+    },
+
+    selectedRegion() {
+      //console.log('selected region change detected');
       this.$emit('update:day', this.dates.length);
     },
 
@@ -672,7 +677,7 @@ let app = new Vue({
 
     regions: ['World', 'US', 'China', 'Australia', 'Canada'],
 
-    selectedRegion: "World",
+    selectedRegion: 'World',
 
     sliderSelected: false,
 
