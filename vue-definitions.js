@@ -521,7 +521,7 @@ let app = new Vue({
 
         this.paused = false;
         this.icon = 'icons/pause.svg';
-        this.increment();
+        setTimeout(this.increment, 200);
 
       } else {
         this.paused = true;
@@ -640,7 +640,7 @@ let app = new Vue({
     minDay() {
       let minDay = this.myMin(...(this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)).filter(x => x != -1)));
       if (isFinite(minDay) && !isNaN(minDay)){
-        return minDay;
+        return minDay + 1;
       } else {
         return -1;
       }
