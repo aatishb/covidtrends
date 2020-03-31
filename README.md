@@ -42,3 +42,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+## License 
+
+Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.txt](LICENSE.txt) for complete text.
+

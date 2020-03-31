@@ -108,6 +108,7 @@ p {
 #explainer a {
   text-decoration: underline;
   color: lightgoldenrodyellow;
+  cursor: pointer;
 }
 
 #explainer p {
