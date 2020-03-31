@@ -21,4 +21,4 @@ Created by [Aatish Bhatia](https://aatishb.com/) in collaboration with [Henry Re
 Created using [Plotly.js](https://plot.ly/javascript/) and [Vue.js](https://vuejs.org/)
 
 ## License 
-Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.md](LICENSE.md) for complete text.
+Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.txt](LICENSE.txt) for complete text.
