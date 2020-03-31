@@ -18,6 +18,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mustpax",
+      "name": "Mustafa \"Moose\" Paksoy",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22178?v=4",
+      "profile": "http://www.professormoose.com",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7
