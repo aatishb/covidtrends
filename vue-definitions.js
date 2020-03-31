@@ -150,7 +150,7 @@ Vue.component('graph', {
         },
         hovermode: 'closest',
         font: {
-                family: 'Open Sans',
+                family: 'Open Sans, sans-serif',
                 color: "black",
                 size: 14
               },
