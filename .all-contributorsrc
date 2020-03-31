@@ -9,6 +9,16 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "aatishb",
+      "name": "Aatish Bhatia",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1878638?v=4",
+      "profile": "https://aatishb.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
   "contributorsPerLine": 7
 }

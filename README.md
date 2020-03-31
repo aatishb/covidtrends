@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -30,6 +30,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://aatishb.com"><img src="https://avatars2.githubusercontent.com/u/1878638?v=4" width="100px;" alt=""/><br /><sub><b>Aatish Bhatia</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=aatishb" title="Code">💻</a></td>
+  </tr>
+</table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
