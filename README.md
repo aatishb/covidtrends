@@ -19,3 +19,6 @@ Created by [Aatish Bhatia](https://aatishb.com/) in collaboration with [Henry Re
 **With thanks to Upasana Roy, Connie Sun, Ritwick Ghosh, Ann Bybee-Finley, Nicky Case, Mustafa Paksoy, Shekhar Bhatia, Arkarup Banerjee, and Igor Kholopov for their very helpful feedback & suggestions!** Any mistakes or omissions are mine.
 
 Created using [Plotly.js](https://plot.ly/javascript/) and [Vue.js](https://vuejs.org/)
+
+## License 
+Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.txt](LICENSE.txt) for complete text.
