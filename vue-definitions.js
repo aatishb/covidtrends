@@ -287,7 +287,7 @@ let app = new Vue({
   el: '#root',
 
   mounted() {
-    this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ true);
+    this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ false);
   },
 
   created: function() {
@@ -498,7 +498,7 @@ let app = new Vue({
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
           'South Korea', 'Singapore', 'Japan', // Observed success so far
           'Canada', 'Australia']; // These appear in the region selector
-      if (didRegionChange) {
+      if (didRegionChange || this.selectedCountries == null) {
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
       }
     },
@@ -699,7 +699,7 @@ let app = new Vue({
 
     isHidden: true,
 
-    selectedCountries: [],
+    selectedCountries: null,
 
     graphMounted: false,
 
