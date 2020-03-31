@@ -55,7 +55,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :selected-unit="selectedUnit" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
         <div id="nav">
 
@@ -97,6 +97,12 @@
           <select v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
+            </option>
+          </select>
+
+          <select v-model="selectedUnit" @mousedown="pause">
+            <option v-for="u in units" v-bind:value="u">
+              {{ u }}
             </option>
           </select>
 
