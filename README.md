@@ -12,7 +12,7 @@ Notice that most countries follow a similar straight line path, indicating that 
 
 ## Credits
 
-This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19). Huge thanks to them for making this invaluable data source publicly available.
+This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19) and <a href="https://github.com/nytimes/covid-19-data">NYTimes</a>. Huge thanks to them for making this invaluable data source publicly available.
 
 Created by [Aatish Bhatia](https://aatishb.com/) in collaboration with [Henry Reich](https://www.youtube.com/user/minutephysics).
 
