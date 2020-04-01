@@ -48,16 +48,15 @@
 
         </div>
 
-
     </div>
 
     <div id="content">
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :selected-region="selectedRegion" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
-        <div id="nav">
+        <div v-if="covidData.length > 0" id="nav">
 
           <div class="navelement">
             <img v-if="paused" @click="play" src="icons/play.svg" style="width: 3rem;">
@@ -82,9 +81,10 @@
 
         </div>
 
+        <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span></div>
 
         <div id="footer">
-          Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; Data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> &middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
+          Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> &middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
         </div>
 
       </div>
@@ -100,6 +100,12 @@
             </option>
           </select>
 
+          <select v-model="selectedRegion" @mousedown="pause">
+            <option v-for="s in regions" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
+
           <select v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
@@ -110,9 +116,9 @@
 
         <div id="countries">
 
-          <h2>Countries</h2>
+          <h2>{{regionType}}</h2>
 
-          <p>Countries with at least {{minCasesInCountry}} {{selectedData}}</p>
+          <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
           <div id="buttonwrapper">
             <button @click="deselectAll">Deselect All</button>
@@ -126,7 +132,6 @@
             </li>
           </ul>
 
-
         </div>
 
         <div>
@@ -137,13 +142,9 @@
 
         </div>
 
-
       </div>
 
-
     </div>
-
-
 
   </div>
 

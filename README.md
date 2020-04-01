@@ -11,11 +11,11 @@ When plotted in this way, exponential growth is displayed as a straight line.
 
 Notice that most countries follow a similar straight line path, indicating that the growth rate is similar across countries. We're all in this together.
 
-**Tips:** Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom into graph, doubleclick to zoom back out. Use dropdown menus to switch between Confirmed Cases ↔ Deaths, or between a logarithmic ↔ linear scale. And don't forget to wash your hands!
+**Tips:** Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom into graph, doubleclick to zoom back out. Use dropdown menus to switch between Confirmed Cases ↔ Deaths, between regions, or between a logarithmic ↔ linear scale. And don't forget to wash your hands!
 
 ## Credits
 
-This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19). Huge thanks to them for making this invaluable data source publicly available.
+This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19) and <a href="https://github.com/nytimes/covid-19-data">NYTimes</a>. Huge thanks to them for making this invaluable data source publicly available.
 
 Created by [Aatish Bhatia](https://aatishb.com/) in collaboration with [Henry Reich](https://www.youtube.com/user/minutephysics).
 
