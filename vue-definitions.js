@@ -683,6 +683,7 @@ let app = new Vue({
         case 'US':
           return 'States';
         case 'China':
+          return 'Provinces and Regions';
         case 'Canada':
           return 'Provinces';
         default:
