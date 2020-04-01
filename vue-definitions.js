@@ -201,9 +201,15 @@ Vue.component('graph', {
 
     setyrange() {
       let ymax = Math.max(...this.filteredSlope, 50);
+      let ymin = Math.min(...this.filteredSlope);
 
       if (this.scale == 'Logarithmic Scale') {
-        this.yrange = [0, Math.ceil(Math.log10(1.5*ymax))]
+        if (ymin < 10) {
+          // shift ymin on log scale when fewer than 10 cases
+          this.yrange = [0, Math.ceil(Math.log10(1.5*ymax))]
+        } else {
+          this.yrange = [1, Math.ceil(Math.log10(1.5*ymax))]
+        }
       } else {
         this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
       }
@@ -511,7 +517,7 @@ let app = new Vue({
       this.countries = this.covidData.map(e => e.country).sort();
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
-          'South Korea', 'Singapore', 'Japan', // Observed success so far
+          'South Korea', 'Japan', // Observed success so far
           'Canada', 'Australia']; // These appear in the region selector
 
       // TODO: clean this logic up later
