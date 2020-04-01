@@ -225,28 +225,32 @@ Vue.component('graph', {
 
     scale() {
       //console.log('scale change detected', this.scale);
-       this.makeGraph();
+      this.makeGraph();
     },
 
     day(newDay, oldDay) {
-      //console.log('day change detected', oldDay, newDay);
-      this.updateLayout();
-      this.updateAnimation();
+      if (this.updateDate) { // avoid race condition bug where day change triggers old layout
+        //console.log('day change detected', oldDay, newDay);
+        this.updateLayout();
+        this.updateAnimation();
+      }
     },
 
     selectedData() {
       //console.log('selected data change detected');
-      this.$emit('update:day', this.dates.length);
+      this.updateDate = false;
     },
 
     selectedRegion() {
       //console.log('selected region change detected');
-      this.$emit('update:day', this.dates.length);
+      this.updateDate = false;
     },
 
     data() {
       //console.log('data change detected');
+      this.$emit('update:day', this.dates.length);
       this.makeGraph();
+      this.updateDate = true;
     }
 
   },
@@ -266,6 +270,7 @@ Vue.component('graph', {
       yrange: [],
       autosetRange: true,
       graphMounted: false,
+      updateDate: true,
       config: {
           responsive: true,
           toImageButtonOptions: {
