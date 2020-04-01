@@ -523,7 +523,7 @@ let app = new Vue({
       // TODO: clean this logic up later
       // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
-      if ((this.selectedCountries.length == 0 || this.firstLoad == false) && updateSelectedCountries) {
+      if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
         //console.log('generating new selected countries list');
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
       }
