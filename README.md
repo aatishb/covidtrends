@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -34,6 +34,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://aatishb.com"><img src="https://avatars2.githubusercontent.com/u/1878638?v=4" width="100px;" alt=""/><br /><sub><b>Aatish Bhatia</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=aatishb" title="Code">💻</a></td>
     <td align="center"><a href="http://www.professormoose.com"><img src="https://avatars0.githubusercontent.com/u/22178?v=4" width="100px;" alt=""/><br /><sub><b>Mustafa "Moose" Paksoy</b></sub></a><br /><a href="#maintenance-mustpax" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/edg2s"><img src="https://avatars3.githubusercontent.com/u/180672?v=4" width="100px;" alt=""/><br /><sub><b>Ed S</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=edg2s" title="Code">💻</a></td>
   </tr>
 </table>
 
