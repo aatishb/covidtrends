@@ -334,10 +334,8 @@ let app = new Vue({
 
       if (urlParameters.has('country')) {
         this.selectedCountries = urlParameters.getAll('country');
-        this.loadSelectedCountriesFromUrl = true;
       } else if (urlParameters.has('location')) {
         this.selectedCountries = urlParameters.getAll('location');
-        this.loadSelectedCountriesFromUrl = true;
       }
 
     }
@@ -367,15 +365,13 @@ let app = new Vue({
   watch: {
     selectedData() {
       if (!this.firstLoad) {
-        this.loadSelectedCountriesFromUrl = false;
-        this.pullData(this.selectedData, this.selectedRegion);
+        this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ false);
       }
     },
 
     selectedRegion() {
       if (!this.firstLoad) {
-        this.loadSelectedCountriesFromUrl = false;
-        this.pullData(this.selectedData, this.selectedRegion);
+        this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ true);
       }
     },
 
@@ -421,7 +417,7 @@ let app = new Vue({
       return Math.min.apply(Math, par);
     },
 
-    pullData(selectedData, selectedRegion) {
+    pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
       //console.log('pulling', selectedData, ' for ', selectedRegion);
       if (selectedRegion != 'US') {
         let url;
@@ -432,11 +428,11 @@ let app = new Vue({
         } else {
           return;
         }
-        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion));
+        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
       } else { // selectedRegion == 'US'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion));
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
       }
     },
 
@@ -467,7 +463,7 @@ let app = new Vue({
           .map(e => ({...e, region: e["Province/State"]}));
     },
 
-    processData(data, selectedRegion) {
+    processData(data, selectedRegion, updateSelectedCountries) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
 
@@ -518,7 +514,10 @@ let app = new Vue({
           'South Korea', 'Singapore', 'Japan', // Observed success so far
           'Canada', 'Australia']; // These appear in the region selector
 
-      if (this.selectedCountries.length == 0 || this.firstLoad == false) {
+      // TODO: clean this logic up later
+      // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
+      // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
+      if ((this.selectedCountries.length == 0 || this.firstLoad == false) && updateSelectedCountries) {
         //console.log('generating new selected countries list');
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
       }
@@ -724,7 +723,7 @@ let app = new Vue({
 
     isHidden: true,
 
-    selectedCountries: null,
+    selectedCountries: [],
 
     graphMounted: false,
 
