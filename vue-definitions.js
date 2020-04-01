@@ -292,7 +292,8 @@ let app = new Vue({
   el: '#root',
 
   mounted() {
-    this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ false);
+    //console.log('mounted');
+    this.pullData(this.selectedData, this.selectedRegion);
   },
 
   created: function() {
@@ -333,6 +334,10 @@ let app = new Vue({
 
       if (urlParameters.has('country')) {
         this.selectedCountries = urlParameters.getAll('country');
+        this.loadSelectedCountriesFromUrl = true;
+      } else if (urlParameters.has('location')) {
+        this.selectedCountries = urlParameters.getAll('location');
+        this.loadSelectedCountriesFromUrl = true;
       }
 
     }
@@ -354,16 +359,24 @@ let app = new Vue({
       }
 
     });
+
+    //console.log('created finished');
   },
 
 
   watch: {
     selectedData() {
-      this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ false);
+      if (!this.firstLoad) {
+        this.loadSelectedCountriesFromUrl = false;
+        this.pullData(this.selectedData, this.selectedRegion);
+      }
     },
 
     selectedRegion() {
-      this.pullData(this.selectedData, this.selectedRegion, /* didRegionChange */ true);
+      if (!this.firstLoad) {
+        this.loadSelectedCountriesFromUrl = false;
+        this.pullData(this.selectedData, this.selectedRegion);
+      }
     },
 
     minDay() {
@@ -408,7 +421,8 @@ let app = new Vue({
       return Math.min.apply(Math, par);
     },
 
-    pullData(selectedData, selectedRegion, didRegionChange) {
+    pullData(selectedData, selectedRegion) {
+      //console.log('pulling', selectedData, ' for ', selectedRegion);
       if (selectedRegion != 'US') {
         let url;
         if (selectedData == 'Confirmed Cases') {
@@ -418,11 +432,11 @@ let app = new Vue({
         } else {
           return;
         }
-        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, didRegionChange));
+        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion));
       } else { // selectedRegion == 'US'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, didRegionChange));
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion));
       }
     },
 
@@ -453,7 +467,7 @@ let app = new Vue({
           .map(e => ({...e, region: e["Province/State"]}));
     },
 
-    processData(data, selectedRegion, didRegionChange) {
+    processData(data, selectedRegion) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
 
@@ -503,9 +517,14 @@ let app = new Vue({
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
           'South Korea', 'Singapore', 'Japan', // Observed success so far
           'Canada', 'Australia']; // These appear in the region selector
-      if (didRegionChange || this.selectedCountries == null) {
+
+      if (this.selectedCountries.length == 0 || this.firstLoad == false) {
+        //console.log('generating new selected countries list');
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
       }
+
+      this.firstLoad = false;
+
     },
 
     preprocessNYTData(data, type) {
@@ -600,7 +619,7 @@ let app = new Vue({
 
       for (let country of this.countries) {
         if (this.selectedCountries.includes(country)) {
-        queryUrl.append('country', country);
+        queryUrl.append('location', country);
         }
       }
 
@@ -711,6 +730,8 @@ let app = new Vue({
     autoplay: true,
 
     copied: false,
+
+    firstLoad: true
 
   }
 
