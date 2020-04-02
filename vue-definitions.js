@@ -785,7 +785,7 @@ let app = new Vue({
 
     sliderSelected: false,
 	
-	timeWindow: 7,
+	timeWindow: 3,
 
     day: 1,
 
