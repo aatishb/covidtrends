@@ -45,7 +45,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## Participate and Contribute
 
-If you would like to participate or contribute, please read our [Contributor's Guide](CONTRIBUTORS.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+If you would like to participate or contribute, please read our [Contributor's Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License 
 
