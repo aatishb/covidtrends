@@ -428,7 +428,7 @@ let app = new Vue({
       if (selectedRegion == 'US') { // selectedRegion == 'US'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTStateData(data, type), selectedRegion, updateSelectedCountries));
       } else  { // selectedRegion != 'US' nor a state
         let url;
         if (selectedData == 'Confirmed Cases') {
@@ -532,7 +532,7 @@ let app = new Vue({
 
     },
 
-    preprocessNYTData(data, type) {
+    preprocessNYTStateData(data, type) {
       let recastData = {};
       data.forEach(e => {
         let st = recastData[e.state]  = (recastData[e.state] || {"Province/State": e.state, "Country/Region": "US", "Lat": null, "Long": null});
