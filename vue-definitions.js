@@ -553,7 +553,8 @@ let app = new Vue({
     preprocessNYTCountyData(data, type) {
       let recastData = {};
       data.forEach(e => {
-        let st = recastData[e.county] = (recastData[e.county] || { "Province/State": e.state.concat("/", e.county), "Country/Region": "US Counties", "Lat": null, "Long": null });
+        let st_county = e.state.concat("/", e.county)
+        let st = recastData[st_county] = (recastData[st_county] || { "Province/State": st_county, "Country/Region": "US Counties", "Lat": null, "Long": null });
         st[fixNYTDate(e.date)] = parseInt(e[type]);
       });
       return Object.values(recastData);
