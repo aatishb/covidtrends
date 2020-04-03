@@ -554,7 +554,7 @@ let app = new Vue({
       let recastData = {};
       data.forEach(e => {
         if (e.state == 'Oregon') {
-          let st = recastData[e.county] = (recastData[e.county] || { "Province/State": e.county, "Country/Region": "Oregon", "Lat": null, "Long": null });
+          let st = recastData[e.county] = (recastData[e.county] || { "Province/State": e.state.concat("/", e.county), "Country/Region": "Oregon", "Lat": null, "Long": null });
           st[fixNYTDate(e.date)] = parseInt(e[type]);
         }
       });
