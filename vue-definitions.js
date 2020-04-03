@@ -446,21 +446,24 @@ let app = new Vue({
       return [...new Set(array)];
     },
 
-    groupByCountry(data, dates, regionsToNotCount /* pulls out HK & MO from region to country level */) {
+    groupByCountry(data, dates, regionsToPullToCountryLevel /* pulls out HK & MO from region to country level */) {
       let countries = data.map(e => e['Country/Region']);
       countries = this.removeRepeats(countries);
 
       let grouped = [];
       for (let country of countries){
         let countryData = data.filter(e => e['Country/Region'] == country)
-          .filter(e => !regionsToNotCount.includes(e['Province/State']));
+          .filter(e => !regionsToPullToCountryLevel.includes(e['Province/State']));
+
         const row = {region: country}
 
         for (let date of dates) {
           let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
           row[date] = sum;
         }
+
         grouped.push(row);
+
       }
       return grouped;
     },
@@ -479,23 +482,24 @@ let app = new Vue({
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
 
-      let pullToCountryLevel = ['Hong Kong', 'Macau']
+      let regionsToPullToCountryLevel = ['Hong Kong', 'Macau']
 
       let grouped;
+
       if (selectedRegion == 'World') {
-        grouped = this.groupByCountry(data, dates, pullToCountryLevel);
+        grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
 
         // pull Hong Kong and Macau to Country level
-        for (let region of pullToCountryLevel) {
-          let countryToPull = this.convertStateToCountry(data, dates, region);
-          if (countryToPull.length === 1) {
-            grouped = grouped.concat(countryToPull);
+        for (let region of regionsToPullToCountryLevel) {
+          let country = this.convertStateToCountry(data, dates, region);
+          if (country.length === 1) {
+            grouped = grouped.concat(country);
           }
         }
 
       } else {
         grouped = this.filterByCountry(data, dates, selectedRegion)
-        .filter(e => !pullToCountryLevel.includes(e.region));
+        .filter(e => !regionsToPullToCountryLevel.includes(e.region));
       }
 
       let exclusions = ['Cruise Ship', 'Diamond Princess'];
