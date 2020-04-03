@@ -446,13 +446,14 @@ let app = new Vue({
       return [...new Set(array)];
     },
 
-    groupByCountry(data, dates) {
+    groupByCountry(data, dates, regionsToNotCount /* pulls out HK & MO from region to country level */) {
       let countries = data.map(e => e["Country/Region"]);
       countries = this.removeRepeats(countries);
 
       let grouped = [];
       for (let country of countries){
-        let countryData = data.filter(e => e["Country/Region"] == country);
+        let countryData = data.filter(e => e['Country/Region'] == country)
+          .filter(e => !regionsToNotCount.includes(e['Province/State']));
         const row = {region: country}
 
         for (let date of dates) {
@@ -482,7 +483,7 @@ let app = new Vue({
 
       let grouped;
       if (selectedRegion == 'World') {
-        grouped = this.groupByCountry(data, dates);
+        grouped = this.groupByCountry(data, dates, pullToCountryLevel);
 
         // pull Hong Kong and Macau to Country level
         for (let region of pullToCountryLevel) {
@@ -536,6 +537,7 @@ let app = new Vue({
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
           'South Korea', 'Japan', // Observed success so far
+          'Hong Kong',            // Was previously included in China's numbers
           'Canada', 'Australia']; // These appear in the region selector
 
       // TODO: clean this logic up later
