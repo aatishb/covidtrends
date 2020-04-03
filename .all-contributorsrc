@@ -35,7 +35,17 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "byteit101",
+      "name": "Patrick Plenefisch",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/577344?v=4",
+      "profile": "https://github.com/byteit101",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
