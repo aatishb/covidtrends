@@ -338,10 +338,17 @@ let app = new Vue({
         }
       }
 
+      // since this rename came later, use the old name to not break existing URLs
+      let renames = {
+        'China': 'Mainland China'
+      };
+
+      // before we added regions, the url parameter was called country instead of location
+      // we still check for this so as to not break existing URLs
       if (urlParameters.has('country')) {
-        this.selectedCountries = urlParameters.getAll('country');
+        this.selectedCountries = urlParameters.getAll('country').map(e => Object.keys(renames).includes(e) ? renames[e] : e);
       } else if (urlParameters.has('location')) {
-        this.selectedCountries = urlParameters.getAll('location');
+        this.selectedCountries = urlParameters.getAll('location').map(e => Object.keys(renames).includes(e) ? renames[e] : e);
       }
 
     }
@@ -446,12 +453,16 @@ let app = new Vue({
       return [...new Set(array)];
     },
 
-    groupByCountry(data, dates, regionsToPullToCountryLevel /* pulls out HK & MO from region to country level */) {
+    groupByCountry(data, dates, regionsToPullToCountryLevel /* pulls out Hong Kong & Macau from region to country level */) {
+
       let countries = data.map(e => e['Country/Region']);
       countries = this.removeRepeats(countries);
 
       let grouped = [];
       for (let country of countries){
+
+        // filter data for this country (& exclude regions we're pulling to country level)
+        // e.g. Mainland China numbers should not include Hong Kong & Macau, to avoid double counting
         let countryData = data.filter(e => e['Country/Region'] == country)
           .filter(e => !regionsToPullToCountryLevel.includes(e['Province/State']));
 
@@ -465,6 +476,7 @@ let app = new Vue({
         grouped.push(row);
 
       }
+
       return grouped;
     },
 
@@ -499,7 +511,7 @@ let app = new Vue({
 
       } else {
         grouped = this.filterByCountry(data, dates, selectedRegion)
-        .filter(e => !regionsToPullToCountryLevel.includes(e.region));
+        .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
       }
 
       let exclusions = ['Cruise Ship', 'Diamond Princess'];
@@ -646,9 +658,18 @@ let app = new Vue({
         queryUrl.append('region', this.selectedRegion);
       }
 
+      // since this rename came later, use the old name for URLs to avoid breaking existing URLs
+      let renames = {
+        'Mainland China': 'China'
+      };
+
       for (let country of this.countries) {
         if (this.selectedCountries.includes(country)) {
-        queryUrl.append('location', country);
+          if(Object.keys(renames).includes(country)) {
+            queryUrl.append('location', renames[country]);
+          } else {
+            queryUrl.append('location', country);
+          }
         }
       }
 
