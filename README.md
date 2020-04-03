@@ -34,7 +34,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://aatishb.com"><img src="https://avatars2.githubusercontent.com/u/1878638?v=4" width="100px;" alt=""/><br /><sub><b>Aatish Bhatia</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=aatishb" title="Code">💻</a></td>
     <td align="center"><a href="http://www.professormoose.com"><img src="https://avatars0.githubusercontent.com/u/22178?v=4" width="100px;" alt=""/><br /><sub><b>Mustafa "Moose" Paksoy</b></sub></a><br /><a href="#maintenance-mustpax" title="Maintenance">🚧</a></td>
+<<<<<<< HEAD
     <td align="center"><a href="http://www.youtube.com/minutephysics"><img src="https://static1.squarespace.com/static/57c4aa39725e25ba4eb3ace1/t/57c4aeac20099e3efb1bf1c9/1583766666685/?format=1500w" width="100px;" alt=""/><br /><sub><b>Henry Reich</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
+||||||| merged common ancestors
+=======
+    <td align="center"><a href="https://github.com/edg2s"><img src="https://avatars3.githubusercontent.com/u/180672?v=4" width="100px;" alt=""/><br /><sub><b>Ed S</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=edg2s" title="Code">💻</a></td>
+>>>>>>> origin/all-contributors/add-edg2s
   </tr>
 </table>
 
