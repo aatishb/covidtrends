@@ -429,7 +429,7 @@ let app = new Vue({
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv";
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTStateData(data, type), selectedRegion, updateSelectedCountries));
-      } else if (selectedRegion == 'Oregon') { // Demo a special case for county-specific data. There's probably a better way to make this work via the UI
+      } else if (selectedRegion == 'US Counties') { // Demo a special case for county-specific data. There's probably a better way to make this work via the UI
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv";
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTCountyData(data, type), selectedRegion, updateSelectedCountries));
@@ -553,7 +553,7 @@ let app = new Vue({
     preprocessNYTCountyData(data, type) {
       let recastData = {};
       data.forEach(e => {
-        let st = recastData[e.county] = (recastData[e.county] || { "Province/State": e.state.concat("/", e.county), "Country/Region": "Oregon", "Lat": null, "Long": null });
+        let st = recastData[e.county] = (recastData[e.county] || { "Province/State": e.state.concat("/", e.county), "Country/Region": "US Counties", "Lat": null, "Long": null });
         st[fixNYTDate(e.date)] = parseInt(e[type]);
       });
       return Object.values(recastData);
@@ -705,7 +705,7 @@ let app = new Vue({
         case 'Australia':
         case 'US':
           return 'States';
-        case 'Oregon':
+        case 'US Counties':
           return 'Counties';
         case 'China':
           return 'Provinces and Regions';
@@ -725,9 +725,9 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'US', 'Oregon', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'US', 'US Counties', 'China', 'Australia', 'Canada'],
 
-    selectedRegion: 'Oregon',
+    selectedRegion: 'US Counties',
 
     sliderSelected: false,
 
