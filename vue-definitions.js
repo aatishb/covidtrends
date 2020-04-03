@@ -705,9 +705,10 @@ let app = new Vue({
         case 'World':
           return 'Countries';
         case 'Australia':
-        case 'Oregon':
         case 'US':
           return 'States';
+        case 'Oregon':
+          return 'Counties';
         case 'China':
           return 'Provinces and Regions';
         case 'Canada':
