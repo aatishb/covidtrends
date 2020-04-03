@@ -62,6 +62,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "saufrecht",
+      "name": "S Aufrecht",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/43078751?v=4",
+      "profile": "https://aufrecht.org",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
