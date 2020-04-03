@@ -469,22 +469,40 @@ let app = new Vue({
           .map(e => ({...e, region: e["Province/State"]}));
     },
 
+    convertStateToCountry(data, dates, selectedRegion) {
+      return data.filter(e => e["Province/State"] == selectedRegion)
+          .map(e => ({...e, region: e["Province/State"]}));
+    },
+
     processData(data, selectedRegion, updateSelectedCountries) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
 
+      let pullToCountryLevel = ['Hong Kong', 'Macau']
+
       let grouped;
       if (selectedRegion == 'World') {
         grouped = this.groupByCountry(data, dates);
+
+        // pull Hong Kong and Macau to Country level
+        for (let region of pullToCountryLevel) {
+          let countryToPull = this.convertStateToCountry(data, dates, region);
+          if (countryToPull.length === 1) {
+            grouped = grouped.concat(countryToPull);
+          }
+        }
+
       } else {
-        grouped = this.filterByCountry(data, dates, selectedRegion);
+        grouped = this.filterByCountry(data, dates, selectedRegion)
+        .filter(e => !pullToCountryLevel.includes(e.region));
       }
 
       let exclusions = ['Cruise Ship', 'Diamond Princess'];
 
       let renames = {
         'Taiwan*': 'Taiwan',
-        'Korea, South': 'South Korea'
+        'Korea, South': 'South Korea',
+        'China': 'Mainland China'
       };
 
       let covidData = [];
@@ -688,7 +706,7 @@ let app = new Vue({
         case 'US':
           return 'States';
         case 'China':
-          return 'Provinces and Regions';
+          return 'Provinces';
         case 'Canada':
           return 'Provinces';
         default:
