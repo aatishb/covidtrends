@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -42,6 +42,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/neon-ninja"><img src="https://avatars1.githubusercontent.com/u/3378822?v=4" width="100px;" alt=""/><br /><sub><b>Nick Young</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=neon-ninja" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/NeverFearTheasHere"><img src="https://avatars1.githubusercontent.com/u/12138621?v=4" width="100px;" alt=""/><br /><sub><b>Thea Lanherne</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3ANeverFearTheasHere" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
