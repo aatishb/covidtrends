@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Covid Trends</title>
 
@@ -11,42 +12,61 @@
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162764858-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-162764858-1');
+  </script>
 
 </head>
+
 <body>
 
   <div id="root">
 
     <div id="header">
 
-        <div id="explainer">
-          <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week vs. the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Learn more.</a></span></p>
+      <div id="explainer">
+        <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week vs.
+          the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth
+          is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar
+          path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a
+              @click="toggleHide">Learn more.</a></span></p>
 
-          <span v-if="!isHidden">
+        <span v-if="!isHidden">
 
-            <p>To learn more about this graph, watch this video created by Minute Physics.</p>
-            <br>
+          <p>To learn more about this graph, watch this video created by Minute Physics.</p>
+          <br>
 
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/54XLXg4fYsc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/54XLXg4fYsc" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-            <p><i><b>Note:</b> The x-axis of this graph is not time</i>, but is instead the total number of cases or deaths.</p>
+          <p><i><b>Note:</b> The x-axis of this graph is not time</i>, but is instead the total number of cases or
+            deaths.</p>
 
-            <p><b>Tips:</b> Press Space (or the play button) to Play/Pause. Press +/- keys (or drag the slider) to see daily changes. Hover over the graph for more info. Drag your mouse to zoom in, doubleclick to zoom back out. And don't forget to wash your hands!</p>
+          <p><b>Tips:</b> Press Space (or the play button) to Play/Pause. Press +/- keys (or drag the slider) to see
+            daily changes. Hover over the graph for more info. Drag your mouse to zoom in, doubleclick to zoom back out.
+            And don't forget to wash your hands!</p>
 
-            <a id="hide" @click="toggleHide">Hide</a>
-          </span>
+          <a id="hide" @click="toggleHide">Hide</a>
+        </span>
+      </div>
+
+      <div id="logowrapper">
+
+        <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
+
+        <div v-if="!isHidden" id="logos">
+          <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></img></a>
+          <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png"
+              height="40"></img></a>
         </div>
 
-        <div id="logowrapper">
-
-          <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
-
-          <div v-if="!isHidden" id="logos">
-            <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></img></a>
-            <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></img></a>
-          </div>
-
-        </div>
+      </div>
 
     </div>
 
@@ -54,7 +74,9 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :selected-region="selectedRegion" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day"
+          :selected-data="selectedData" :selected-region="selectedRegion" :scale="selectedScale" :resize="isHidden"
+          @graph-mounted="graphMounted = true"></graph>
 
         <div v-if="covidData.length > 0" id="nav">
 
@@ -68,7 +90,8 @@
           </div>
 
           <div class="navelement" id="slidercontainer">
-            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause"></input>
+            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length"
+              step="1" v-model="day" id="slider" @mousedown="pause"></input>
           </div>
 
           <div class="navelement">
@@ -81,10 +104,18 @@
 
         </div>
 
-        <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span></div>
+        <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span>
+        </div>
 
         <div id="footer">
-          Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> &middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
+          Prototype County-specific additions added by Steve Bonds to a much better original product
+          created by <a href="https://aatishb.com/">Aatish Bhatia</a>
+          in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot;
+          World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>
+          &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a>
+          &middot; Shortcuts: +/- for daily changes, space to play/pause &middot;
+          <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a>
+          &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
         </div>
 
       </div>
@@ -137,7 +168,8 @@
         <div>
 
           <div id="buttonwrapper">
-            <button @click="createURL" @mousedown="pause">{{copied ? 'Link Copied to Clipboard!' : 'Create Shareable Link'}}</button>
+            <button @click="createURL"
+              @mousedown="pause">{{copied ? 'Link Copied to Clipboard!' : 'Create Shareable Link'}}</button>
           </div>
 
         </div>
