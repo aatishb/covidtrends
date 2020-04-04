@@ -474,7 +474,9 @@ let app = new Vue({
       this.dates = dates;
 
       let grouped;
-      if (selectedRegion == 'World') {
+      if (selectedRegion == 'World (All regions)') {
+        grouped = data.map(e => ({...e, region: e["Province/State"] || e["Country/Region"]}))
+      } else if (selectedRegion == 'World') {
         grouped = this.groupByCountry(data, dates);
       } else {
         grouped = this.filterByCountry(data, dates, selectedRegion);
@@ -682,6 +684,8 @@ let app = new Vue({
 
     regionType() {
       switch (this.selectedRegion) {
+        case 'World (All regions)':
+          return 'Countries/Regions';
         case 'World':
           return 'Countries';
         case 'Australia':
@@ -705,7 +709,7 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'World (All regions)', 'US', 'China', 'Australia', 'Canada'],
 
     selectedRegion: 'World',
 
