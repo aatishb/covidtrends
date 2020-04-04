@@ -340,7 +340,7 @@ let app = new Vue({
 
       // since this rename came later, use the old name to not break existing URLs
       let renames = {
-        'China': 'Mainland China'
+        'China': 'China (Mainland)'
       };
 
       // before we added regions, the url parameter was called country instead of location
@@ -519,7 +519,7 @@ let app = new Vue({
       let renames = {
         'Taiwan*': 'Taiwan',
         'Korea, South': 'South Korea',
-        'China': 'Mainland China'
+        'China': 'China (Mainland)'
       };
 
       let covidData = [];
@@ -660,7 +660,7 @@ let app = new Vue({
 
       // since this rename came later, use the old name for URLs to avoid breaking existing URLs
       let renames = {
-        'Mainland China': 'China'
+        'China (Mainland)': 'China'
       };
 
       for (let country of this.countries) {
