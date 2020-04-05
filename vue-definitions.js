@@ -140,7 +140,7 @@ Vue.component('graph', {
           },
         },
         yaxis: {
-          title: 'New ' + this.selectedData + ' (in the Past Week)',
+          title: 'New ' + this.selectedData + ' (in the Past ' + this.$parent.$data.slopeDays + ' days)',
           type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.yrange,
           titlefont: {
@@ -388,6 +388,12 @@ let app = new Vue({
       }
     },
 
+    slopeDays() {
+      if (!this.firstLoad) {
+        this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ false);
+      }
+    },
+
     minDay() {
       if (this.day < this.minDay) {
         this.day = this.minDay;
@@ -530,7 +536,7 @@ let app = new Vue({
           for (let date of dates) {
             arr.push(row[date]);
           }
-          let slope = arr.map((e,i,a) => e - a[i - 7]);
+          let slope = arr.map((e,i,a) => e - a[i - this.slopeDays]);
           let region = row.region
 
           if (Object.keys(renames).includes(region)) {
@@ -757,6 +763,8 @@ let app = new Vue({
     sliderSelected: false,
 
     day: 7,
+
+    slopeDays: 7,
 
     icon: 'icons/play.svg',
 
