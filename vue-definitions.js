@@ -550,6 +550,7 @@ let app = new Vue({
 
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
+      this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
           'South Korea', 'Japan', // Observed success so far
@@ -623,6 +624,17 @@ let app = new Vue({
         }
       }
 
+    },
+
+    search() {
+      var normalizedSearchTerm = this.searchField.toLowerCase();
+      var resultantCountries = [];
+      for(var i = 0 ; i < this.countries.length; i++){
+        if(this.countries[i].toLowerCase().includes(normalizedSearchTerm)){
+          resultantCountries.push(this.countries[i]);
+        }
+      }
+      this.visibleCountries = resultantCountries;
     },
 
     selectAll() {
@@ -772,9 +784,13 @@ let app = new Vue({
 
     countries: [],
 
+    visibleCountries: [], 
+
     isHidden: true,
 
     selectedCountries: [],
+
+    searchField: "",
 
     graphMounted: false,
 
