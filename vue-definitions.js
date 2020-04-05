@@ -432,7 +432,15 @@ let app = new Vue({
 
     pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
       //console.log('pulling', selectedData, ' for ', selectedRegion);
-      if (selectedRegion != 'US') {
+      if (selectedRegion == 'Japan') {
+        let url;
+        if (selectedData == 'Confirmed Cases') {
+	    url = "https://raw.githubusercontent.com/sanpei3/covid19jp/master/time_series_covid19_confirmed_Japan.csv";
+	} else {
+	    return;
+	}
+        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
+      } else if (selectedRegion != 'US') {
         let url;
         if (selectedData == 'Confirmed Cases') {
          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
@@ -735,6 +743,7 @@ let app = new Vue({
         case 'China':
           return 'Provinces';
         case 'Canada':
+        case 'Japan':
           return 'Provinces';
         default:
           return 'Regions';
@@ -750,7 +759,7 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'US', 'China', 'Australia', 'Canada', 'Japan'],
 
     selectedRegion: 'World',
 
