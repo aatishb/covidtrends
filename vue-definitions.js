@@ -432,7 +432,8 @@ let app = new Vue({
 
     pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
       //console.log('pulling', selectedData, ' for ', selectedRegion);
-      if (selectedRegion != 'US') {
+      if (selectedRegion == 'World' || selectedRegion == 'China' ||
+          selectedRegion == 'Canada' || selectedRegion == 'Australia') {
         let url;
         if (selectedData == 'Confirmed Cases') {
          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
@@ -442,10 +443,14 @@ let app = new Vue({
           return;
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
-      } else { // selectedRegion == 'US'
+      } else if (selectedRegion == 'US') {
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
         const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
+      } else { // selectedRegion is a state
+        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
+        const url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv";
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTCountyData(data, type, selectedRegion), selectedRegion, updateSelectedCountries));
       }
     },
 
@@ -582,6 +587,22 @@ let app = new Vue({
       }
     },
 
+    preprocessNYTCountyData(data, type, state) {
+      let recastData = {};
+      data.filter(e => e.state == state)
+          .forEach(e => {
+            let st = recastData[e.county]  = (recastData[e.county] || {
+              "Province/State": e.county, "Country/Region": state, "Lat": null, "Long": null
+            });
+            st[fixNYTDate(e.date)] = parseInt(e[type]);
+          });
+      return Object.values(recastData);
+
+      function fixNYTDate(date) {
+        let tmp = date.split("-");
+        return `${tmp[1]}/${tmp[2]}/${tmp[0].substr(2)}`;
+      }
+    },
     play() {
       if (this.paused) {
 
@@ -737,7 +758,7 @@ let app = new Vue({
         case 'Canada':
           return 'Provinces';
         default:
-          return 'Regions';
+          return 'Counties';
       }
     }
   },
@@ -750,7 +771,15 @@ let app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'US', 'China', 'Australia', 'Canada',
+            "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+            "District of Columbia", "Florida", "Georgia", "Guam", "Hawaii", "Idaho", "Illinois", "Indiana",
+            "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+            "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+            "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Northern Mariana Islands",
+            "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Puerto Rico", "Rhode Island", "South Carolina",
+            "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virgin Islands",
+            "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
 
     selectedRegion: 'World',
 
