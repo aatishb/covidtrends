@@ -387,6 +387,7 @@ let app = new Vue({
       if (!this.firstLoad) {
         this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ false);
       }
+      this.searchField = '';
     },
 
     selectedRegion() {
