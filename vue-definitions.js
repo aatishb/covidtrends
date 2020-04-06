@@ -81,7 +81,8 @@ Vue.component('graph', {
         x: e.cases,
         y: e.slope,
         name: e.country,
-        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
+        //text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
+        text: this.dates.map(date => e.country + '<br>' + date ),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
@@ -133,7 +134,8 @@ Vue.component('graph', {
       }
 
       this.layout = {
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        //title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
         showlegend: false,
         xaxis: {
           title: 'Total ' + this.selectedData,
