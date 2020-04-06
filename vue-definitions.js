@@ -68,6 +68,11 @@ Vue.component('graph', {
 
     },
 
+    formatDate(date) {
+      let [m, d, y] = date.split('/');
+      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
+    },
+
     updateTraces() {
 
       let showDailyMarkers = this.data.length <= 2;
@@ -76,7 +81,7 @@ Vue.component('graph', {
         x: e.cases,
         y: e.slope,
         name: e.country,
-        text: this.dates.map(f => e.country + '<br>' + f),
+        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
@@ -128,7 +133,7 @@ Vue.component('graph', {
       }
 
       this.layout = {
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         xaxis: {
           title: 'Total ' + this.selectedData,
@@ -428,6 +433,11 @@ let app = new Vue({
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
+    },
+
+    formatDate(date) {
+      let [m, d, y] = date.split('/');
+      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
     },
 
     myMax() { //https://stackoverflow.com/a/12957522
