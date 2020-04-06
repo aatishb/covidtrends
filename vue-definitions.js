@@ -797,7 +797,7 @@ let app = new Vue({
 
     countries: [],
 
-    visibleCountries: [], 
+    visibleCountries: [],
 
     isHidden: true,
 

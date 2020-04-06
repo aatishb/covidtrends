@@ -119,9 +119,12 @@
           <h2>{{regionType}}</h2>
 
           <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
-          
+
+          <div id="search">
+            <input v-model="searchField" placeholder="Search"></input>
+          </div>
+
           <div id="buttonwrapper">
-            <div><input v-model="searchField" placeholder="Search"></input></div>
             <button @click="deselectAll">Deselect All</button>
             <button @click="selectAll">Select All</button>
           </div>
