@@ -61,3 +61,5 @@ If you would like to participate or contribute, please read our [Contributor's G
 
 Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.txt](LICENSE.txt) for complete text.
 
+This repository pulls data from [2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19) and [New York Times Coronavirus (Covid-19) Data in the United States](https://github.com/nytimes/covid-19-data#license-and-attribution). Please consult these repositories for terms of use on the data.
+
