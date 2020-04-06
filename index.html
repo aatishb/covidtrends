@@ -120,13 +120,17 @@
 
           <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
+          <div id="search">
+            <input v-model="searchField" placeholder="Search"></input>
+          </div>
+
           <div id="buttonwrapper">
             <button @click="deselectAll">Deselect All</button>
             <button @click="selectAll">Select All</button>
           </div>
 
           <ul style="padding-top: 0.5rem;">
-            <li v-for="country in countries">
+            <li v-for="country in visibleCountries">
               <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
             </li>

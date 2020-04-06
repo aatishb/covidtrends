@@ -410,10 +410,30 @@ let app = new Vue({
         this.play();
         this.autoplay = false; // disable autoplay on first play
       }
+    },
+
+    searchField() {
+      let debouncedSearch = this.debounce(this.search, 250, false);
+      debouncedSearch();
     }
   },
 
   methods: {
+
+    debounce(func, wait, immediate) { //https://davidwalsh.name/javascript-debounce-function
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    },
 
     formatDate(date) {
       let [m, d, y] = date.split('/');
@@ -560,6 +580,7 @@ let app = new Vue({
 
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
+      this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
           'South Korea', 'Japan', // Observed success so far
@@ -633,6 +654,10 @@ let app = new Vue({
         }
       }
 
+    },
+
+    search() {
+      this.visibleCountries = this.countries.filter(e => e.toLowerCase().includes(this.searchField.toLowerCase()));
     },
 
     selectAll() {
@@ -782,9 +807,13 @@ let app = new Vue({
 
     countries: [],
 
+    visibleCountries: [],
+
     isHidden: true,
 
     selectedCountries: [],
+
+    searchField: '',
 
     graphMounted: false,
 
