@@ -405,7 +405,7 @@ let app = new Vue({
         this.play();
         this.autoplay = false; // disable autoplay on first play
       }
-    }
+    },
   },
 
   methods: {
@@ -627,14 +627,7 @@ let app = new Vue({
     },
 
     search() {
-      var normalizedSearchTerm = this.searchField.toLowerCase();
-      var resultantCountries = [];
-      for(var i = 0 ; i < this.countries.length; i++){
-        if(this.countries[i].toLowerCase().includes(normalizedSearchTerm)){
-          resultantCountries.push(this.countries[i]);
-        }
-      }
-      this.visibleCountries = resultantCountries;
+      this.visibleCountries = this.countries.filter(e => e.toLowerCase().includes(this.searchField.toLowerCase()));
     },
 
     selectAll() {
@@ -790,7 +783,7 @@ let app = new Vue({
 
     selectedCountries: [],
 
-    searchField: "",
+    searchField: '',
 
     graphMounted: false,
 
