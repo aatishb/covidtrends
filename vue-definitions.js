@@ -48,6 +48,7 @@ Vue.component('graph', {
 
         let curveNumber = data.points[0].curveNumber;
         let name = this.traces[curveNumber].name;
+        if (name.includes("projection")) return;
         this.traceIndices = this.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
 
         let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
@@ -115,7 +116,23 @@ Vue.component('graph', {
       })
       );
 
-      this.traces = [...traces1, ...traces2];
+      let traces3 = this.data.map((e,i) => ({
+        x: e.projectedCases,
+        y: e.projectedSlope,
+        name: e.country + " projection",
+        text: e.projectedDates.map(date => e.country + '<br>' + date ),
+        mode: 'lines',
+        type: 'scatter',
+        legendgroup: i,
+        line: {
+          color: 'rgba(255,0,0,0.5)',
+          dash: 'dashdot',
+        },
+        hovertemplate: '%{text}<br>Projected Total ' + this.selectedData +': %{x:,}<br>Projected Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+      })
+      );
+
+      this.traces = [...traces1, ...traces2, ...traces3];
       this.traceCount =  new Array(this.traces.length).fill(0).map((e,i) => i);
 
       this.filteredCases = Array.prototype.concat(...this.data.map(e => e.cases)).filter(e => !isNaN(e));
@@ -178,8 +195,13 @@ Vue.component('graph', {
           y: [e.slope[this.day - 1]]
         }));
 
+        let traces3 = this.data.map(e => ({
+          x: parseInt(this.day) == this.dates.length ? e.projectedCases : [],
+          y: parseInt(this.day) == this.dates.length ? e.projectedSlope : []
+        }));
+
         Plotly.animate(this.$refs.graph, {
-          data: [...traces1, ...traces2],
+          data: [...traces1, ...traces2, ...traces3],
           traces: this.traceCount,
           layout: this.layout
         }, {
@@ -571,11 +593,27 @@ let app = new Vue({
             region = renames[region];
           }
 
+          let date = new Date(dates[dates.length - 1]);
+          let projectedDates = [date.toLocaleDateString()];
+          let projectedCases = [parseInt(arr[arr.length - 1])];
+          let projectedSlope = [slope[slope.length - 1]];
+          const slopeDelta = (slope[slope.length - 1] - slope[slope.length - 2]);
+          for (let i = 1; i <= 7; i++) {
+            date.setDate(date.getDate() + 1);
+            projectedDates.push(date.toLocaleDateString());
+            projectedSlope.push(Math.round(projectedSlope[i - 1] + slopeDelta))
+            let slopeHere = projectedSlope[i] / 7;
+            projectedCases.push(Math.round(projectedCases[i - 1] + slopeHere))
+          }
+
           const cases = arr.map(e => e >= this.minCasesInCountry ? e : NaN);
           covidData.push({
             country: region,
             cases,
             slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
+            projectedDates: projectedDates,
+            projectedSlope: projectedSlope,
+            projectedCases: projectedCases,
             maxCases: this.myMax(...cases)
           });
 
