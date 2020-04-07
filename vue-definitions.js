@@ -69,6 +69,9 @@ Vue.component('graph', {
     },
 
     formatDate(date) {
+      if (!date) {
+        return '';
+      }
       let [m, d, y] = date.split('/');
       return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
     },
@@ -81,8 +84,7 @@ Vue.component('graph', {
         x: e.cases,
         y: e.slope,
         name: e.country,
-        //text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
-        text: this.dates.map(date => e.country + '<br>' + date ),
+        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
@@ -134,8 +136,7 @@ Vue.component('graph', {
       }
 
       this.layout = {
-        //title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         xaxis: {
           title: 'Total ' + this.selectedData,
@@ -440,6 +441,9 @@ let app = new Vue({
     },
 
     formatDate(date) {
+      if (!date) {
+        return '';
+      }
       let [m, d, y] = date.split('/');
       return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
     },
