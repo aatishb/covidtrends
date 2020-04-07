@@ -1,0 +1,11 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "Vue": "readonly",
+    "Plotly": "readonly"
+  }
+}

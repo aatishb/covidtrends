@@ -34,7 +34,7 @@ Vue.component('graph', {
 
     },
 
-    onHoverOff(data) {
+    onHoverOff() {
 
         let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
 
@@ -155,7 +155,7 @@ Vue.component('graph', {
 })
 
 // global data
-let app = new Vue({
+window.app = new Vue({
 
   el: '#root',
 
@@ -485,7 +485,7 @@ let app = new Vue({
 
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      let [m, d, y] = date.split('/');
+      let [m, d] = date.split('/');
       return monthNames[m-1] + ' ' + d;
     },
 
