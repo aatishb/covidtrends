@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -43,6 +43,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/neon-ninja"><img src="https://avatars1.githubusercontent.com/u/3378822?v=4" width="100px;" alt=""/><br /><sub><b>Nick Young</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=neon-ninja" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/NeverFearTheasHere"><img src="https://avatars1.githubusercontent.com/u/12138621?v=4" width="100px;" alt=""/><br /><sub><b>Thea Lanherne</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3ANeverFearTheasHere" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/arjo129"><img src="https://avatars0.githubusercontent.com/u/542272?v=4" width="100px;" alt=""/><br /><sub><b>Arjo Chakravarty</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=arjo129" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/lucypxu"><img src="https://pbs.twimg.com/profile_images/665771785493712896/cwYcvRLp_400x400.jpg" width="100px;" alt=""/><br /><sub><b>Lucy Xu</b></sub></a><br /><a href="#question" title="Answering Questions">💬</a></td>
   </tr>
 </table>
 
@@ -59,4 +61,6 @@ If you would like to participate or contribute, please read our [Contributor's G
 ## License 
 
 Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.txt](LICENSE.txt) for complete text.
+
+This repository pulls data from [2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19) and [New York Times Coronavirus (Covid-19) Data in the United States](https://github.com/nytimes/covid-19-data#license-and-attribution). Please consult these repositories for terms of use on the data.
 

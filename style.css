@@ -214,6 +214,20 @@ svg {
   right: 0;
 }
 
+#search {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  min-width: 10rem;
+}
+
+#search > input {
+  flex: 1;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 #buttonwrapper {
   width: 100%;
   display:flex;
