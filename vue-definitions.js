@@ -60,7 +60,7 @@ Vue.component('graph', {
 
     onHoverOff(data) {
 
-        let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
+        let update = {'line':{color: null}};
 
         for (let i of this.traceIndices) {
           Plotly.restyle(this.$refs.graph, update, [i]);
@@ -88,10 +88,8 @@ Vue.component('graph', {
         legendgroup: i,
         marker: {
           size: 4,
-          color: 'rgba(0,0,0,0.15)'
         },
         line: {
-          color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo:'x+y+text',
         hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
