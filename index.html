@@ -116,6 +116,12 @@
             </option>
           </select>
 
+          <select v-model="selectedState" @mousedown="pause" v-if="selectedRegion == 'US Counties'">
+            <option v-for="s in states" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
+
           <select v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
