@@ -54,7 +54,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :selected-region="selectedRegion" :scale="selectedScale" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :data="filteredCovidData" :dates="dates" :day.sync="day" :selected-data="selectedData" :selected-region="selectedRegion" :scale="selectedScale" :selected-unit="selectedUnit" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
         <div v-if="covidData.length > 0" id="nav">
 
@@ -87,7 +87,7 @@
         <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span></div>
 
         <div id="footer">
-          Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> &middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
+          Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> &middot; World Population data provided by <a href="https://population.un.org/wpp/Download/Standard/CSV/">UN Department of Economic and Social Affairs</a> &middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
         </div>
 
       </div>
@@ -112,6 +112,12 @@
           <select v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
+            </option>
+          </select>
+          
+          <select v-model="selectedUnit" @mousedown="pause">
+            <option v-for="u in units" v-bind:value="u">
+              {{ u }}
             </option>
           </select>
 
