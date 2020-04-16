@@ -1,7 +1,9 @@
+const perCapitaScale = 1_000_000;
+const densityScale = 10_000;
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'selectedRegion', 'scale', 'resize'],
+  props: ['data', 'dates', 'day', 'selectedData', 'selectedRegion', 'scale', 'selectedUnit', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -76,7 +78,12 @@ Vue.component('graph', {
     updateTraces() {
 
       let showDailyMarkers = this.data.length <= 2;
+      
+      let unitStr = "";
+      if(this.selectedUnit === "Per Capita"){unitStr= ` per ${perCapitaScale.toLocaleString()}`}
+      else if(this.selectedUnit === "Population Density"){unitStr= ` per ${densityScale.toLocaleString()} per km2`}
 
+      
       let traces1 = this.data.map((e,i) => ({
         x: e.cases,
         y: e.slope,
@@ -94,7 +101,7 @@ Vue.component('graph', {
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData + unitStr +': %{x:,}<br>Weekly ' + this.selectedData + unitStr +': %{y:,}<extra></extra>',
       })
       );
 
@@ -110,7 +117,7 @@ Vue.component('graph', {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData + unitStr +': %{x:,}<br>Weekly ' + this.selectedData + unitStr +': %{y:,}<extra></extra>',
 
       })
       );
@@ -259,6 +266,13 @@ Vue.component('graph', {
       this.updateDate = false;
     },
 
+    selectedUnit() {
+      //console.log('selected unit change detected');
+      this.updateDate = false;
+      // re-making the graph isn't enough, we need to recompute all the data.
+      this.makeGraph();
+    },
+    
     data() {
       //console.log('data change detected');
       this.$emit('update:day', this.dates.length);
@@ -345,6 +359,18 @@ let app = new Vue({
         }
       }
 
+      if (urlParameters.has('unit')) {
+        let myUnit = urlParameters.get('unit').toLowerCase();
+
+        if (myUnit == 'per+capita') {
+          this.selectedUnit = "Per Capita";
+        } else if (myUnit == 'density') {
+          this.selectedUnit = "Population Density";
+        } else if (myUnit == 'absolute') {
+          this.selectedUnit = "Absolute";
+        }
+      }
+      
       // since this rename came later, use the old name to not break existing URLs
       let renames = {
         'China': 'China (Mainland)'
@@ -397,6 +423,13 @@ let app = new Vue({
       this.searchField = '';
     },
 
+    selectedUnit() {
+      if (!this.firstLoad) {
+        this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ false);
+      }
+      this.searchField = '';
+    },
+    
     minDay() {
       if (this.day < this.minDay) {
         this.day = this.minDay;
@@ -531,7 +564,7 @@ let app = new Vue({
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau']
 
       let grouped;
-
+      
       if (selectedRegion == 'World') {
         grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
 
@@ -548,7 +581,7 @@ let app = new Vue({
         .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
       }
 
-      let exclusions = ['Cruise Ship', 'Diamond Princess'];
+      let exclusions = ['Cruise Ship', 'Diamond Princess', 'MS Zaandam'];
 
       let renames = {
         'Taiwan*': 'Taiwan',
@@ -556,50 +589,98 @@ let app = new Vue({
         'China': 'China (Mainland)'
       };
 
-      let covidData = [];
-      for (let row of grouped){
-
-        if (!exclusions.includes(row.region)) {
-          const arr = [];
-          for (let date of dates) {
-            arr.push(row[date]);
-          }
-          let slope = arr.map((e,i,a) => e - a[i - 7]);
-          let region = row.region
-
-          if (Object.keys(renames).includes(region)) {
-            region = renames[region];
-          }
-
-          const cases = arr.map(e => e >= this.minCasesInCountry ? e : NaN);
-          covidData.push({
-            country: region,
-            cases,
-            slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
-            maxCases: this.myMax(...cases)
-          });
-
+      let appData = this;
+      Plotly.d3.csv("./data/WPP2019_TotalPopulationBySex-2.csv", function(rawPopData) {
+        let popByCountry = rawPopData.filter(function(x) {
+          return x.Time == 2020 && x.Variant == 'Medium'; });
+        // FIXME: is Kosovo in the database? if so, where? (Part of Serbia)
+        popByCountry.push({Location: "Kosovo", PopTotal: 1_831_000/1000, PopDensity: 159});
+        // fallback to manual location ID mappings for cases where the databases don't match up in terms of country names
+        let locIDMapping =
+            {"Cote d'Ivoire":384,"South Korea":408,"Moldova":498,"Taiwan":158,"Tanzania":834,
+             "US":840,"Congo (Kinshasa)":180,"Congo (Brazzaville)":178,
+             "Vietnam":418,"Laos":418,"West Bank and Gaza":275,"Burma":104, "China (Mainland)":156,
+             "Hong Kong":344, "Macau":446};
+        let minCases = appData.minCasesInCountry;
+        if (appData.selectedUnit === "Per Capita") {
+          minCases = 1;
         }
-      }
+        else if(appData.selectedUnit == "Population Density"){
+          minCases = 30;
+        }
 
-      this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
-      this.countries = this.covidData.map(e => e.country).sort();
-      this.visibleCountries = this.countries;
-      const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
-      const notableCountries = ['China', 'India', 'US', // Top 3 by population
-          'South Korea', 'Japan', // Observed success so far
-          'Hong Kong',            // Was previously included in China's numbers
-          'Canada', 'Australia']; // These appear in the region selector
+        let covidData = [];
+        
+        for (let row of grouped){
+          if (!exclusions.includes(row.region)) {
+            const arr = [];
+            for (let date of dates) {
+              arr.push(row[date]);
+            }
+            let region = row.region
+
+            if (Object.keys(renames).includes(region)) {
+              region = renames[region];
+            }
+
+            let locID = locIDMapping[region];
+            let countryStats = popByCountry.find(x => {
+              if (locID === undefined) {
+                return x.Location.toLowerCase().startsWith(region.toLowerCase());
+              } else {
+                return x.LocID == locID;
+              }
+            });
+            if("undefined" === typeof countryStats){
+              console.log(region + " isn't a recognised country, please add in the ID mapping for it");
+            }
+            else{
+//              console.log(region + " [" + countryStats.Location + "] population: " + countryStats.PopTotal);
+            }
+            // Now to scale it all by the chosen units, the stats are in thousands, so we need to multiply that in first
+            let scaledArray = arr;
+            if (appData.selectedUnit === "Per Capita") {
+              scaledArray = arr.map(e => (e / (countryStats.PopTotal * 1000)) * perCapitaScale);
+            }
+            else if(appData.selectedUnit == "Population Density"){
+              scaledArray = arr.map(e => (e / (countryStats.PopDensity * 1000)) * densityScale);
+            }
+            
+            let slope = scaledArray.map((e,i,a) => e - a[i - 7]);
+            const cases = scaledArray.map(e => e >= minCases ? e : NaN);
+            const entry = {
+              country: region,
+              cases,
+              slope: slope.map((e,i) => arr[i] >= minCases ? e : NaN),
+              maxCases: appData.myMax(...cases),
+              source: arr
+            };
+            //console.log(entry);
+            
+            covidData.push(entry);
+
+          }
+        }
+        // Store the data back to the application
+        //console.log(covidData);
+        appData.covidData = covidData.filter(e => e.maxCases > minCases);
+        appData.countries = appData.covidData.map(e => e.country).sort();
+        appData.visibleCountries = appData.countries;
+        const topCountries = appData.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
+        const notableCountries = ['China', 'India', 'US', // Top 3 by population
+                                  'South Korea', 'Japan', // Observed success so far
+                                  'Hong Kong',            // Was previously included in China's numbers
+                                  'Canada', 'Australia']; // These appear in the region selector
 
       // TODO: clean this logic up later
       // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
-      if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
-        //console.log('generating new selected countries list');
-        this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
-      }
-
-      this.firstLoad = false;
+        if ((appData.selectedCountries.length === 0 || !appData.firstLoad) && updateSelectedCountries) {
+          //console.log('generating new selected countries list');
+          appData.selectedCountries = appData.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+        }
+        appData.firstLoad = false;
+      });
 
     },
 
@@ -695,6 +776,13 @@ let app = new Vue({
 
       if (this.selectedRegion != 'World') {
         queryUrl.append('region', this.selectedRegion);
+      }
+
+      if (this.selectedUnit == 'Per Capita') {
+        queryUrl.append('unit', 'per+capita');
+      }
+      else if (this.selectedUnit == 'Population Density') {
+        queryUrl.append('unit', 'density');
       }
 
       // since this rename came later, use the old name for URLs to avoid breaking existing URLs
@@ -802,6 +890,10 @@ let app = new Vue({
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
     selectedScale: 'Logarithmic Scale',
+
+    units: ['Absolute', 'Per Capita', 'Population Density'],
+
+    selectedUnit: 'Absolute',
 
     minCasesInCountry: 50,
 
