@@ -77,6 +77,7 @@ Vue.component('graph', {
 
       let showDailyMarkers = this.data.length <= 2;
 
+      // draws grey lines (line plot for each location)
       let traces1 = this.data.map((e,i) => ({
         x: e.cases,
         y: e.slope,
@@ -98,6 +99,7 @@ Vue.component('graph', {
       })
       );
 
+      // draws red dots (most recent data for each location)
       let traces2 = this.data.map((e,i) => ({
         x: [e.cases[e.cases.length - 1]],
         y: [e.slope[e.slope.length - 1]],
@@ -116,8 +118,11 @@ Vue.component('graph', {
       );
 
       this.traces = [...traces1, ...traces2];
-      this.traceCount =  new Array(this.traces.length).fill(0).map((e,i) => i);
+      this.traceCount =  Array(this.traces.length).fill(0).map((e,i) => i);
 
+      // used to set xrange and yrange behavior
+      // this flattens the x and y arrays and filters out non numbers
+      // so later we can find the min and the max of these arrays
       this.filteredCases = Array.prototype.concat(...this.data.map(e => e.cases)).filter(e => !isNaN(e));
       this.filteredSlope =  Array.prototype.concat(...this.data.map(e => e.slope)).filter(e => !isNaN(e));
 
@@ -168,11 +173,13 @@ Vue.component('graph', {
 
     updateAnimation() {
 
+        // updates grey lines (line plot for each location)
         let traces1 = this.data.map(e => ({
           x: e.cases.slice(0, this.day),
           y: e.slope.slice(0, this.day)
         }));
 
+        // updates red dots (most recent data for each location)
         let traces2 = this.data.map(e => ({
           x: [e.cases[this.day - 1]],
           y: [e.slope[this.day - 1]]
