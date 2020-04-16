@@ -1,13 +1,22 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'selectedRegion', 'scale', 'resize'],
+  //props: ['data', 'dates', 'day', 'selectedData', 'selectedRegion', 'scale', 'resize'],
+  props: ['graphData'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
   methods: {
 
     makeGraph() {
+
+      Plotly.newPlot(this.$refs.graph, [], {}, this.config);
+
+      this.$refs.graph.on('plotly_hover', this.onHoverOn)
+        .on('plotly_unhover', this.onHoverOff);
+        //.on('plotly_relayout', this.onLayoutChange);
+
+      /*
       this.autosetRange = true;
       this.updateTraces();
       this.updateLayout();
@@ -24,6 +33,7 @@ Vue.component('graph', {
         .on('plotly_relayout', this.onLayoutChange);
 
       this.updateAnimation();
+      */
     },
 
     onLayoutChange(data) {
@@ -68,56 +78,9 @@ Vue.component('graph', {
 
     },
 
-    formatDate(date) {
-      let [m, d, y] = date.split('/');
-      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
-    },
-
     updateTraces() {
 
-      let showDailyMarkers = this.data.length <= 2;
 
-      // draws grey lines (line plot for each location)
-      let traces1 = this.data.map((e,i) => ({
-        x: e.cases,
-        y: e.slope,
-        name: e.country,
-        //text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
-        text: this.dates.map(date => e.country + '<br>' + date ),
-        mode: showDailyMarkers ? 'lines+markers' : 'lines',
-        type: 'scatter',
-        legendgroup: i,
-        marker: {
-          size: 4,
-          color: 'rgba(0,0,0,0.15)'
-        },
-        line: {
-          color: 'rgba(0,0,0,0.15)'
-        },
-        hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
-      })
-      );
-
-      // draws red dots (most recent data for each location)
-      let traces2 = this.data.map((e,i) => ({
-        x: [e.cases[e.cases.length - 1]],
-        y: [e.slope[e.slope.length - 1]],
-        text: e.country,
-        name: e.country,
-        mode: 'markers+text',
-        legendgroup: i,
-        textposition: 'top left',
-        marker: {
-          size: 6,
-          color: 'rgba(254, 52, 110, 1)'
-        },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
-
-      })
-      );
-
-      this.traces = [...traces1, ...traces2];
       this.traceCount =  Array(this.traces.length).fill(0).map((e,i) => i);
 
       // used to set xrange and yrange behavior
@@ -138,67 +101,6 @@ Vue.component('graph', {
         this.autosetRange = false;
       }
 
-      this.layout = {
-        //title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
-        showlegend: false,
-        xaxis: {
-          title: 'Total ' + this.selectedData,
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: this.xrange,
-          titlefont: {
-            size: 24,
-            color: 'rgba(254, 52, 110,1)'
-          },
-        },
-        yaxis: {
-          title: 'New ' + this.selectedData + ' (in the Past Week)',
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: this.yrange,
-          titlefont: {
-            size: 24,
-            color: 'rgba(254, 52, 110,1)'
-          },
-        },
-        hovermode: 'closest',
-        font: {
-                family: 'Open Sans, sans-serif',
-                color: 'black',
-                size: 14
-              },
-      };
-
-    },
-
-
-    updateAnimation() {
-
-        // updates grey lines (line plot for each location)
-        let traces1 = this.data.map(e => ({
-          x: e.cases.slice(0, this.day),
-          y: e.slope.slice(0, this.day)
-        }));
-
-        // updates red dots (most recent data for each location)
-        let traces2 = this.data.map(e => ({
-          x: [e.cases[this.day - 1]],
-          y: [e.slope[this.day - 1]]
-        }));
-
-        Plotly.animate(this.$refs.graph, {
-          data: [...traces1, ...traces2],
-          traces: this.traceCount,
-          layout: this.layout
-        }, {
-          transition: {
-            duration: 0
-          },
-          frame: {
-            // must be >= transition duration
-            duration: 0,
-            redraw: true
-          }
-        });
 
     },
 
@@ -233,11 +135,23 @@ Vue.component('graph', {
   },
 
   mounted() {
+    console.log('graph mounted!');
     this.makeGraph();
   },
 
   watch: {
 
+    graphData: {
+
+      deep: true,
+
+      handler(data, oldData) {
+        console.log('graph updated!');
+        Plotly.react(this.$refs.graph, data.traces, data.layout, this.config);
+      }
+
+    }
+    /*
     resize() {
       //console.log('resize detected');
       Plotly.Plots.resize(this.$refs.graph);
@@ -272,14 +186,13 @@ Vue.component('graph', {
       this.makeGraph();
       this.updateDate = true;
     }
+    */
 
-  },
-
-  computed: {
   },
 
   data() {
     return {
+      /*
       filteredCases: [],
       filteredSlope: [],
       traces: [],
@@ -291,6 +204,7 @@ Vue.component('graph', {
       autosetRange: true,
       graphMounted: false,
       updateDate: true,
+      */
       config: {
           responsive: true,
           toImageButtonOptions: {
@@ -785,7 +699,95 @@ let app = new Vue({
         default:
           return 'Regions';
       }
+    },
+
+    layout() {
+      return {
+        //title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
+        showlegend: false,
+        xaxis: {
+          title: 'Total ' + this.selectedData,
+          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
+          //range: this.xrange,
+          titlefont: {
+            size: 24,
+            color: 'rgba(254, 52, 110,1)'
+          },
+        },
+        yaxis: {
+          title: 'New ' + this.selectedData + ' (in the Past Week)',
+          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
+          //range: this.yrange,
+          titlefont: {
+            size: 24,
+            color: 'rgba(254, 52, 110,1)'
+          },
+        },
+        hovermode: 'closest',
+        font: {
+                family: 'Open Sans, sans-serif',
+                color: 'black',
+                size: 14
+              },
+      };
+    },
+
+    traces() {
+
+      let showDailyMarkers = this.filteredCovidData.length <= 2;
+
+      // draws grey lines (line plot for each location)
+      let trace1 = this.filteredCovidData.map((e,i) => ({
+        x: e.cases,
+        y: e.slope,
+        name: e.country,
+        text: this.dates.map(date => e.country + '<br>' + date ),
+        mode: showDailyMarkers ? 'lines+markers' : 'lines',
+        type: 'scatter',
+        legendgroup: i,
+        marker: {
+          size: 4,
+          color: 'rgba(0,0,0,0.15)'
+        },
+        line: {
+          color: 'rgba(0,0,0,0.15)'
+        },
+        hoverinfo:'x+y+text',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+      })
+      );
+
+      // draws red dots (most recent data for each location)
+      let trace2 = this.filteredCovidData.map((e,i) => ({
+        x: [e.cases[e.cases.length - 1]],
+        y: [e.slope[e.slope.length - 1]],
+        text: e.country,
+        name: e.country,
+        mode: 'markers+text',
+        legendgroup: i,
+        textposition: 'top left',
+        marker: {
+          size: 6,
+          color: 'rgba(254, 52, 110, 1)'
+        },
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+
+      })
+      );
+
+      return [...trace1, ...trace2];
+
+    },
+
+    graphData() {
+      return {
+        traces: this.traces,
+        layout: this.layout
+      };
     }
+
+
   },
 
   data: {
