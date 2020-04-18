@@ -397,7 +397,7 @@ let app = new Vue({
       this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China', 'India', 'US', // Top 3 by population
-          'South Korea', 'Japan', // Observed success so far
+          'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
           'Hong Kong',            // Was previously included in China's numbers
           'Canada', 'Australia']; // These appear in the region selector
 
