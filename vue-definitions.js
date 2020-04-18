@@ -692,7 +692,7 @@ let app = new Vue({
       if (this.selectedScale == 'Logarithmic Scale') {
         return [1, Math.ceil(Math.log10(1.5*xmax))]
       } else {
-        return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
+        return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.2 * xmax)];
       }
 
     },
