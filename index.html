@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>Covid Trends</title>
-
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <meta content="utf-8" http-equiv="encoding">
   <script src="libraries/plotly.min.js"></script>
   <script src="libraries/vue.min.js"></script>
   <link rel="stylesheet" type="text/css" href="normalize.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Covid Trends">
+  <meta name="twitter:description" content="Visualizing the exponential growth of COVID-19 across the world.">
+  <meta name="twitter:site" content="@aatishb">
+  <!-- Twitter Summary card images must be at least 120x120px -->
+  <meta name="twitter:image" content="https://aatishb.com/covidtrends/logos/covid-trends-logo-nowords.png">
+  <!-- Open Graph data -->
+  <meta property="og:title" content="Covid Trends" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://aatishb.com/covidtrends/" />
+  <meta property="og:image" content="https://aatishb.com/covidtrends/logos/covid-trends-logo-nowords.png" />
+  <meta property="og:description" content="Visualizing the exponential growth of COVID-19 across the world." />
 </head>
 <body>
 
@@ -42,8 +52,8 @@
           <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
 
           <div v-if="!isHidden" id="logos">
-            <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></img></a>
-            <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></img></a>
+            <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></a>
+            <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></a>
           </div>
 
         </div>
@@ -156,22 +166,5 @@
   <script src="vue-definitions.js?1"></script>
 
 </body>
-
-
-<!-- Twitter Card data -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Covid Trends">
-<meta name="twitter:description" content="Visualizing the exponential growth of COVID-19 across the world.">
-<meta name="twitter:site" content="@aatishb">
-<!-- Twitter Summary card images must be at least 120x120px -->
-<meta name="twitter:image" content="https://aatishb.com/covidtrends/logos/covid-trends-logo-nowords.png">
-
-<!-- Open Graph data -->
-<meta property="og:title" content="Covid Trends" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://aatishb.com/covidtrends/" />
-<meta property="og:image" content="https://aatishb.com/covidtrends/logos/covid-trends-logo-nowords.png" />
-<meta property="og:description" content="Visualizing the exponential growth of COVID-19 across the world." />
-
 
 </html>
