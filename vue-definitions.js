@@ -253,11 +253,6 @@ let app = new Vue({
       };
     },
 
-    formatDate(date) {
-      let [m, d, y] = date.split('/');
-      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
-    },
-
     myMax() { // https://stackoverflow.com/a/12957522
       var par = []
       for (var i = 0; i < arguments.length; i++) {
@@ -431,6 +426,15 @@ let app = new Vue({
       }
     },
 
+    formatDate(date) {
+      if (!date) {
+        return '';
+      }
+
+      let [m, d, y] = date.split('/');
+      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
+    },
+
     // TODO: clean up play/pause logic
     play() {
       if (this.paused) {
@@ -589,8 +593,7 @@ let app = new Vue({
 
     layout() {
       return {
-        //title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         autorange: false,
           xaxis: {
@@ -629,7 +632,7 @@ let app = new Vue({
         x: e.cases.slice(0, this.day),
         y: e.slope.slice(0, this.day),
         name: e.country,
-        text: this.dates.map(date => e.country + '<br>' + date ),
+        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
