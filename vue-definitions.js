@@ -653,7 +653,7 @@ let app = new Vue({
         name: e.country,
         mode: 'markers+text',
         legendgroup: i,
-        textposition: 'top left',
+        textposition: 'center right',
         marker: {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
