@@ -494,7 +494,8 @@ let app = new Vue({
     },
 
     createURL() {
-      let baseUrl = 'https://aatishb.com/covidtrends/?';
+
+      let baseUrl = window.location.href.split('?')[0];
 
       let queryUrl = new URLSearchParams();
 
@@ -525,7 +526,7 @@ let app = new Vue({
         }
       }
 
-      let url = baseUrl + queryUrl.toString();
+      let url = baseUrl + '?' + queryUrl.toString();
 
       window.history.replaceState( {} , 'Covid Trends', '?'+queryUrl.toString() );
 
