@@ -18,25 +18,11 @@ Vue.component('graph', {
 
     },
 
-    onLayoutChange(data) {
-
-      if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
-        this.userSetRange = false;
-      }
-
-      else if (data['xaxis.range[0]']) {
-        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
-        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
-        this.userSetRange = true;
-      }
-
-      this.updateGraph();
-    },
-
     onHoverOn(data) {
 
         let curveNumber = data.points[0].curveNumber;
         let name = this.graphData.traces[curveNumber].name;
+
         this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
 
         let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
@@ -57,12 +43,31 @@ Vue.component('graph', {
 
     },
 
+    onLayoutChange(data) {
+
+      // if the user selects autorange, go back to the default range
+      if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
+        this.userSetRange = false;
+      }
+
+      // if the user selects a custom range, use this
+      else if (data['xaxis.range[0]']) {
+        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
+        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
+        this.userSetRange = true;
+      }
+
+      this.updateGraph();
+    },
+
     updateGraph() {
 
       // we're deep copying the layout object to avoid side effects
       // because plotly mutates layout on user input
+      // note: this may cause issues if we pass in date objects through the layout
       let layout = JSON.parse(JSON.stringify(this.graphData.layout));
 
+      // if the user selects a custom range, use this
       if (this.userSetRange) {
         layout.xaxis.range = this.xrange;
         layout.yaxis.range = this.yrange;
@@ -73,7 +78,6 @@ Vue.component('graph', {
   },
 
   mounted() {
-    //console.log('graph mounted!');
     this.makeGraph();
   },
 
@@ -96,9 +100,9 @@ Vue.component('graph', {
 
   data() {
     return {
-      xrange: [],
-      yrange: [],
-      userSetRange: false,
+      xrange: [], // stores user selected xrange
+      yrange: [], // stores user selected yrange
+      userSetRange: false, // determines whether to use user selected range
       traceIndices: [],
       config: {
           responsive: true,
@@ -121,7 +125,6 @@ let app = new Vue({
   el: '#root',
 
   mounted() {
-    //console.log('mounted');
     this.pullData(this.selectedData, this.selectedRegion);
   },
 
@@ -194,7 +197,6 @@ let app = new Vue({
 
     });
 
-    //console.log('created finished');
   },
 
 
@@ -220,12 +222,8 @@ let app = new Vue({
     },
 
     graphMounted() {
-      //console.log('minDay', this.minDay);
-      //console.log('autoPlay', this.autoplay);
-      //console.log('graphMounted', this.graphMounted);
 
       if (this.graphMounted && this.autoplay && this.minDay > 0) {
-        //console.log('autoplaying');
         this.day = this.minDay;
         this.play();
         this.autoplay = false; // disable autoplay on first play
@@ -240,7 +238,7 @@ let app = new Vue({
 
   methods: {
 
-    debounce(func, wait, immediate) { //https://davidwalsh.name/javascript-debounce-function
+    debounce(func, wait, immediate) { // https://davidwalsh.name/javascript-debounce-function
       var timeout;
       return function() {
         var context = this, args = arguments;
@@ -260,7 +258,7 @@ let app = new Vue({
       return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
     },
 
-    myMax() { //https://stackoverflow.com/a/12957522
+    myMax() { // https://stackoverflow.com/a/12957522
       var par = []
       for (var i = 0; i < arguments.length; i++) {
           if (!isNaN(arguments[i])) {
@@ -281,7 +279,7 @@ let app = new Vue({
     },
 
     pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
-      //console.log('pulling', selectedData, ' for ', selectedRegion);
+
       if (selectedRegion != 'US') {
         let url;
         if (selectedData == 'Confirmed Cases') {
@@ -412,7 +410,6 @@ let app = new Vue({
       // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
       if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
-        //console.log('generating new selected countries list');
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
       }
 
@@ -434,6 +431,7 @@ let app = new Vue({
       }
     },
 
+    // TODO: clean up play/pause logic
     play() {
       if (this.paused) {
 
@@ -460,8 +458,6 @@ let app = new Vue({
     },
 
     increment() {
-       //console.log('day', this.day);
-       //console.log('incrementing');
 
       if (this.day == this.dates.length || this.minDay < 0) {
         this.day = this.dates.length;
@@ -530,8 +526,6 @@ let app = new Vue({
       window.history.replaceState( {} , 'Covid Trends', '?'+queryUrl.toString() );
 
       this.copyToClipboard(url);
-      //alert('Here\'s a custom URL to pull up this view:\n' + url);
-
 
     },
 
