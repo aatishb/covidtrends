@@ -1,8 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  //props: ['data', 'dates', 'day', 'selectedData', 'selectedRegion', 'scale', 'resize'],
-  props: ['graphData'],
+  props: ['graphData', 'day', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -10,55 +9,35 @@ Vue.component('graph', {
 
     makeGraph() {
 
-      Plotly.newPlot(this.$refs.graph, [], {}, this.config);
-
-      this.$refs.graph.on('plotly_hover', this.onHoverOn)
-        .on('plotly_unhover', this.onHoverOff);
-        //.on('plotly_relayout', this.onLayoutChange);
-
-      /*
-      this.autosetRange = true;
-      this.updateTraces();
-      this.updateLayout();
-
-      Plotly.newPlot(this.$refs.graph, this.traces, this.layout, this.config).then(e => {
-          if (!this.graphMounted) {
-            this.$emit('graph-mounted')
-            this.graphMounted = true;
-          }
-        });
+      Plotly.newPlot(this.$refs.graph, [], {}, this.config)
+        .then(e => this.$emit('graph-mounted'));
 
       this.$refs.graph.on('plotly_hover', this.onHoverOn)
         .on('plotly_unhover', this.onHoverOff)
         .on('plotly_relayout', this.onLayoutChange);
 
-      this.updateAnimation();
-      */
     },
 
     onLayoutChange(data) {
 
-      //console.log('layout change detected');
-
-      if (data['xaxis.autorange'] && data['yaxis.autorange']) { // by default, override plotly autorange
-        data['xaxis.autorange'] = false;
-        data['yaxis.autorange'] = false;
-        this.autosetRange = true;
-        this.updateLayout();
-        this.updateAnimation();
-      } else if (data['xaxis.range[0]']) { // if range set manually
-        this.autosetRange = false; // then use the manual range
-        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
-        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
+      if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
+        this.userSetRange = false;
       }
 
+      else if (data['xaxis.range[0]']) {
+        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
+        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
+        this.userSetRange = true;
+      }
+
+      this.updateGraph();
     },
 
     onHoverOn(data) {
 
         let curveNumber = data.points[0].curveNumber;
-        let name = this.traces[curveNumber].name;
-        this.traceIndices = this.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
+        let name = this.graphData.traces[curveNumber].name;
+        this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
 
         let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
 
@@ -78,64 +57,23 @@ Vue.component('graph', {
 
     },
 
-    updateTraces() {
+    updateGraph() {
 
+      // we're deep copying the layout object to avoid side effects
+      // because plotly mutates layout on user input
+      let layout = JSON.parse(JSON.stringify(this.graphData.layout));
 
-      this.traceCount =  Array(this.traces.length).fill(0).map((e,i) => i);
-
-      // used to set xrange and yrange behavior
-      // this flattens the x and y arrays and filters out non numbers
-      // so later we can find the min and the max of these arrays
-      this.filteredCases = Array.prototype.concat(...this.data.map(e => e.cases)).filter(e => !isNaN(e));
-      this.filteredSlope =  Array.prototype.concat(...this.data.map(e => e.slope)).filter(e => !isNaN(e));
-
-    },
-
-    updateLayout() {
-
-      //console.log('layout updated');
-
-      if (this.autosetRange) {
-        this.setxrange();
-        this.setyrange();
-        this.autosetRange = false;
+      if (this.userSetRange) {
+        layout.xaxis.range = this.xrange;
+        layout.yaxis.range = this.yrange;
       }
 
-
-    },
-
-    setxrange() {
-      let xmax = Math.max(...this.filteredCases, 50);
-
-      if (this.scale == 'Logarithmic Scale') {
-        this.xrange = [1, Math.ceil(Math.log10(1.5*xmax))]
-      } else {
-        this.xrange = [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
-      }
-
-    },
-
-    setyrange() {
-      let ymax = Math.max(...this.filteredSlope, 50);
-      let ymin = Math.min(...this.filteredSlope);
-
-      if (this.scale == 'Logarithmic Scale') {
-        if (ymin < 10) {
-          // shift ymin on log scale when fewer than 10 cases
-          this.yrange = [0, Math.ceil(Math.log10(1.5*ymax))]
-        } else {
-          this.yrange = [1, Math.ceil(Math.log10(1.5*ymax))]
-        }
-      } else {
-        this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
-      }
-
-    },
-
+      Plotly.react(this.$refs.graph, this.graphData.traces, layout, this.config);
+    }
   },
 
   mounted() {
-    console.log('graph mounted!');
+    //console.log('graph mounted!');
     this.makeGraph();
   },
 
@@ -145,66 +83,23 @@ Vue.component('graph', {
 
       deep: true,
 
-      handler(data, oldData) {
-        console.log('graph updated!');
-        Plotly.react(this.$refs.graph, data.traces, data.layout, this.config);
+      handler() {
+        this.updateGraph();
       }
 
-    }
-    /*
+    },
+
     resize() {
-      //console.log('resize detected');
       Plotly.Plots.resize(this.$refs.graph);
     },
-
-    scale() {
-      //console.log('scale change detected', this.scale);
-      this.makeGraph();
-    },
-
-    day(newDay, oldDay) {
-      if (this.updateDate) { // avoid race condition bug where day change triggers old layout
-        //console.log('day change detected', oldDay, newDay);
-        this.updateLayout();
-        this.updateAnimation();
-      }
-    },
-
-    selectedData() {
-      //console.log('selected data change detected');
-      this.updateDate = false;
-    },
-
-    selectedRegion() {
-      //console.log('selected region change detected');
-      this.updateDate = false;
-    },
-
-    data() {
-      //console.log('data change detected');
-      this.$emit('update:day', this.dates.length);
-      this.makeGraph();
-      this.updateDate = true;
-    }
-    */
-
   },
 
   data() {
     return {
-      /*
-      filteredCases: [],
-      filteredSlope: [],
-      traces: [],
-      layout: {},
-      traceCount: [],
-      traceIndices: [],
       xrange: [],
       yrange: [],
-      autosetRange: true,
-      graphMounted: false,
-      updateDate: true,
-      */
+      userSetRange: false,
+      traceIndices: [],
       config: {
           responsive: true,
           toImageButtonOptions: {
@@ -448,6 +343,7 @@ let app = new Vue({
     processData(data, selectedRegion, updateSelectedCountries) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
+      this.day = this.dates.length;
 
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau']
 
@@ -593,10 +489,6 @@ let app = new Vue({
       this.selectedCountries = [];
     },
 
-    changeScale() {
-      this.selectedScale = (this.selectedScale + 1) % 2;
-    },
-
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
@@ -706,10 +598,11 @@ let app = new Vue({
         //title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
         showlegend: false,
-        xaxis: {
+        autorange: false,
+          xaxis: {
           title: 'Total ' + this.selectedData,
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          //range: this.xrange,
+          type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
+          range: this.xrange,
           titlefont: {
             size: 24,
             color: 'rgba(254, 52, 110,1)'
@@ -717,8 +610,8 @@ let app = new Vue({
         },
         yaxis: {
           title: 'New ' + this.selectedData + ' (in the Past Week)',
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          //range: this.yrange,
+          type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
+          range: this.yrange,
           titlefont: {
             size: 24,
             color: 'rgba(254, 52, 110,1)'
@@ -739,8 +632,8 @@ let app = new Vue({
 
       // draws grey lines (line plot for each location)
       let trace1 = this.filteredCovidData.map((e,i) => ({
-        x: e.cases,
-        y: e.slope,
+        x: e.cases.slice(0, this.day),
+        y: e.slope.slice(0, this.day),
         name: e.country,
         text: this.dates.map(date => e.country + '<br>' + date ),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
@@ -760,8 +653,8 @@ let app = new Vue({
 
       // draws red dots (most recent data for each location)
       let trace2 = this.filteredCovidData.map((e,i) => ({
-        x: [e.cases[e.cases.length - 1]],
-        y: [e.slope[e.slope.length - 1]],
+        x: [e.cases[this.day - 1]],
+        y: [e.slope[this.day - 1]],
         text: e.country,
         name: e.country,
         mode: 'markers+text',
@@ -783,10 +676,45 @@ let app = new Vue({
     graphData() {
       return {
         traces: this.traces,
-        layout: this.layout
+        layout: this.layout,
       };
-    }
+    },
 
+    filteredCases() {
+      return Array.prototype.concat(...this.filteredCovidData.map(e => e.cases)).filter(e => !isNaN(e));
+    },
+
+    filteredSlope() {
+      return Array.prototype.concat(...this.filteredCovidData.map(e => e.slope)).filter(e => !isNaN(e));
+    },
+
+    xrange() {
+      let xmax = Math.max(...this.filteredCases, 50);
+
+      if (this.selectedScale == 'Logarithmic Scale') {
+        return [1, Math.ceil(Math.log10(1.5*xmax))]
+      } else {
+        return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
+      }
+
+    },
+
+    yrange() {
+      let ymax = Math.max(...this.filteredSlope, 50);
+      let ymin = Math.min(...this.filteredSlope);
+
+      if (this.selectedScale == 'Logarithmic Scale') {
+        if (ymin < 10) {
+          // shift ymin on log scale when fewer than 10 cases
+          return [0, Math.ceil(Math.log10(1.5*ymax))]
+        } else {
+          return [1, Math.ceil(Math.log10(1.5*ymax))]
+        }
+      } else {
+        return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+      }
+
+    },
 
   },
 
