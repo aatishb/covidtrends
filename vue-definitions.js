@@ -66,7 +66,7 @@ Vue.component('graph', {
       // note: this may cause issues if we pass in date objects through the layout
       let layout = JSON.parse(JSON.stringify(this.graphData.layout));
 
-      // if the user selects a custom range, use this
+      // if the user selects a custom range, use it
       if (this.userSetRange) {
         layout.xaxis.range = this.xrange;
         layout.yaxis.range = this.yrange;
@@ -92,7 +92,13 @@ Vue.component('graph', {
 
       deep: true,
 
-      handler() {
+      handler(data, oldData) {
+
+        // if UI state changes, revert to auto range
+        if (JSON.stringify(data.uistate) !== JSON.stringify(oldData.uistate)) {
+          this.userSetRange = false;
+        }
+
         this.updateGraph();
       }
 
@@ -605,7 +611,7 @@ let app = new Vue({
           xaxis: {
           title: 'Total ' + this.selectedData,
           type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: this.xrange,
+          range: this.selectedScale == 'Logarithmic Scale' ? this.logxrange : this.linearxrange,
           titlefont: {
             size: 24,
             color: 'rgba(254, 52, 110,1)'
@@ -614,7 +620,7 @@ let app = new Vue({
         yaxis: {
           title: 'New ' + this.selectedData + ' (in the Past Week)',
           type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: this.yrange,
+          range: this.selectedScale == 'Logarithmic Scale' ? this.logyrange : this.linearyrange,
           titlefont: {
             size: 24,
             color: 'rgba(254, 52, 110,1)'
@@ -678,6 +684,7 @@ let app = new Vue({
 
     graphData() {
       return {
+        uistate: [this.selectedData, this.selectedRegion, this.selectedScale],
         traces: this.traces,
         layout: this.layout,
       };
@@ -691,32 +698,32 @@ let app = new Vue({
       return Array.prototype.concat(...this.filteredCovidData.map(e => e.slope)).filter(e => !isNaN(e));
     },
 
-    xrange() {
+    logxrange() {
       let xmax = Math.max(...this.filteredCases, 50);
-
-      if (this.selectedScale == 'Logarithmic Scale') {
-        return [1, Math.ceil(Math.log10(1.5*xmax))]
-      } else {
-        return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.2 * xmax)];
-      }
-
+      return [1, Math.ceil(Math.log10(1.5*xmax))]
     },
 
-    yrange() {
+    linearxrange() {
+      let xmax = Math.max(...this.filteredCases, 50);
+      return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.2 * xmax)];
+    },
+
+    logyrange() {
       let ymax = Math.max(...this.filteredSlope, 50);
       let ymin = Math.min(...this.filteredSlope);
 
-      if (this.selectedScale == 'Logarithmic Scale') {
-        if (ymin < 10) {
-          // shift ymin on log scale when fewer than 10 cases
-          return [0, Math.ceil(Math.log10(1.5*ymax))]
-        } else {
-          return [1, Math.ceil(Math.log10(1.5*ymax))]
-        }
+      if (ymin < 10) { // shift ymin on log scale if fewer than 10 cases
+        return [0, Math.ceil(Math.log10(1.5*ymax))]
       } else {
-        return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+        return [1, Math.ceil(Math.log10(1.5*ymax))]
       }
+    },
 
+    linearyrange() {
+      let ymax = Math.max(...this.filteredSlope, 50);
+      let ymin = Math.min(...this.filteredSlope);
+
+      return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
     },
 
   },
