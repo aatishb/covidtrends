@@ -114,6 +114,24 @@
       "profile": "https://zmoazeni.github.io/gitspective/#/timeline/waldyrious",
       "contributions": [
         "review"
+     ]
+    },
+    {
+       "login": "Kojoley",
+      "name": "Nikita Kniazev",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2743474?v=4",
+      "profile": "https://github.com/Kojoley",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "thisIsTheFoxe",
+      "name": "Henry",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/18512366?v=4",
+      "profile": "https://www.thisisthefoxe.me",
+      "contributions": [
+        "content"
       ]
     }
   ],
