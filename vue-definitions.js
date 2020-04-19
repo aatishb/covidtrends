@@ -7,10 +7,9 @@ Vue.component('graph', {
 
   methods: {
 
-    makeGraph() {
+    mountGraph() {
 
-      Plotly.newPlot(this.$refs.graph, [], {}, this.config)
-        .then(e => this.$emit('graph-mounted'));
+      Plotly.newPlot(this.$refs.graph, [], {}, this.config);
 
       this.$refs.graph.on('plotly_hover', this.onHoverOn)
         .on('plotly_unhover', this.onHoverOff)
@@ -78,7 +77,13 @@ Vue.component('graph', {
   },
 
   mounted() {
-    this.makeGraph();
+    this.mountGraph();
+
+    if (this.graphData) {
+      this.updateGraph();
+    }
+
+    this.$emit('graph-mounted');
   },
 
   watch: {
