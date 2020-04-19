@@ -106,6 +106,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "bdarfler",
+      "name": "Ben Darfler",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/197776?v=4",
+      "profile": "http://bdarfler.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
