@@ -106,6 +106,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "Kojoley",
+      "name": "Nikita Kniazev",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2743474?v=4",
+      "profile": "https://github.com/Kojoley",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
