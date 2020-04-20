@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['graphData', 'day', 'resize', 'labelsHidden'],
+  props: ['graphData', 'day', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -107,10 +107,6 @@ Vue.component('graph', {
     resize() {
       Plotly.Plots.resize(this.$refs.graph);
     },
-
-    labelsHidden() {
-      this.updateGraph();
-    }
   },
 
   data() {
