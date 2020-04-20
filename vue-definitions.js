@@ -1,7 +1,7 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['graphData', 'day', 'resize'],
+  props: ['graphData', 'day', 'resize', 'labelsHidden'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
@@ -107,6 +107,10 @@ Vue.component('graph', {
     resize() {
       Plotly.Plots.resize(this.$refs.graph);
     },
+
+    labelsHidden() {
+      this.updateGraph();
+    }
   },
 
   data() {
@@ -500,6 +504,14 @@ let app = new Vue({
       this.selectedCountries = [];
     },
 
+    hideLabels() {
+      this.labelsHidden = true;
+    },
+
+    showLabels() {
+      this.labelsHidden = false;
+    },
+
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
@@ -666,7 +678,7 @@ let app = new Vue({
         y: [e.slope[this.day - 1]],
         text: e.country,
         name: e.country,
-        mode: 'markers+text',
+        mode: this.labelsHidden ? 'markers':'markers+text',
         legendgroup: i,
         textposition: 'center right',
         marker: {
@@ -760,7 +772,10 @@ let app = new Vue({
 
     visibleCountries: [],
 
+    ///explainer panel
     isHidden: true,
+
+    labelsHidden: false,
 
     selectedCountries: [],
 

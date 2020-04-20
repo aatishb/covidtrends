@@ -64,7 +64,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" :labels-hidden="labelsHidden" @graph-mounted="graphMounted = true"></graph>
 
         <div v-if="covidData.length > 0" id="nav">
 
@@ -137,6 +137,11 @@
           <div id="buttonwrapper">
             <button @click="deselectAll">Deselect All</button>
             <button @click="selectAll">Select All</button>
+          </div>
+
+          <div id="buttonwrapper">
+            <button @click="hideLabels">Hide Labels</button>
+            <button @click="showLabels">Show Labels</button>
           </div>
 
           <ul style="padding-top: 0.5rem;">
