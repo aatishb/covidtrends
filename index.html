@@ -122,6 +122,9 @@
             </option>
           </select>
 
+            <input type="checkbox" style="margin-top: 0.75rem;" id="hideLabels" v-model="labelsHidden">
+            <label for="hideLabels">Hide country labels</label>
+
         </div>
 
         <div id="countries">
@@ -137,11 +140,6 @@
           <div id="buttonwrapper">
             <button @click="deselectAll">Deselect All</button>
             <button @click="selectAll">Select All</button>
-          </div>
-
-          <div id="buttonwrapper">
-            <button @click="hideLabels">Hide Labels</button>
-            <button @click="showLabels">Show Labels</button>
           </div>
 
           <ul style="padding-top: 0.5rem;">
