@@ -500,14 +500,6 @@ let app = new Vue({
       this.selectedCountries = [];
     },
 
-    hideLabels() {
-      this.labelsHidden = true;
-    },
-
-    showLabels() {
-      this.labelsHidden = false;
-    },
-
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
