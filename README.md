@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -45,6 +45,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/NeverFearTheasHere"><img src="https://avatars1.githubusercontent.com/u/12138621?v=4" width="100px;" alt=""/><br /><sub><b>Thea Lanherne</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3ANeverFearTheasHere" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/arjo129"><img src="https://avatars0.githubusercontent.com/u/542272?v=4" width="100px;" alt=""/><br /><sub><b>Arjo Chakravarty</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=arjo129" title="Code">💻</a></td>
     <td align="center"><a href="https://twitter.com/lucypxu"><img src="https://pbs.twimg.com/profile_images/665771785493712896/cwYcvRLp_400x400.jpg" width="100px;" alt=""/><br /><sub><b>Lucy Xu</b></sub></a><br /><a href="#question" title="Answering Questions">💬</a></td>
+    <td align="center"><a href="http://bdarfler.com"><img src="https://avatars1.githubusercontent.com/u/197776?v=4" width="100px;" alt=""/><br /><sub><b>Ben Darfler</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=bdarfler" title="Code">💻</a></td>
+    <td align="center"><a href="https://zmoazeni.github.io/gitspective/#/timeline/waldyrious"><img src="https://avatars2.githubusercontent.com/u/478237?v=4" width="100px;" alt=""/><br /><sub><b>Waldir Pimenta</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/pulls?q=is%3Apr+reviewed-by%3Awaldyrious" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/Kojoley"><img src="https://avatars3.githubusercontent.com/u/2743474?v=4" width="100px;" alt=""/><br /><sub><b>Nikita Kniazev</b></sub></a><br /><a href="#design-Kojoley" title="Design">🎨</a></td>
+    <td align="center"><a href="https://www.thisisthefoxe.me"><img src="https://avatars0.githubusercontent.com/u/18512366?v=4" width="100px;" alt=""/><br /><sub><b>Henry</b></sub></a><br /><a href="#content-thisIsTheFoxe" title="Content">🖋</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/rpkoller"><img src="https://avatars2.githubusercontent.com/u/1665422?v=4" width="100px;" alt=""/><br /><sub><b>Ralf Koller</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=rpkoller" title="Code">💻</a></td>
   </tr>
 </table>
 
