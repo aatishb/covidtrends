@@ -666,7 +666,7 @@ let app = new Vue({
         y: [e.slope[this.day - 1]],
         text: e.country,
         name: e.country,
-        mode: this.showLabels ? 'markers+text':'markers',
+        mode: this.showLabels ? 'markers+text' : 'markers',
         legendgroup: i,
         textposition: 'center right',
         marker: {
