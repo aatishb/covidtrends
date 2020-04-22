@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -53,6 +53,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.thisisthefoxe.me"><img src="https://avatars0.githubusercontent.com/u/18512366?v=4" width="100px;" alt=""/><br /><sub><b>Henry</b></sub></a><br /><a href="#content-thisIsTheFoxe" title="Content">🖋</a></td>
     <td align="center"><a href="https://github.com/rpkoller"><img src="https://avatars2.githubusercontent.com/u/1665422?v=4" width="100px;" alt=""/><br /><sub><b>Ralf Koller</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=rpkoller" title="Code">💻</a></td>
     <td align="center"><a href="http://joachimneumann.com"><img src="https://avatars1.githubusercontent.com/u/5642225?v=4" width="100px;" alt=""/><br /><sub><b>Joachim Neumann</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3Ajoachimneumann" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/archiewood"><img src="https://avatars0.githubusercontent.com/u/58074498?v=4" width="100px;" alt=""/><br /><sub><b>archiewood</b></sub></a><br /><a href="#ideas-archiewood" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
