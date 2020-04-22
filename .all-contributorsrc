@@ -160,6 +160,22 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "name": "Arkarup Banerjee",
+      "avatar_url": "all-contributors-photos/arkarup.jpg",
+      "profile": "https://www.arkarup.com/",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "name": "Ann Bybee-Finley",
+      "avatar_url": "all-contributors-photos/bybee-finley.jpg",
+      "profile": "https://blogs.cornell.edu/scslab/people/275-2/",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
