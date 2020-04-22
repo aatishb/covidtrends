@@ -191,8 +191,8 @@ let app = new Vue({
       }
 
       if (urlParameters.has('trendline')) {
-        let showtrendline = urlParameters.get('trendline');
-        this.showTrendLine = (showtrendline == 'true');
+        let showTrendLine = urlParameters.get('trendline');
+        this.showTrendLine = (showTrendLine == 'true');
       } else if (urlParameters.has('doublingtime')) {
         let doublingTime = urlParameters.get('doublingtime');
         this.doublingTime = doublingTime;
@@ -654,24 +654,24 @@ let app = new Vue({
                 color: 'black',
                 size: 14
               },
-        annotations: [
+        annotations: this.showTrendLine ? [
           {
-            x: 0.2,
+            x: 0.1,
             y: 0.8,
             xref: 'paper',
             yref: 'paper',
             xanchor: 'left',
             yanchor: 'center',
-            text: 'Dotted Line Shows Trend Line<br>For ' + this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
+            text: 'Trend Line Indicates<br>' + this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
             align: 'left',
             font: {
               family: 'Open Sans, sans-serif',
-              color: 'rgba(254, 52, 110, 1)',
-              size: 15
+              color: '#af8baf',
+              size: 18
             },
             showarrow: false,
           }
-        ]
+        ] : [],
       };
     },
 
@@ -729,7 +729,7 @@ let app = new Vue({
             dash: 'dot',
           },
           marker: {
-            color: 'pink'
+            color: '#af8baf'
           },
           hoverinfo: 'skip',
         }];
