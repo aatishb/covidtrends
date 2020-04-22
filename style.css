@@ -4,8 +4,12 @@ html, body {
   margin: 0;
 }
 
-body {
+body,
+.plotly-notifier {
   font-family: 'Open Sans', sans-serif;
+}
+
+body {
   font-size:1em;
   line-height: 1.5;
   font-weight: 400;
