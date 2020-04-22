@@ -47,6 +47,7 @@ Vue.component('graph', {
       // if the user selects autorange, go back to the default range
       if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
         this.userSetRange = false;
+        this.updateGraph();
       }
 
       // if the user selects a custom range, use this
@@ -56,7 +57,6 @@ Vue.component('graph', {
         this.userSetRange = true;
       }
 
-      this.updateGraph();
     },
 
     updateGraph() {
@@ -336,12 +336,12 @@ let app = new Vue({
 
     filterByCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Country/Region'] == selectedRegion)
-          .map(e => ({...e, region: e['Province/State']}));
+          .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     convertStateToCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Province/State'] == selectedRegion)
-          .map(e => ({...e, region: e['Province/State']}));
+          .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     processData(data, selectedRegion, updateSelectedCountries) {
@@ -666,7 +666,7 @@ let app = new Vue({
         y: [e.slope[this.day - 1]],
         text: e.country,
         name: e.country,
-        mode: 'markers+text',
+        mode: this.showLabels ? 'markers+text' : 'markers',
         legendgroup: i,
         textposition: 'center right',
         marker: {
@@ -761,6 +761,8 @@ let app = new Vue({
     visibleCountries: [],
 
     isHidden: true,
+
+    showLabels: true,
 
     selectedCountries: [],
 
