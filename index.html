@@ -122,8 +122,21 @@
             </option>
           </select>
 
-          <input type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
-          <label for="showLabels">Show labels</label>
+          <div>
+            <input type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
+            <label for="showLabels">Show Labels</label>
+          </div>
+
+          <div>
+            <input type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
+            <label for="showTrendLine">Show
+                <select style="width: 3rem; min-width: 2rem; padding: 0rem; font-size: 0.75rem;" v-model="doublingTime" @mousedown="pause">
+                  <option v-for="d in doublingTimes" v-bind:value="d">
+                    {{ d }}
+                  </option>
+                </select>
+               Day Doubling Time</label>
+          </div>
 
         </div>
 

@@ -22,12 +22,14 @@ Vue.component('graph', {
         let curveNumber = data.points[0].curveNumber;
         let name = this.graphData.traces[curveNumber].name;
 
-        this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
+        if (name) {
 
-        let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
+          this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
+          let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
 
-        for (let i of this.traceIndices) {
-          Plotly.restyle(this.$refs.graph, update, [i]);
+          for (let i of this.traceIndices) {
+            Plotly.restyle(this.$refs.graph, update, [i]);
+          }
         }
 
     },
@@ -678,7 +680,28 @@ let app = new Vue({
       })
       );
 
-      return [...trace1, ...trace2];
+      if (this.showTrendLine) {
+        let cases = [0, 1000000];
+
+        let trace3 = [{
+          x: cases,
+          y: cases.map(numCases => numCases * 7 / this.doublingTime), // factor of 7 converts doubling time from days to week
+          mode: 'lines',
+          line: {
+            dash: 'dot',
+          },
+          marker: {
+            color: 'rgba(0, 0, 0, 0.5)'
+          },
+          hoverinfo: 'skip',
+        }];
+
+        return [...trace1, ...trace2, ...trace3];
+
+      } else {
+        return [...trace1, ...trace2];
+      }
+
 
     },
 
@@ -763,6 +786,12 @@ let app = new Vue({
     isHidden: true,
 
     showLabels: true,
+
+    showTrendLine: true,
+
+    doublingTimes: Array(50).fill(0).map((e,i) => i + 1),
+
+    doublingTime: 7,
 
     selectedCountries: [],
 
