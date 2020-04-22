@@ -47,6 +47,7 @@ Vue.component('graph', {
       // if the user selects autorange, go back to the default range
       if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
         this.userSetRange = false;
+        this.updateGraph();
       }
 
       // if the user selects a custom range, use this
@@ -56,7 +57,6 @@ Vue.component('graph', {
         this.userSetRange = true;
       }
 
-      this.updateGraph();
     },
 
     updateGraph() {
