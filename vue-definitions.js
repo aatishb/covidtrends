@@ -760,7 +760,6 @@ let app = new Vue({
 
     visibleCountries: [],
 
-    ///explainer panel
     isHidden: true,
 
     showLabels: true,
