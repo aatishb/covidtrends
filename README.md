@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -56,6 +56,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.arkarup.com/"><img src="all-contributors-photos/arkarup.jpg" width="100px;" alt=""/><br /><sub><b>Arkarup Banerjee</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://blogs.cornell.edu/scslab/people/275-2/"><img src="all-contributors-photos/bybee-finley.jpg" width="100px;" alt=""/><br /><sub><b>Ann Bybee-Finley</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://www.instagram.com/cartoonconnie/"><img src="all-contributors-photos/connie.jpg" width="100px;" alt=""/><br /><sub><b>Connie Sun</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://twitter.com/roy_upasana"><img src="https://pbs.twimg.com/profile_images/798378170764394496/2i4v4w6E_400x400.jpg" width="100px;" alt=""/><br /><sub><b>Upasana Roy</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
