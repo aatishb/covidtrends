@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -18,8 +18,6 @@ Notice that most countries follow a similar straight line path, indicating that 
 This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19) and <a href="https://github.com/nytimes/covid-19-data">NYTimes</a>. Huge thanks to them for making this invaluable data source publicly available.
 
 Created by [Aatish Bhatia](https://aatishb.com/) in collaboration with [Henry Reich](https://www.youtube.com/user/minutephysics).
-
-**With thanks to Upasana Roy, Connie Sun, Ritwick Ghosh, Ann Bybee-Finley, Nicky Case, Mustafa Paksoy, Shekhar Bhatia, Arkarup Banerjee, and Igor Kholopov for their very helpful feedback & suggestions!** Any mistakes or omissions are mine.
 
 Created using [Plotly.js](https://plot.ly/javascript/) and [Vue.js](https://vuejs.org/)
 
@@ -53,6 +51,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.thisisthefoxe.me"><img src="https://avatars0.githubusercontent.com/u/18512366?v=4" width="100px;" alt=""/><br /><sub><b>Henry</b></sub></a><br /><a href="#content-thisIsTheFoxe" title="Content">🖋</a></td>
     <td align="center"><a href="https://github.com/rpkoller"><img src="https://avatars2.githubusercontent.com/u/1665422?v=4" width="100px;" alt=""/><br /><sub><b>Ralf Koller</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=rpkoller" title="Code">💻</a></td>
     <td align="center"><a href="http://joachimneumann.com"><img src="https://avatars1.githubusercontent.com/u/5642225?v=4" width="100px;" alt=""/><br /><sub><b>Joachim Neumann</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3Ajoachimneumann" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://www.arkarup.com/"><img src="all-contributors-photos/arkarup.jpg" width="100px;" alt=""/><br /><sub><b>Arkarup Banerjee</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://blogs.cornell.edu/scslab/people/275-2/"><img src="all-contributors-photos/bybee-finley.jpg" width="100px;" alt=""/><br /><sub><b>Ann Bybee-Finley</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://www.instagram.com/cartoonconnie/"><img src="all-contributors-photos/connie.jpg" width="100px;" alt=""/><br /><sub><b>Connie Sun</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://twitter.com/roy_upasana"><img src="https://pbs.twimg.com/profile_images/798378170764394496/2i4v4w6E_400x400.jpg" width="100px;" alt=""/><br /><sub><b>Upasana Roy</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
@@ -61,6 +63,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+Special thanks to Ritwick Ghosh, Nicky Case, Shekhar Bhatia, and Igor Kholopov for their very helpful feedback & suggestions!
 
 ## Participate and Contribute
 
