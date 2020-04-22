@@ -193,7 +193,6 @@ let app = new Vue({
       if (urlParameters.has('trendline')) {
         let showtrendline = urlParameters.get('trendline');
         this.showTrendLine = (showtrendline == 'true');
-        console.log(this.showTrendLine);
       } else if (urlParameters.has('doublingtime')) {
         let doublingTime = urlParameters.get('doublingtime');
         this.doublingTime = doublingTime;
@@ -397,7 +396,7 @@ let app = new Vue({
           for (let date of dates) {
             arr.push(row[date]);
           }
-          let slope = arr.map((e,i,a) => e - a[i - 7]);
+          let slope = arr.map((e,i,a) => e - a[i - this.lookbackTime]);
           let region = row.region
 
           if (Object.keys(renames).includes(region)) {
@@ -586,6 +585,11 @@ let app = new Vue({
 
       this.copied = true;
       setTimeout(() => this.copied = false, 2500);
+    },
+
+    // reference line for exponential growth with a given doubling time
+    referenceLine(x) {
+      return x * (1 - Math.pow(2, -this.lookbackTime / this.doublingTime));
     }
 
   },
@@ -650,6 +654,19 @@ let app = new Vue({
                 color: 'black',
                 size: 14
               },
+        annotations: [
+          {
+            x: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax / this.referenceLine(1)) : this.ymax / this.referenceLine(1),
+            y: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax) : this.ymax,
+            xref: 'x',
+            yref: 'y',
+            text: 'Annotation Text',
+            showarrow: false,
+            ax: 0,
+            ay: 0,
+            textangle: this.selectedScale == 'Logarithmic Scale' ? -90 + Math.atan2(Math.log10(this.ymax), Math.log10(this.ymax/this.referenceLine(1))) * 180 / Math.PI : -90 + Math.atan(this.referenceLine(1)) * 180 / Math.PI,
+          }
+        ]
       };
     },
 
@@ -698,13 +715,10 @@ let app = new Vue({
 
       if (this.showTrendLine) {
         let cases = [0, 1000000];
-        let summingTime = 7; // our y axis shows cases in the past 7 days
-        // reference line for exponential growth with a given doubling time
-        const referenceLine = x => x * (1 - Math.pow(2, -summingTime / this.doublingTime));
 
         let trace3 = [{
           x: cases,
-          y: cases.map(referenceLine),
+          y: cases.map(this.referenceLine),
           mode: 'lines',
           line: {
             dash: 'dot',
@@ -732,6 +746,18 @@ let app = new Vue({
       };
     },
 
+    xmax() {
+      return Math.max(...this.filteredCases, 50);
+    },
+
+    ymax() {
+      return Math.max(...this.filteredSlope, 50);
+    },
+
+    ymin() {
+      return Math.min(...this.filteredSlope);
+    },
+
     filteredCases() {
       return Array.prototype.concat(...this.filteredCovidData.map(e => e.cases)).filter(e => !isNaN(e));
     },
@@ -741,30 +767,24 @@ let app = new Vue({
     },
 
     logxrange() {
-      let xmax = Math.max(...this.filteredCases, 50);
-      return [1, Math.ceil(Math.log10(1.5*xmax))]
+      return [1, Math.ceil(Math.log10(1.5 * this.xmax))]
     },
 
     linearxrange() {
-      let xmax = Math.max(...this.filteredCases, 50);
-      return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.2 * xmax)];
+      return [-0.49*Math.pow(10,Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
     },
 
     logyrange() {
-      let ymax = Math.max(...this.filteredSlope, 50);
-      let ymin = Math.min(...this.filteredSlope);
 
-      if (ymin < 10) { // shift ymin on log scale if fewer than 10 cases
-        return [0, Math.ceil(Math.log10(1.5*ymax))]
+      if (this.ymin < 10) { // shift ymin on log scale if fewer than 10 cases
+        return [0, Math.ceil(Math.log10(1.5 * this.ymax))]
       } else {
-        return [1, Math.ceil(Math.log10(1.5*ymax))]
+        return [1, Math.ceil(Math.log10(1.5 * this.ymax))]
       }
     },
 
     linearyrange() {
       let ymax = Math.max(...this.filteredSlope, 50);
-      let ymin = Math.min(...this.filteredSlope);
-
       return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
     },
 
@@ -785,6 +805,8 @@ let app = new Vue({
     sliderSelected: false,
 
     day: 7,
+
+    lookbackTime: 7,
 
     icon: 'icons/play.svg',
 
