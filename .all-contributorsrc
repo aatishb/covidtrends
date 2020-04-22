@@ -151,6 +151,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "joachimneumann",
+      "name": "Joachim Neumann",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5642225?v=4",
+      "profile": "http://joachimneumann.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
