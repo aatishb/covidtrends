@@ -336,12 +336,12 @@ let app = new Vue({
 
     filterByCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Country/Region'] == selectedRegion)
-          .map(e => ({...e, region: e['Province/State']}));
+          .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     convertStateToCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Province/State'] == selectedRegion)
-          .map(e => ({...e, region: e['Province/State']}));
+          .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     processData(data, selectedRegion, updateSelectedCountries) {
