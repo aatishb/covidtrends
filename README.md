@@ -19,8 +19,6 @@ This interactive pulls data on COVID-19 provided by [Johns Hopkins CSSE](https:/
 
 Created by [Aatish Bhatia](https://aatishb.com/) in collaboration with [Henry Reich](https://www.youtube.com/user/minutephysics).
 
-**With thanks to Upasana Roy, Connie Sun, Ritwick Ghosh, Ann Bybee-Finley, Nicky Case, Mustafa Paksoy, Shekhar Bhatia, Arkarup Banerjee, and Igor Kholopov for their very helpful feedback & suggestions!** Any mistakes or omissions are mine.
-
 Created using [Plotly.js](https://plot.ly/javascript/) and [Vue.js](https://vuejs.org/)
 
 ## Contributors ✨
@@ -65,6 +63,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+Special thanks to Ritwick Ghosh, Nicky Case, Shekhar Bhatia, and Igor Kholopov for their very helpful feedback & suggestions!
 
 ## Participate and Contribute
 
