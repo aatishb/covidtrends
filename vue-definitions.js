@@ -627,7 +627,7 @@ let app = new Vue({
 
     layout() {
       return {
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         autorange: false,
           xaxis: {
@@ -656,15 +656,19 @@ let app = new Vue({
               },
         annotations: [
           {
-            x: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax / this.referenceLine(1)) : this.ymax / this.referenceLine(1),
+            x: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.xmin) : this.xmin,
             y: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax) : this.ymax,
             xref: 'x',
             yref: 'y',
-            text: 'Annotation Text',
+            xanchor: 'left',
+            yanchor: 'center',
+            text: 'Dotted Line Shows Trend Line For ' + this.doublingTime + ' Day Doubling Time of ' + this.selectedData,
+            font: {
+              family: 'Open Sans, sans-serif',
+              color: 'rgba(254, 52, 110, 1)',
+              size: 15
+            },
             showarrow: false,
-            ax: 0,
-            ay: 0,
-            textangle: this.selectedScale == 'Logarithmic Scale' ? -90 + Math.atan2(Math.log10(this.ymax), Math.log10(this.ymax/this.referenceLine(1))) * 180 / Math.PI : -90 + Math.atan(this.referenceLine(1)) * 180 / Math.PI,
           }
         ]
       };
@@ -748,6 +752,10 @@ let app = new Vue({
 
     xmax() {
       return Math.max(...this.filteredCases, 50);
+    },
+
+    xmin() {
+      return Math.min(...this.filteredCases, 50);
     },
 
     ymax() {
