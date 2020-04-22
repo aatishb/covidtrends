@@ -656,13 +656,14 @@ let app = new Vue({
               },
         annotations: [
           {
-            x: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.xmin) : this.xmin,
-            y: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax) : this.ymax,
-            xref: 'x',
-            yref: 'y',
+            x: 0.2,
+            y: 0.8,
+            xref: 'paper',
+            yref: 'paper',
             xanchor: 'left',
             yanchor: 'center',
-            text: 'Dotted Line Shows Trend Line For ' + this.doublingTime + ' Day Doubling Time of ' + this.selectedData,
+            text: 'Dotted Line Shows Trend Line<br>For ' + this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
+            align: 'left',
             font: {
               family: 'Open Sans, sans-serif',
               color: 'rgba(254, 52, 110, 1)',
