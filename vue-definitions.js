@@ -710,7 +710,7 @@ let app = new Vue({
             dash: 'dot',
           },
           marker: {
-            color: 'rgba(0, 0, 0, 0.5)'
+            color: 'pink'
           },
           hoverinfo: 'skip',
         }];
