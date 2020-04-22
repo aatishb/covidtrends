@@ -682,10 +682,13 @@ let app = new Vue({
 
       if (this.showTrendLine) {
         let cases = [0, 1000000];
+        let summingTime = 7; // our y axis shows cases in the past 7 days
+        // reference line for exponential growth with a given doubling time
+        const referenceLine = x => x * (1 - Math.pow(2, -summingTime / this.doublingTime));
 
         let trace3 = [{
           x: cases,
-          y: cases.map(numCases => numCases * 7 / this.doublingTime), // factor of 7 converts doubling time from days to week
+          y: cases.map(referenceLine),
           mode: 'lines',
           line: {
             dash: 'dot',
@@ -791,7 +794,7 @@ let app = new Vue({
 
     doublingTimes: Array(50).fill(0).map((e,i) => i + 1),
 
-    doublingTime: 7,
+    doublingTime: 2,
 
     selectedCountries: [],
 
