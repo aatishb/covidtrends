@@ -97,7 +97,7 @@ Vue.component('graph', {
       handler(data, oldData) {
 
         // if UI state changes, revert to auto range
-        if (JSON.stringify(data.uistate) !== JSON.stringify(oldData.uistate)) {
+        if (JSON.stringify(data.uistate) != JSON.stringify(oldData.uistate)) {
           this.userSetRange = false;
         }
 
@@ -189,6 +189,16 @@ let app = new Vue({
       } else if (urlParameters.has('location')) {
         this.selectedCountries = urlParameters.getAll('location').map(e => Object.keys(renames).includes(e) ? renames[e] : e);
       }
+
+      if (urlParameters.has('trendline')) {
+        let showtrendline = urlParameters.get('trendline');
+        this.showTrendLine = (showtrendline == 'true');
+        console.log(this.showTrendLine);
+      } else if (urlParameters.has('doublingtime')) {
+        let doublingTime = urlParameters.get('doublingtime');
+        this.doublingTime = doublingTime;
+      }
+
 
     }
 
@@ -537,6 +547,12 @@ let app = new Vue({
             queryUrl.append('location', country);
           }
         }
+      }
+
+      if (!this.showTrendLine) {
+        queryUrl.append('trendline', this.showTrendLine);
+      } else if (this.doublingTime != 2) {
+        queryUrl.append('doublingtime', this.doublingTime);
       }
 
       let url = baseUrl + '?' + queryUrl.toString();
