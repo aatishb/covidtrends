@@ -16,7 +16,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/1878638?v=4",
       "profile": "https://aatishb.com",
       "contributions": [
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -149,7 +150,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/1665422?v=4",
       "profile": "https://github.com/rpkoller",
       "contributions": [
-        "code"
+        "code",
+        "review"
       ]
     },
     {
@@ -159,6 +161,39 @@
       "profile": "http://joachimneumann.com",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "name": "Arkarup Banerjee",
+      "avatar_url": "all-contributors-photos/arkarup.jpg",
+      "profile": "https://www.arkarup.com/",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "name": "Ann Bybee-Finley",
+      "avatar_url": "all-contributors-photos/bybee-finley.jpg",
+      "profile": "https://blogs.cornell.edu/scslab/people/275-2/",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "name": "Connie Sun",
+      "avatar_url": "all-contributors-photos/connie.jpg",
+      "profile": "https://www.instagram.com/cartoonconnie/",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "name": "Upasana Roy",
+      "avatar_url": "https://pbs.twimg.com/profile_images/798378170764394496/2i4v4w6E_400x400.jpg",
+      "profile": "https://twitter.com/roy_upasana",
+      "contributions": [
+        "ideas",
+        "design"
       ]
     },
     {
