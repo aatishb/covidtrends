@@ -641,9 +641,10 @@ let app = new Vue({
       let annotation = [
       {
         x: 0.05,
-        y: 1,
+        y: 0.90,
         xref: 'paper',
         yref: 'paper',
+        yshift: 65,
         xanchor: 'left',
         yanchor: 'top',
         text: this.dateToText(this.dates[this.day - 1]),
@@ -659,7 +660,7 @@ let app = new Vue({
         annotation.push(
         {
           x: 0.05,
-          y: 0.85,
+          y: 0.90,
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
