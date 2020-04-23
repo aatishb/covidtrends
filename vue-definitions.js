@@ -664,7 +664,7 @@ let app = new Vue({
           yref: 'paper',
           xanchor: 'left',
           yanchor: 'top',
-          text: 'Trend Line Indicates<br>' + this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
+          text: 'Dotted Line Indicates<br>Exponential Growth of<br>' + this.selectedData + ' with<br>' + this.doublingTime + ' Day Doubling Time',
           align: 'left',
           font: {
             family: 'Open Sans, sans-serif',
