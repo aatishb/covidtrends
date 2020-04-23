@@ -55,6 +55,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://blogs.cornell.edu/scslab/people/275-2/"><img src="all-contributors-photos/bybee-finley.jpg" width="100px;" alt=""/><br /><sub><b>Ann Bybee-Finley</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://www.instagram.com/cartoonconnie/"><img src="all-contributors-photos/connie.jpg" width="100px;" alt=""/><br /><sub><b>Connie Sun</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://twitter.com/roy_upasana"><img src="https://pbs.twimg.com/profile_images/798378170764394496/2i4v4w6E_400x400.jpg" width="100px;" alt=""/><br /><sub><b>Upasana Roy</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
+  <tr>
     <td align="center"><a href="https://github.com/archiewood"><img src="https://avatars0.githubusercontent.com/u/58074498?v=4" width="100px;" alt=""/><br /><sub><b>archiewood</b></sub></a><br /><a href="#ideas-archiewood" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
