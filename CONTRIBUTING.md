@@ -6,7 +6,9 @@ Our goals for the website are accuracy, clarity, and usefulness at a glance. Our
 
 ### Contribute
 
-We’d like to be inclusive of all kinds of contributions, not just code contributions or pull requests. So [things like](https://allcontributors.org/docs/en/emoji-key) feedback, ideas, identifying issues, spotting bugs, creating tutorials, working on translations, and more. We will prioritize issues and pull requests that address (or intersect with) our [current milestones](https://github.com/aatishb/covidtrends/milestones).
+We’d like to be inclusive of all kinds of contributions, not just code contributions or pull requests. So [things like](https://allcontributors.org/docs/en/emoji-key) feedback, ideas, identifying issues, spotting bugs, creating tutorials, working on translations, and more. 
+
+We aim to prioritize issues and pull requests that address (or intersect with) our [current milestones](https://github.com/aatishb/covidtrends/milestones).
 
 We’re using the [All Contributors bot](https://allcontributors.org/docs/en/bot/usage). If you’ve contributed in any way, we encourage you to add your name to the contributor’s list by commenting on an issue or pull request with:
 
