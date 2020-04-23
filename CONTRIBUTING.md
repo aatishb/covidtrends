@@ -6,11 +6,14 @@ Our goals for the website are accuracy, clarity, and usefulness at a glance. Our
 
 ### Contribute
 
-We’d like to be inclusive of all kinds of contributions, not just code contributions or pull requests. So things like feedback, ideas, identifying issues, spotting bugs, creating tutorials, working on translations, and more. We’re using the [All Contributors bot](https://allcontributors.org/docs/en/bot/usage). If you’ve contributed in any way, we encourage you to add your name to the contributor’s list by commenting on an issue or pull request with:
+We’d like to be inclusive of all kinds of contributions, not just code contributions or pull requests. So [things like](https://allcontributors.org/docs/en/emoji-key) feedback, ideas, identifying issues, spotting bugs, creating tutorials, working on translations, and more. We will prioritize issues and pull requests that address (or intersect with) our [current milestones](https://github.com/aatishb/covidtrends/milestones).
+
+We’re using the [All Contributors bot](https://allcontributors.org/docs/en/bot/usage). If you’ve contributed in any way, we encourage you to add your name to the contributor’s list by commenting on an issue or pull request with:
 
 ```
-@all-contributors please add @your-github-username for contribution-type 
+@all-contributors add @your-github-username for contribution-type 
 ```
+where `contribution-type` is [one of these areas](https://allcontributors.org/docs/en/emoji-key).
 
 ### Move slow and fix things
 
@@ -32,7 +35,7 @@ We don’t want to become a repository of many datasets, as it’s difficult for
 
 ### Where I’m coming from
 
-Putting my cards on the table (@aatishb here): This is my first time co-managing an open source repository at this level of visibility. I’m an educator and not a professional web developer. This is a learning process for all of us, and I appreciate your patience and understanding.
+Putting my cards on the table (@aatishb here): This is my first time co-managing an open source repository at this level of visibility. I’m an educator and not a professional web developer. This is a learning process for all of us, and I appreciate your patience and understanding as we learn together.
 
 ### Be nice
 
