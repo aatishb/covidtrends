@@ -1,54 +1,28 @@
 // custom graph component
 Vue.component('graph', {
 
-  props: ['data', 'dates', 'day', 'selectedData', 'scale', 'resize'],
+  props: ['graphData', 'day', 'resize'],
 
   template: '<div ref="graph" id="graph" style="height: 100%;"></div>',
 
   methods: {
 
-    makeGraph() {
-      this.autosetRange = true;
-      this.updateTraces();
-      this.updateLayout();
+    mountGraph() {
 
-      Plotly.newPlot(this.$refs.graph, this.traces, this.layout, this.config).then(e => {
-          if (!this.graphMounted) {
-            this.$emit('graph-mounted')
-            this.graphMounted = true;
-          }
-        });
+      Plotly.newPlot(this.$refs.graph, [], {}, this.config);
 
       this.$refs.graph.on('plotly_hover', this.onHoverOn)
         .on('plotly_unhover', this.onHoverOff)
         .on('plotly_relayout', this.onLayoutChange);
-
-      this.updateAnimation();
-    },
-
-    onLayoutChange(data) {
-
-      //console.log('layout change detected');
-
-      if (data['xaxis.autorange'] && data['yaxis.autorange']) { // by default, override plotly autorange
-        data['xaxis.autorange'] = false;
-        data['yaxis.autorange'] = false;
-        this.autosetRange = true;
-        this.updateLayout();
-        this.updateAnimation();
-      } else if (data['xaxis.range[0]']) { // if range set manually
-        this.autosetRange = false; // then use the manual range
-        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
-        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
-      }
 
     },
 
     onHoverOn(data) {
 
         let curveNumber = data.points[0].curveNumber;
-        let name = this.traces[curveNumber].name;
-        this.traceIndices = this.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
+        let name = this.graphData.traces[curveNumber].name;
+
+        this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
 
         let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
 
@@ -68,199 +42,79 @@ Vue.component('graph', {
 
     },
 
-    updateTraces() {
+    onLayoutChange(data) {
 
-      let showDailyMarkers = this.data.length <= 2;
-
-      let traces1 = this.data.map((e,i) => ({
-        x: e.cases,
-        y: e.slope,
-        name: e.country,
-        text: this.dates.map(f => e.country + '<br>' + f),
-        mode: showDailyMarkers ? 'lines+markers' : 'lines',
-        type: 'scatter',
-        legendgroup: i,
-        marker: {
-          size: 4,
-          color: 'rgba(0,0,0,0.15)'
-        },
-        line: {
-          color: 'rgba(0,0,0,0.15)'
-        },
-        hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
-      })
-      );
-
-      let traces2 = this.data.map((e,i) => ({
-        x: [e.cases[e.cases.length - 1]],
-        y: [e.slope[e.slope.length - 1]],
-        text: e.country,
-        name: e.country,
-        mode: 'markers+text',
-        legendgroup: i,
-        textposition: 'top left',
-        marker: {
-          size: 6,
-          color: 'rgba(254, 52, 110, 1)'
-        },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
-
-      })
-      );
-
-      this.traces = [...traces1, ...traces2];
-      this.traceCount =  new Array(this.traces.length).fill(0).map((e,i) => i);
-
-      this.filteredCases = Array.prototype.concat(...this.data.map(e => e.cases)).filter(e => !isNaN(e));
-      this.filteredSlope =  Array.prototype.concat(...this.data.map(e => e.slope)).filter(e => !isNaN(e));
-
-    },
-
-    updateLayout() {
-
-      //console.log('layout updated');
-
-      if (this.autosetRange) {
-        this.setxrange();
-        this.setyrange();
-        this.autosetRange = false;
+      // if the user selects autorange, go back to the default range
+      if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
+        this.userSetRange = false;
+        this.updateGraph();
       }
 
-      this.layout = {
-        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.dates[this.day - 1] + ')',
-        showlegend: false,
-        xaxis: {
-          title: 'Total ' + this.selectedData,
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: this.xrange,
-          titlefont: {
-            size: 24,
-            color: 'rgba(254, 52, 110,1)'
-          },
-        },
-        yaxis: {
-          title: 'New ' + this.selectedData + ' (in the Past Week)',
-          type: this.scale == 'Logarithmic Scale' ? 'log' : 'linear',
-          range: this.yrange,
-          titlefont: {
-            size: 24,
-            color: 'rgba(254, 52, 110,1)'
-          },
-        },
-        hovermode: 'closest',
-        font: {
-                family: 'Open Sans',
-                color: "black",
-                size: 14
-              },
-      };
-
-    },
-
-
-    updateAnimation() {
-
-        let traces1 = this.data.map(e => ({
-          x: e.cases.slice(0, this.day),
-          y: e.slope.slice(0, this.day)
-        }));
-
-        let traces2 = this.data.map(e => ({
-          x: [e.cases[this.day - 1]],
-          y: [e.slope[this.day - 1]]
-        }));
-
-        Plotly.animate(this.$refs.graph, {
-          data: [...traces1, ...traces2],
-          traces: this.traceCount,
-          layout: this.layout
-        }, {
-          transition: {
-            duration: 0
-          },
-          frame: {
-            // must be >= transition duration
-            duration: 0,
-            redraw: true
-          }
-        });
-
-    },
-
-    setxrange() {
-      let xmax = Math.max(...this.filteredCases, 50);
-
-      if (this.scale == 'Logarithmic Scale') {
-        this.xrange = [1, Math.ceil(Math.log10(1.5*xmax))]
-      } else {
-        this.xrange = [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.05 * xmax)];
+      // if the user selects a custom range, use this
+      else if (data['xaxis.range[0]']) {
+        this.xrange = [data['xaxis.range[0]'], data['xaxis.range[1]']].map(e => parseFloat(e));
+        this.yrange = [data['yaxis.range[0]'], data['yaxis.range[1]']].map(e => parseFloat(e));
+        this.userSetRange = true;
       }
 
     },
 
-    setyrange() {
-      let ymax = Math.max(...this.filteredSlope, 50);
+    updateGraph() {
 
-      if (this.scale == 'Logarithmic Scale') {
-        this.yrange = [1, Math.ceil(Math.log10(1.5*ymax))]
-      } else {
-        this.yrange = [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+      // we're deep copying the layout object to avoid side effects
+      // because plotly mutates layout on user input
+      // note: this may cause issues if we pass in date objects through the layout
+      let layout = JSON.parse(JSON.stringify(this.graphData.layout));
+
+      // if the user selects a custom range, use it
+      if (this.userSetRange) {
+        layout.xaxis.range = this.xrange;
+        layout.yaxis.range = this.yrange;
       }
 
-    },
-
+      Plotly.react(this.$refs.graph, this.graphData.traces, layout, this.config);
+    }
   },
 
   mounted() {
-    this.makeGraph();
+    this.mountGraph();
+
+    if (this.graphData) {
+      this.updateGraph();
+    }
+
+    this.$emit('graph-mounted');
   },
 
   watch: {
 
+    graphData: {
+
+      deep: true,
+
+      handler(data, oldData) {
+
+        // if UI state changes, revert to auto range
+        if (JSON.stringify(data.uistate) !== JSON.stringify(oldData.uistate)) {
+          this.userSetRange = false;
+        }
+
+        this.updateGraph();
+      }
+
+    },
+
     resize() {
-      //console.log('resize detected');
       Plotly.Plots.resize(this.$refs.graph);
     },
-
-    scale() {
-      //console.log('scale change detected', this.scale);
-       this.makeGraph();
-    },
-
-    day(newDay, oldDay) {
-      //console.log('day change detected', oldDay, newDay);
-      this.updateLayout();
-      this.updateAnimation();
-    },
-
-    selectedData() {
-      //console.log('selected data change detected');
-      this.$emit('update:day', this.dates.length);
-    },
-
-    data() {
-      //console.log('data change detected');
-      this.makeGraph();
-    }
-
-  },
-
-  computed: {
   },
 
   data() {
     return {
-      filteredCases: [],
-      filteredSlope: [],
-      traces: [],
-      layout: {},
-      traceCount: [],
+      xrange: [], // stores user selected xrange
+      yrange: [], // stores user selected yrange
+      userSetRange: false, // determines whether to use user selected range
       traceIndices: [],
-      xrange: [],
-      yrange: [],
-      autosetRange: true,
-      graphMounted: false,
       config: {
           responsive: true,
           toImageButtonOptions: {
@@ -282,7 +136,7 @@ let app = new Vue({
   el: '#root',
 
   mounted() {
-    this.pullData(this.selectedData);
+    this.pullData(this.selectedData, this.selectedRegion);
   },
 
   created: function() {
@@ -314,8 +168,24 @@ let app = new Vue({
 
       }
 
+      if (urlParameters.has('region')) {
+        let myRegion = urlParameters.get('region');
+        if (this.regions.includes(myRegion)) {
+          this.selectedRegion = myRegion;
+        }
+      }
+
+      // since this rename came later, use the old name to not break existing URLs
+      let renames = {
+        'China': 'China (Mainland)'
+      };
+
+      // before we added regions, the url parameter was called country instead of location
+      // we still check for this so as to not break existing URLs
       if (urlParameters.has('country')) {
-        this.selectedCountries = urlParameters.getAll('country');
+        this.selectedCountries = urlParameters.getAll('country').map(e => Object.keys(renames).includes(e) ? renames[e] : e);
+      } else if (urlParameters.has('location')) {
+        this.selectedCountries = urlParameters.getAll('location').map(e => Object.keys(renames).includes(e) ? renames[e] : e);
       }
 
     }
@@ -328,7 +198,7 @@ let app = new Vue({
 
       else if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
         this.paused = true;
-        this.day = Math.max(this.day - 1, 8);
+        this.day = Math.max(this.day - 1, this.minDay);
       }
 
       else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
@@ -337,31 +207,64 @@ let app = new Vue({
       }
 
     });
+
   },
 
 
   watch: {
     selectedData() {
-      this.pullData(this.selectedData);
+      if (!this.firstLoad) {
+        this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ false);
+      }
+      this.searchField = '';
+    },
+
+    selectedRegion() {
+      if (!this.firstLoad) {
+        this.pullData(this.selectedData, this.selectedRegion, /*updateSelectedCountries*/ true);
+      }
+      this.searchField = '';
+    },
+
+    minDay() {
+      if (this.day < this.minDay) {
+        this.day = this.minDay;
+      }
     },
 
     graphMounted() {
-      //console.log('minDay', this.minDay);
-      //console.log('autoPlay', this.autoplay);
-      //console.log('graphMounted', this.graphMounted);
 
       if (this.graphMounted && this.autoplay && this.minDay > 0) {
-        //console.log('autoplaying');
         this.day = this.minDay;
         this.play();
         this.autoplay = false; // disable autoplay on first play
       }
+    },
+
+    searchField() {
+      let debouncedSearch = this.debounce(this.search, 250, false);
+      debouncedSearch();
     }
   },
 
   methods: {
 
-    myMax() { //https://stackoverflow.com/a/12957522
+    debounce(func, wait, immediate) { // https://davidwalsh.name/javascript-debounce-function
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    },
+
+    myMax() { // https://stackoverflow.com/a/12957522
       var par = []
       for (var i = 0; i < arguments.length; i++) {
           if (!isNaN(arguments[i])) {
@@ -381,12 +284,22 @@ let app = new Vue({
       return Math.min.apply(Math, par);
     },
 
-    pullData(selectedData) {
+    pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
 
-      if (selectedData == 'Confirmed Cases') {
-       Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", this.processData);
-      } else if (selectedData == 'Reported Deaths') {
-       Plotly.d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", this.processData);
+      if (selectedRegion != 'US') {
+        let url;
+        if (selectedData == 'Confirmed Cases') {
+         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+        } else if (selectedData == 'Reported Deaths') {
+         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
+        } else {
+          return;
+        }
+        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
+      } else { // selectedRegion == 'US'
+        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
+        const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
       }
     },
 
@@ -394,55 +307,146 @@ let app = new Vue({
       return [...new Set(array)];
     },
 
-    processData(data) {
+    groupByCountry(data, dates, regionsToPullToCountryLevel /* pulls out Hong Kong & Macau from region to country level */) {
 
-      let countriesToLeaveOut = ['Cruise Ship', 'Diamond Princess'];
-
-      let renameCountries = {
-        'Taiwan*': 'Taiwan',
-        'Korea, South': 'South Korea'
-      };
-
-      let countries = data.map(e => e["Country/Region"]);
+      let countries = data.map(e => e['Country/Region']);
       countries = this.removeRepeats(countries);
 
-      let dates = Object.keys(data[0]).slice(4);
-      this.dates = dates;
-
-      //this.day = this.dates.length;
-
-      let myData = [];
+      let grouped = [];
       for (let country of countries){
-        let countryData = data.filter(e => e["Country/Region"] == country);
-        let arr = [];
+
+        // filter data for this country (& exclude regions we're pulling to country level)
+        // e.g. Mainland China numbers should not include Hong Kong & Macau, to avoid double counting
+        let countryData = data.filter(e => e['Country/Region'] == country)
+          .filter(e => !regionsToPullToCountryLevel.includes(e['Province/State']));
+
+        const row = {region: country}
 
         for (let date of dates) {
           let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
-          arr.push(sum);
+          row[date] = sum;
         }
 
-        if (!countriesToLeaveOut.includes(country)) {
+        grouped.push(row);
 
+      }
+
+      return grouped;
+    },
+
+    filterByCountry(data, dates, selectedRegion) {
+      return data.filter(e => e['Country/Region'] == selectedRegion)
+          .map(e => Object.assign({}, e, {region: e['Province/State']}));
+    },
+
+    convertStateToCountry(data, dates, selectedRegion) {
+      return data.filter(e => e['Province/State'] == selectedRegion)
+          .map(e => Object.assign({}, e, {region: e['Province/State']}));
+    },
+
+    processData(data, selectedRegion, updateSelectedCountries) {
+      let dates = Object.keys(data[0]).slice(4);
+      this.dates = dates;
+      this.day = this.dates.length;
+
+      let regionsToPullToCountryLevel = ['Hong Kong', 'Macau']
+
+      let grouped;
+
+      if (selectedRegion == 'World') {
+        grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
+
+        // pull Hong Kong and Macau to Country level
+        for (let region of regionsToPullToCountryLevel) {
+          let country = this.convertStateToCountry(data, dates, region);
+          if (country.length === 1) {
+            grouped = grouped.concat(country);
+          }
+        }
+
+      } else {
+        grouped = this.filterByCountry(data, dates, selectedRegion)
+        .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
+      }
+
+      let exclusions = ['Cruise Ship', 'Diamond Princess'];
+
+      let renames = {
+        'Taiwan*': 'Taiwan',
+        'Korea, South': 'South Korea',
+        'China': 'China (Mainland)'
+      };
+
+      let covidData = [];
+      for (let row of grouped){
+
+        if (!exclusions.includes(row.region)) {
+          const arr = [];
+          for (let date of dates) {
+            arr.push(row[date]);
+          }
           let slope = arr.map((e,i,a) => e - a[i - 7]);
+          let region = row.region
 
-          if (Object.keys(renameCountries).includes(country)) {
-            country = renameCountries[country];
+          if (Object.keys(renames).includes(region)) {
+            region = renames[region];
           }
 
-          myData.push({
-            country: country,
-            cases: arr.map(e => e >= this.minCasesInCountry ? e : NaN),
+          const cases = arr.map(e => e >= this.minCasesInCountry ? e : NaN);
+          covidData.push({
+            country: region,
+            cases,
             slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
+            maxCases: this.myMax(...cases)
           });
 
         }
       }
 
-      this.covidData = myData.filter(e => this.myMax(...e.cases) >= this.minCasesInCountry);
+      this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
+      this.visibleCountries = this.countries;
+      const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
+      const notableCountries = ['China', 'India', 'US', // Top 3 by population
+          'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
+          'Hong Kong',            // Was previously included in China's numbers
+          'Canada', 'Australia']; // These appear in the region selector
+
+      // TODO: clean this logic up later
+      // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
+      // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
+      if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
+        this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+      }
+
+      this.firstLoad = false;
 
     },
 
+    preprocessNYTData(data, type) {
+      let recastData = {};
+      data.forEach(e => {
+        let st = recastData[e.state]  = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'US', 'Lat': null, 'Long': null});
+        st[fixNYTDate(e.date)] = parseInt(e[type]);
+      });
+      return Object.values(recastData);
+
+      function fixNYTDate(date) {
+        let tmp = date.split('-');
+        return `${tmp[1]}/${tmp[2]}/${tmp[0].substr(2)}`;
+      }
+    },
+
+    formatDate(date) {
+      if (!date) {
+        return '';
+      }
+
+      let [m, d, y] = date.split('/');
+      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
+    },
+
+    // TODO: clean up play/pause logic
     play() {
       if (this.paused) {
 
@@ -452,7 +456,7 @@ let app = new Vue({
 
         this.paused = false;
         this.icon = 'icons/pause.svg';
-        this.increment();
+        setTimeout(this.increment, 200);
 
       } else {
         this.paused = true;
@@ -469,8 +473,6 @@ let app = new Vue({
     },
 
     increment() {
-       //console.log('day', this.day);
-       //console.log('incrementing');
 
       if (this.day == this.dates.length || this.minDay < 0) {
         this.day = this.dates.length;
@@ -486,6 +488,10 @@ let app = new Vue({
 
     },
 
+    search() {
+      this.visibleCountries = this.countries.filter(e => e.toLowerCase().includes(this.searchField.toLowerCase()));
+    },
+
     selectAll() {
       this.selectedCountries = this.countries;
     },
@@ -494,16 +500,13 @@ let app = new Vue({
       this.selectedCountries = [];
     },
 
-    changeScale() {
-      this.selectedScale = (this.selectedScale + 1) % 2;
-    },
-
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
 
     createURL() {
-      let baseUrl = 'https://aatishb.com/covidtrends/?';
+
+      let baseUrl = window.location.href.split('?')[0];
 
       let queryUrl = new URLSearchParams();
 
@@ -515,19 +518,30 @@ let app = new Vue({
         queryUrl.append('data', 'deaths');
       }
 
+      if (this.selectedRegion != 'World') {
+        queryUrl.append('region', this.selectedRegion);
+      }
+
+      // since this rename came later, use the old name for URLs to avoid breaking existing URLs
+      let renames = {
+        'China (Mainland)': 'China'
+      };
+
       for (let country of this.countries) {
         if (this.selectedCountries.includes(country)) {
-        queryUrl.append('country', country);
+          if(Object.keys(renames).includes(country)) {
+            queryUrl.append('location', renames[country]);
+          } else {
+            queryUrl.append('location', country);
+          }
         }
       }
 
-      let url = baseUrl + queryUrl.toString();
+      let url = baseUrl + '?' + queryUrl.toString();
 
       window.history.replaceState( {} , 'Covid Trends', '?'+queryUrl.toString() );
 
       this.copyToClipboard(url);
-      //alert('Here\'s a custom URL to pull up this view:\n' + url);
-
 
     },
 
@@ -565,13 +579,152 @@ let app = new Vue({
     },
 
     minDay() {
-      let minDay = this.myMin(...this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)));
+      let minDay = this.myMin(...(this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)).filter(x => x != -1)));
       if (isFinite(minDay) && !isNaN(minDay)){
-        return minDay;
+        return minDay + 1;
       } else {
         return -1;
       }
-    }
+    },
+
+    regionType() {
+      switch (this.selectedRegion) {
+        case 'World':
+          return 'Countries';
+        case 'Australia':
+        case 'US':
+          return 'States';
+        case 'China':
+          return 'Provinces';
+        case 'Canada':
+          return 'Provinces';
+        default:
+          return 'Regions';
+      }
+    },
+
+    layout() {
+      return {
+        title: 'Trajectory of COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        showlegend: false,
+        autorange: false,
+          xaxis: {
+          title: 'Total ' + this.selectedData,
+          type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
+          range: this.selectedScale == 'Logarithmic Scale' ? this.logxrange : this.linearxrange,
+          titlefont: {
+            size: 24,
+            color: 'rgba(254, 52, 110,1)'
+          },
+        },
+        yaxis: {
+          title: 'New ' + this.selectedData + ' (in the Past Week)',
+          type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
+          range: this.selectedScale == 'Logarithmic Scale' ? this.logyrange : this.linearyrange,
+          titlefont: {
+            size: 24,
+            color: 'rgba(254, 52, 110,1)'
+          },
+        },
+        hovermode: 'closest',
+        font: {
+                family: 'Open Sans, sans-serif',
+                color: 'black',
+                size: 14
+              },
+      };
+    },
+
+    traces() {
+
+      let showDailyMarkers = this.filteredCovidData.length <= 2;
+
+      // draws grey lines (line plot for each location)
+      let trace1 = this.filteredCovidData.map((e,i) => ({
+        x: e.cases.slice(0, this.day),
+        y: e.slope.slice(0, this.day),
+        name: e.country,
+        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
+        mode: showDailyMarkers ? 'lines+markers' : 'lines',
+        type: 'scatter',
+        legendgroup: i,
+        marker: {
+          size: 4,
+          color: 'rgba(0,0,0,0.15)'
+        },
+        line: {
+          color: 'rgba(0,0,0,0.15)'
+        },
+        hoverinfo:'x+y+text',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+      })
+      );
+
+      // draws red dots (most recent data for each location)
+      let trace2 = this.filteredCovidData.map((e,i) => ({
+        x: [e.cases[this.day - 1]],
+        y: [e.slope[this.day - 1]],
+        text: e.country,
+        name: e.country,
+        mode: this.showLabels ? 'markers+text' : 'markers',
+        legendgroup: i,
+        textposition: 'center right',
+        marker: {
+          size: 6,
+          color: 'rgba(254, 52, 110, 1)'
+        },
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+
+      })
+      );
+
+      return [...trace1, ...trace2];
+
+    },
+
+    graphData() {
+      return {
+        uistate: [this.selectedData, this.selectedRegion, this.selectedScale],
+        traces: this.traces,
+        layout: this.layout,
+      };
+    },
+
+    filteredCases() {
+      return Array.prototype.concat(...this.filteredCovidData.map(e => e.cases)).filter(e => !isNaN(e));
+    },
+
+    filteredSlope() {
+      return Array.prototype.concat(...this.filteredCovidData.map(e => e.slope)).filter(e => !isNaN(e));
+    },
+
+    logxrange() {
+      let xmax = Math.max(...this.filteredCases, 50);
+      return [1, Math.ceil(Math.log10(1.5*xmax))]
+    },
+
+    linearxrange() {
+      let xmax = Math.max(...this.filteredCases, 50);
+      return [-0.49*Math.pow(10,Math.floor(Math.log10(xmax))), Math.round(1.2 * xmax)];
+    },
+
+    logyrange() {
+      let ymax = Math.max(...this.filteredSlope, 50);
+      let ymin = Math.min(...this.filteredSlope);
+
+      if (ymin < 10) { // shift ymin on log scale if fewer than 10 cases
+        return [0, Math.ceil(Math.log10(1.5*ymax))]
+      } else {
+        return [1, Math.ceil(Math.log10(1.5*ymax))]
+      }
+    },
+
+    linearyrange() {
+      let ymax = Math.max(...this.filteredSlope, 50);
+      let ymin = Math.min(...this.filteredSlope);
+
+      return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+    },
 
   },
 
@@ -582,6 +735,10 @@ let app = new Vue({
     dataTypes: ['Confirmed Cases', 'Reported Deaths'],
 
     selectedData: 'Confirmed Cases',
+
+    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
+
+    selectedRegion: 'World',
 
     sliderSelected: false,
 
@@ -601,15 +758,23 @@ let app = new Vue({
 
     countries: [],
 
+    visibleCountries: [],
+
     isHidden: true,
 
-    selectedCountries: ['Australia', 'Canada', 'China', 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'South Korea', 'Spain', 'Switzerland', 'US', 'United Kingdom', 'India', 'Pakistan'],
+    showLabels: true,
+
+    selectedCountries: [],
+
+    searchField: '',
 
     graphMounted: false,
 
     autoplay: true,
 
     copied: false,
+
+    firstLoad: true
 
   }
 

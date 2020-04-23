@@ -4,12 +4,16 @@ html, body {
   margin: 0;
 }
 
-body {
+body,
+.plotly-notifier {
   font-family: 'Open Sans', sans-serif;
+}
+
+body {
   font-size:1em;
   line-height: 1.5;
   font-weight: 400;
-  color: '#444';
+  color: #444;
 
   text-rendering: optimizeLegibility;
 }
@@ -108,6 +112,7 @@ p {
 #explainer a {
   text-decoration: underline;
   color: lightgoldenrodyellow;
+  cursor: pointer;
 }
 
 #explainer p {
@@ -213,6 +218,20 @@ svg {
   right: 0;
 }
 
+#search {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  min-width: 10rem;
+}
+
+#search > input {
+  flex: 1;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 #buttonwrapper {
   width: 100%;
   display:flex;
@@ -258,4 +277,12 @@ select {
 
 select:first-child {
   margin-top: 0;
+}
+
+#nodata {
+  height: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 }
