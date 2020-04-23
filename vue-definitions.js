@@ -659,7 +659,7 @@ let app = new Vue({
         annotation.push(
         {
           x: 0.05,
-          y: 0.9,
+          y: 0.85,
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
