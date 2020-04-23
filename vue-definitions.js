@@ -457,6 +457,17 @@ let app = new Vue({
       return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
     },
 
+    dateToText(date) {
+      if (!date) {
+        return '';
+      }
+
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      let [m, d, y] = date.split('/');
+      return monthNames[m-1] + ' ' + d;
+    },
+
     // TODO: clean up play/pause logic
     play() {
       if (this.paused) {
@@ -625,6 +636,48 @@ let app = new Vue({
       }
     },
 
+    annotations() {
+
+      let annotation = [
+      {
+        x: 0.05,
+        y: 1,
+        xref: 'paper',
+        yref: 'paper',
+        xanchor: 'left',
+        yanchor: 'top',
+        text: this.dateToText(this.dates[this.day - 1]),
+        font: {
+          family: 'Open Sans, sans-serif',
+          color: 'black',
+          size: 50
+        },
+        showarrow: false,
+      }];
+
+      if (this.showTrendLine) {
+        annotation.push(
+        {
+          x: 0.05,
+          y: 0.9,
+          xref: 'paper',
+          yref: 'paper',
+          xanchor: 'left',
+          yanchor: 'top',
+          text: 'Trend Line Indicates<br>' + this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
+          align: 'left',
+          font: {
+            family: 'Open Sans, sans-serif',
+            color: 'black',
+            size: 16
+          },
+          showarrow: false,
+        });
+      }
+
+      return annotation;
+    },
+
     layout() {
       return {
         title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
@@ -654,24 +707,7 @@ let app = new Vue({
                 color: 'black',
                 size: 14
               },
-        annotations: this.showTrendLine ? [
-          {
-            x: 0.25,
-            y: 0.8,
-            xref: 'paper',
-            yref: 'paper',
-            xanchor: 'left',
-            yanchor: 'center',
-            text: 'Trend Line Indicates<br>' + this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
-            align: 'left',
-            font: {
-              family: 'Open Sans, sans-serif',
-              color: '#af8baf',
-              size: 18
-            },
-            showarrow: false,
-          }
-        ] : [],
+        annotations: this.annotations
       };
     },
 
@@ -780,7 +816,7 @@ let app = new Vue({
     },
 
     linearxrange() {
-      return [-0.49*Math.pow(10,Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
+      return [0, Math.round(1.2 * this.xmax)];
     },
 
     logyrange() {
