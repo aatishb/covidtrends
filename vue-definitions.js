@@ -670,7 +670,8 @@ let app = new Vue({
           y: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax) : this.ymax,
           xref: 'x',
           yref: 'y',
-          text: 'Reference Line',
+          yshift: 10,
+          text: this.doublingTime + ' Day Doubling Time',
           showarrow: false,
           ax: 0,
           ay: 0,
@@ -759,7 +760,7 @@ let app = new Vue({
       );
 
       if (this.showTrendLine) {
-        let cases = [1, 1000000];
+        let cases = [1, 10000000];
 
         let trace3 = [{
           x: cases,
