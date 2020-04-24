@@ -74,7 +74,7 @@
           </div>
 
           <div class="navelement">
-            <h2>{{ formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1]) }}</h2>
+            <time class="h2" :datetime="formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1])">{{ formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1]) }}</time>
           </div>
 
           <div class="navelement slidercontainer">

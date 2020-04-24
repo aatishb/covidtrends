@@ -27,7 +27,8 @@ h1 {
   font-size:2rem;
 }
 
-h2 {
+h2,
+.h2 {
   margin:0px;
   font-weight:700;
   font-size: 1.5rem;
@@ -40,7 +41,7 @@ h3 {
   font-size:1.2rem;
 }
 
-h1, h2, h3 {
+h1, h2, .h2, h3 {
   line-height: 1.1;
 }
 
@@ -133,7 +134,8 @@ main {
   -webkit-overflow-scrolling: touch;
 }
 
-main h2 {
+main h2,
+main .h2 {
   color: #fe346e;
 }
 
