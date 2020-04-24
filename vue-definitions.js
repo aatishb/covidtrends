@@ -139,6 +139,8 @@ Vue.component('graph', {
     resize() {
       Plotly.Plots.resize(this.$refs.graph);
     },
+
+
   },
 
   data() {
@@ -461,7 +463,7 @@ let app = new Vue({
       }
 
       this.firstLoad = false;
-
+      this.dataUpdateCount += 1;
     },
 
     preprocessNYTData(data, type) {
@@ -798,7 +800,8 @@ let app = new Vue({
           selectedScale: this.selectedScale,
           showLabels: this.showLabels,
           showTrendLine: this.showTrendLine,
-          doublingTime: this.doublingTime
+          doublingTime: this.doublingTime,
+          dataUpdateCount: this.dataUpdateCount // hack to fix bug where graph updates too fast when we switch selectedData
         },
         traces: this.traces,
         layout: this.layout,
@@ -954,7 +957,9 @@ let app = new Vue({
       width: NaN,
       height: NaN,
       referenceLineAngle: NaN
-    }
+    },
+
+    dataUpdateCount: 0
 
   }
 
