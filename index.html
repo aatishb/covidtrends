@@ -78,11 +78,11 @@
           </div>
 
           <div class="navelement slidercontainer">
-            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" class="slider" @mousedown="pause">
+            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" class="slider" @mousedown="pause" aria-label="Choose the current observation day">
           </div>
 
           <div class="navelement">
-            <select v-model="selectedScale" @mousedown="pause">
+            <select v-model="selectedScale" @mousedown="pause" aria-Label="Select Data Set">
               <option v-for="s in scale" v-bind:value="s">
                 {{ s }}
               </option>
@@ -104,19 +104,19 @@
         <div>
           <h2>Customize</h2>
           <label for="selectedData">Select Data Set</label>
-          <select v-model="selectedData" @mousedown="pause">
+          <select id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
             </option>
           </select>
           <label for="selectedRegion">Select Region</label>
-          <select v-model="selectedRegion" @mousedown="pause">
+          <select id="selectedRegion" v-model="selectedRegion" @mousedown="pause">
             <option v-for="s in regions" v-bind:value="s">
               {{ s }}
             </option>
           </select>
           <label for="selectedScale">Select Scale</label>
-          <select v-model="selectedScale" @mousedown="pause">
+          <select id="selectedScale" v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
             </option>
@@ -134,7 +134,7 @@
 
           <label for="searchField">Search country to display</label>
           <div class="search">
-            <input v-model="searchField">
+            <input id="searchField" v-model="searchField">
           </div>
 
           <div class="buttonwrapper">
