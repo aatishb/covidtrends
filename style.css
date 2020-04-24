@@ -125,7 +125,7 @@ header {
   margin-top: 0;
 }
 
-main {
+.ctapp {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
@@ -134,12 +134,12 @@ main {
   -webkit-overflow-scrolling: touch;
 }
 
-main h2,
-main .h2 {
+.ctapp h2,
+.ctapp .h2 {
   color: #fe346e;
 }
 
-article {
+main {
   flex: 6;
   display: flex;
   flex-direction: column;

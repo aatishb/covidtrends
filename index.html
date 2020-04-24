@@ -60,9 +60,9 @@
 
     </header>
 
-    <main id="main">
+    <div class="ctapp">
 
-      <article>
+      <main id="main">
 
         <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
@@ -97,7 +97,7 @@
           Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> (updated daily around 00:00 UTC / 20:00 ET) &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> (updated daily around 16:00 UTC / 12:00 ET)&middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
         </footer>
 
-      </article>
+      </main>
 
       <aside>
 
@@ -161,7 +161,7 @@
 
       </aside>
 
-    </main>
+    </div>
 
   </div>
 
