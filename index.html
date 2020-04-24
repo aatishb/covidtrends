@@ -27,7 +27,7 @@
 
   <div id="root">
 
-    <div id="header">
+    <header>
 
         <div id="explainer">
           <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week vs. the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Learn more.</a></span></p>
@@ -58,11 +58,11 @@
 
         </div>
 
-    </div>
+    </header>
 
-    <div id="content">
+    <main id="main">
 
-      <div id="left-column">
+      <article>
 
         <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
@@ -93,13 +93,13 @@
 
         <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span></div>
 
-        <div id="footer">
+        <footer>
           Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> (updated daily around 00:00 UTC / 20:00 ET) &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> (updated daily around 16:00 UTC / 12:00 ET)&middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
-        </div>
+        </footer>
 
-      </div>
+      </article>
 
-      <div id="right-column">
+      <aside>
 
         <div>
           <h2>Customize</h2>
@@ -159,9 +159,9 @@
 
         </div>
 
-      </div>
+      </aside>
 
-    </div>
+    </main>
 
   </div>
 
