@@ -46,6 +46,11 @@ Vue.component('graph', {
 
     onLayoutChange(data) {
 
+      let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
+      this.$emit('update:width', graphInnerDiv.width.nodeValue)
+      this.$emit('update:height', graphInnerDiv.height.nodeValue)
+      this.$emit('update:referenceLineAngle', this.calculateAngle());
+
       // if the user selects autorange, go back to the default range
       if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
         this.userSetRange = false;
@@ -61,7 +66,7 @@ Vue.component('graph', {
 
     },
 
-    updateGraph() {
+    updateGraph(recomputeAngle = false) {
 
       // we're deep copying the layout object to avoid side effects
       // because plotly mutates layout on user input
@@ -75,6 +80,20 @@ Vue.component('graph', {
       }
 
       Plotly.react(this.$refs.graph, this.graphData.traces, layout, this.config);
+
+      if (recomputeAngle) {
+        this.$emit('update:referenceLineAngle', this.calculateAngle());
+      }
+
+    },
+
+    calculateAngle() {
+      let test = this.$refs.graph.querySelector(".plot").querySelector(".scatterlayer").lastChild.querySelector(".lines").firstChild.getAttribute('d');
+      let pts = test.split('M').join(',').split('L').join(',').split(',').filter(e => e != '');
+      let angle = Math.atan2(pts[3]-pts[1], pts[2]-pts[0]);
+      if (angle) {
+        return angle;
+      }
     }
   },
 
@@ -85,7 +104,12 @@ Vue.component('graph', {
       this.updateGraph();
     }
 
-    this.$emit('graph-mounted');
+    let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
+    this.$emit('update:width', graphInnerDiv.width.nodeValue)
+    this.$emit('update:height', graphInnerDiv.height.nodeValue)
+    this.$emit('update:mounted', true)
+    this.$emit('update:referenceLineAngle', this.calculateAngle());
+
   },
 
   watch: {
@@ -99,9 +123,11 @@ Vue.component('graph', {
         // if UI state changes, revert to auto range
         if (JSON.stringify(data.uistate) != JSON.stringify(oldData.uistate)) {
           this.userSetRange = false;
+          this.updateGraph(true);
+        } else {
+          this.updateGraph();
         }
 
-        this.updateGraph();
       }
 
     },
@@ -243,9 +269,9 @@ let app = new Vue({
       }
     },
 
-    graphMounted() {
+    'graphAttributes.mounted': function() {
 
-      if (this.graphMounted && this.autoplay && this.minDay > 0) {
+      if (this.graphAttributes.mounted && this.autoplay && this.minDay > 0) {
         this.day = this.minDay;
         this.play();
         this.autoplay = false; // disable autoplay on first play
@@ -638,45 +664,22 @@ let app = new Vue({
 
     annotations() {
 
-      let annotation = [
-      {
-        x: 0.05,
-        y: 0.90,
-        xref: 'paper',
-        yref: 'paper',
-        yshift: 65,
-        xanchor: 'left',
-        yanchor: 'top',
-        text: this.dateToText(this.dates[this.day - 1]),
-        font: {
-          family: 'Open Sans, sans-serif',
-          color: 'black',
-          size: 50
-        },
-        showarrow: false,
-      }];
-
       if (this.showTrendLine) {
-        annotation.push(
-        {
-          x: 0.05,
-          y: 0.90,
-          xref: 'paper',
-          yref: 'paper',
-          xanchor: 'left',
-          yanchor: 'top',
-          text: 'Dotted Line Indicates<br>Exponential Growth of<br>' + this.selectedData + ' with<br>' + this.doublingTime + ' Day Doubling Time',
-          align: 'left',
-          font: {
-            family: 'Open Sans, sans-serif',
-            color: 'black',
-            size: 16
-          },
+       return [{
+          x: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax / this.referenceLine(1)) : this.ymax / this.referenceLine(1),
+          y: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax) : this.ymax,
+          xref: 'x',
+          yref: 'y',
+          text: 'Reference Line',
           showarrow: false,
-        });
+          ax: 0,
+          ay: 0,
+          textangle: this.graphAttributes.referenceLineAngle * 180 / Math.PI
+        }];
+      } else {
+        return NaN;
       }
 
-      return annotation;
     },
 
     layout() {
@@ -756,7 +759,7 @@ let app = new Vue({
       );
 
       if (this.showTrendLine) {
-        let cases = [0, 1000000];
+        let cases = [1, 1000000];
 
         let trace3 = [{
           x: cases,
@@ -884,13 +887,21 @@ let app = new Vue({
 
     searchField: '',
 
-    graphMounted: false,
+    //graphMounted: false,
 
     autoplay: true,
 
     copied: false,
 
-    firstLoad: true
+    firstLoad: true,
+
+    // inner size of graph
+    graphAttributes: {
+      mounted: false,
+      width: NaN,
+      height: NaN,
+      referenceLineAngle: NaN
+    }
 
   }
 

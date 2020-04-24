@@ -64,7 +64,7 @@
 
       <div id="left-column">
 
-        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" v-bind.sync="graphAttributes"></graph>
 
         <div v-if="covidData.length > 0" id="nav">
 
