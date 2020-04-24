@@ -103,25 +103,24 @@
 
         <div>
           <h2>Customize</h2>
-
+          <label for="selectedData">Select Data Set</label>
           <select v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
             </option>
           </select>
-
+          <label for="selectedRegion">Select Region</label>
           <select v-model="selectedRegion" @mousedown="pause">
             <option v-for="s in regions" v-bind:value="s">
               {{ s }}
             </option>
           </select>
-
+          <label for="selectedScale">Select Scale</label>
           <select v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
             </option>
           </select>
-
           <input type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
           <label for="showLabels">Show labels</label>
 
@@ -133,8 +132,9 @@
 
           <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
+          <label for="searchField">Search country to display</label>
           <div class="search">
-            <input v-model="searchField" placeholder="Search">
+            <input v-model="searchField">
           </div>
 
           <div class="buttonwrapper">
