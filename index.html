@@ -77,7 +77,7 @@
             <h2>{{ formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1]) }}</h2>
           </div>
 
-          <div class="navelement" class="slidercontainer">
+          <div class="navelement slidercontainer">
             <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" class="slider" @mousedown="pause">
           </div>
 
