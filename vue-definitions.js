@@ -54,7 +54,7 @@ Vue.component('graph', {
       // if the user selects autorange, go back to the default range
       if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
         this.userSetRange = false;
-        this.updateGraph();
+        this.updateGraph(true);
       }
 
       // if the user selects a custom range, use this
@@ -88,13 +88,16 @@ Vue.component('graph', {
     },
 
     calculateAngle() {
-      let test = this.$refs.graph.querySelector(".plot").querySelector(".scatterlayer").lastChild.querySelector(".lines").firstChild.getAttribute('d');
-      let pts = test.split('M').join(',').split('L').join(',').split(',').filter(e => e != '');
-      let angle = Math.atan2(pts[3]-pts[1], pts[2]-pts[0]);
-      if (angle) {
+      if (this.graphData.uistate.showTrendLine) {
+        let element = this.$refs.graph.querySelector(".cartesianlayer").querySelector(".plot").querySelector(".scatterlayer").lastChild.querySelector(".lines").firstChild.getAttribute('d');
+        let pts = element.split('M').join(',').split('L').join(',').split(',').filter(e => e != '');
+        let angle = Math.atan2(pts[3] - pts[1], pts[2] - pts[0]);
         return angle;
+      } else {
+        return NaN;
       }
     }
+
   },
 
   mounted() {
@@ -120,12 +123,13 @@ Vue.component('graph', {
 
       handler(data, oldData) {
 
-        // if UI state changes, revert to auto range
+        // if UI state changes
         if (JSON.stringify(data.uistate) != JSON.stringify(oldData.uistate)) {
-          this.userSetRange = false;
-          this.updateGraph(true);
+          console.log('ui state changed');
+          this.userSetRange = false; // revert to auto range
+          this.updateGraph(true);    // update graph and recalculate angle for annotation label
         } else {
-          this.updateGraph();
+          this.updateGraph(); // update graph and don't recalculate angle for annotation label
         }
 
       }
@@ -664,22 +668,24 @@ let app = new Vue({
 
     annotations() {
 
-      if (this.showTrendLine) {
-       return [{
-          x: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax / this.referenceLine(1)) : this.ymax / this.referenceLine(1),
-          y: this.selectedScale == 'Logarithmic Scale' ? Math.log10(this.ymax) : this.ymax,
-          xref: 'x',
-          yref: 'y',
-          yshift: 10,
-          text: this.doublingTime + ' Day Doubling Time',
-          showarrow: false,
-          ax: 0,
-          ay: 0,
-          textangle: this.graphAttributes.referenceLineAngle * 180 / Math.PI
-        }];
-      } else {
-        return NaN;
-      }
+     return [{
+        visible: this.showTrendLine,
+        x: this.xAnnotation,
+        y: this.yAnnotation,
+        xref: 'x',
+        yref: 'y',
+        xshift: 0,//-10 * Math.sin(this.graphAttributes.referenceLineAngle),
+        yshift: 0,//10 * Math.cos(this.graphAttributes.referenceLineAngle),
+        text: this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
+        showarrow: false,
+        textangle: this.graphAttributes.referenceLineAngle * 180 / Math.PI,
+        font: {
+                family: 'Open Sans, sans-serif',
+                color: 'black',
+                size: 14
+              },
+      }];
+
 
     },
 
@@ -756,7 +762,7 @@ let app = new Vue({
         },
         hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
 
-      })
+       })
       );
 
       if (this.showTrendLine) {
@@ -786,7 +792,14 @@ let app = new Vue({
 
     graphData() {
       return {
-        uistate: [this.selectedData, this.selectedRegion, this.selectedScale],
+        uistate: { // graph is updated when uistate changes
+          selectedData: this.selectedData,
+          selectedRegion: this.selectedRegion,
+          selectedScale: this.selectedScale,
+          showLabels: this.showLabels,
+          showTrendLine: this.showTrendLine,
+          doublingTime: this.doublingTime
+        },
         traces: this.traces,
         layout: this.layout,
       };
@@ -821,7 +834,7 @@ let app = new Vue({
     },
 
     linearxrange() {
-      return [0, Math.round(1.2 * this.xmax)];
+      return [-0.49*Math.pow(10,Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
     },
 
     logyrange() {
@@ -837,6 +850,45 @@ let app = new Vue({
       let ymax = Math.max(...this.filteredSlope, 50);
       return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
     },
+
+    xAnnotation() {
+
+      if (this.selectedScale == 'Logarithmic Scale') {
+        let x = this.logyrange[1] - Math.log10(this.referenceLine(1));
+        if (x < this.logxrange[1]) {
+          return x;
+        } else {
+          return this.logxrange[1];
+        }
+
+      } else {
+        let x = this.linearyrange[1] / this.referenceLine(1);
+        if (x < this.linearxrange[1]) {
+          return x;
+        } else {
+          return this.linearxrange[1];
+        }
+      }
+    },
+
+    yAnnotation() {
+      if (this.selectedScale == 'Logarithmic Scale') {
+        let x = this.logyrange[1] - Math.log10(this.referenceLine(1));
+        if (x < this.logxrange[1]) {
+          return this.logyrange[1];
+        } else {
+          return this.logxrange[1] + Math.log10(this.referenceLine(1));
+        }
+      } else {
+        let x = this.linearyrange[1] / this.referenceLine(1);
+        if (x < this.linearxrange[1]) {
+          return this.linearyrange[1];
+        } else {
+          return this.linearxrange[1] * this.referenceLine(1);
+        }
+      }
+
+    }
 
   },
 
