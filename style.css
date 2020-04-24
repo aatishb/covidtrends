@@ -56,7 +56,7 @@ p {
   font-size: 1rem;
 }
 
-#logowrapper {
+.logowrapper {
   flex: 1;
 
   display: flex;
@@ -67,20 +67,20 @@ p {
   min-width: 10rem;
 }
 
-#logowrapper a {
+.logowrapper a {
   text-decoration: none; /* no underline */
   color: white;
 }
 
-#logowrapper h1 {
+.logowrapper h1 {
   text-align: center;
 }
 
-#logos {
+.logos {
   margin-top:1rem;
 }
 
-#logos > a:first-child {
+.logos > a:first-child {
   margin-right: 0.75rem;
 }
 
@@ -103,24 +103,24 @@ header {
   flex-shrink: 0
 }
 
-#explainer {
+.explainer {
   flex: 6;
   padding-right: 2rem;
   text-align: justify;
 }
 
-#explainer a {
+.explainer a {
   text-decoration: underline;
   color: lightgoldenrodyellow;
   cursor: pointer;
 }
 
-#explainer p {
+.explainer p {
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
 
-#explainer > p:first-child {
+.explainer > p:first-child {
   margin-top: 0;
 }
 
@@ -166,7 +166,7 @@ aside > div:last-child {
   margin-bottom: 0;
 }
 
-#countries {
+.countries {
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -181,7 +181,7 @@ footer {
   font-size: 0.75rem;
 }
 
-#nav {
+.nav {
   display: flex;
   flex-direction: row;
 }
@@ -197,11 +197,11 @@ footer {
   margin: auto;
 }
 
-#slidercontainer {
+.slidercontainer {
   flex-grow: 1;
 }
 
-#slider {
+.slider {
   width: 100%;
   min-width: 200px;
 }
@@ -218,21 +218,21 @@ svg {
   right: 0;
 }
 
-#search {
+.search {
   width: 100%;
   display: flex;
   flex-direction: row;
   min-width: 10rem;
 }
 
-#search > input {
+.search > input {
   flex: 1;
   font-size: 0.75rem;
   padding: 0.5rem;
   margin-top: 0.5rem;
 }
 
-#buttonwrapper {
+.buttonwrapper {
   width: 100%;
   display:flex;
   flex-direction: row;
@@ -263,7 +263,7 @@ button:hover {
   color: lightgoldenrodyellow;
 }
 
-#countries button {
+.countries button {
   margin-top: 0.5rem;
 }
 
@@ -279,7 +279,7 @@ select:first-child {
   margin-top: 0;
 }
 
-#nodata {
+.nodata {
   height: 100%;
   display: flex;
   align-content: center;

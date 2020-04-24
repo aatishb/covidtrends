@@ -29,7 +29,7 @@
 
     <header>
 
-        <div id="explainer">
+        <div class="explainer">
           <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week vs. the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Learn more.</a></span></p>
 
           <span v-if="!isHidden">
@@ -47,11 +47,11 @@
           </span>
         </div>
 
-        <div id="logowrapper">
+        <div class="logowrapper">
 
           <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
 
-          <div v-if="!isHidden" id="logos">
+          <div v-if="!isHidden" class="logos">
             <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></a>
             <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></a>
           </div>
@@ -66,7 +66,7 @@
 
         <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
-        <div v-if="covidData.length > 0" id="nav">
+        <div v-if="covidData.length > 0" class="nav">
 
           <div class="navelement">
             <img v-if="paused" @click="play" src="icons/play.svg" style="width: 3rem;">
@@ -77,8 +77,8 @@
             <h2>{{ formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1]) }}</h2>
           </div>
 
-          <div class="navelement" id="slidercontainer">
-            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause">
+          <div class="navelement" class="slidercontainer">
+            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" class="slider" @mousedown="pause">
           </div>
 
           <div class="navelement">
@@ -91,7 +91,7 @@
 
         </div>
 
-        <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span></div>
+        <div v-if="!firstLoad && covidData.length == 0" class="nodata"><span>Not enough data for these parameters.</span></div>
 
         <footer>
           Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> (updated daily around 00:00 UTC / 20:00 ET) &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> (updated daily around 16:00 UTC / 12:00 ET)&middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
@@ -127,17 +127,17 @@
 
         </div>
 
-        <div id="countries">
+        <div class="countries">
 
           <h2>{{regionType}}</h2>
 
           <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
-          <div id="search">
+          <div class="search">
             <input v-model="searchField" placeholder="Search">
           </div>
 
-          <div id="buttonwrapper">
+          <div class="buttonwrapper">
             <button @click="deselectAll">Deselect All</button>
             <button @click="selectAll">Select All</button>
           </div>
@@ -153,7 +153,7 @@
 
         <div>
 
-          <div id="buttonwrapper">
+          <div class="buttonwrapper">
             <button @click="createURL" @mousedown="pause">{{copied ? 'Link Copied to Clipboard!' : 'Create Shareable Link'}}</button>
           </div>
 
