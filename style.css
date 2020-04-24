@@ -268,13 +268,16 @@ button:hover {
 .countries button {
   margin-top: 0.5rem;
 }
+.countries p {
+  margin-bottom: 0.75rem;
+}
 
 select {
   min-width: 12rem;
   font-size: 1rem;
   padding: 0.5rem;
   width: 100%;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0;
 }
 
 select:first-child {
