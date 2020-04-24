@@ -107,7 +107,7 @@ header {
 .explainer {
   flex: 6;
   padding-right: 2rem;
-  text-align: justify;
+  text-align: left;
 }
 
 .explainer a {
