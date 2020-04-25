@@ -9,7 +9,7 @@ Vue.component('graph', {
 
     mountGraph() {
 
-      Plotly.newPlot(this.$refs.graph, [], {}, this.config);
+      Plotly.newPlot(this.$refs.graph, [], {}, {responsive: true});
 
       this.$refs.graph.on('plotly_hover', this.onHoverOn)
         .on('plotly_unhover', this.onHoverOff)
@@ -46,15 +46,12 @@ Vue.component('graph', {
 
     onLayoutChange(data) {
 
-      let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
-      this.$emit('update:width', graphInnerDiv.width.nodeValue)
-      this.$emit('update:height', graphInnerDiv.height.nodeValue)
-      this.$emit('update:referenceLineAngle', this.calculateAngle());
+      this.emitGraphAttributes();
 
       // if the user selects autorange, go back to the default range
       if (data['xaxis.autorange'] == true || data['yaxis.autorange'] == true) {
         this.userSetRange = false;
-        this.updateGraph(true);
+        this.updateGraph();
       }
 
       // if the user selects a custom range, use this
@@ -66,7 +63,7 @@ Vue.component('graph', {
 
     },
 
-    updateGraph(recomputeAngle = false) {
+    updateGraph() {
 
       // we're deep copying the layout object to avoid side effects
       // because plotly mutates layout on user input
@@ -79,11 +76,7 @@ Vue.component('graph', {
         layout.yaxis.range = this.yrange;
       }
 
-      Plotly.react(this.$refs.graph, this.graphData.traces, layout, this.config);
-
-      if (recomputeAngle) {
-        this.$emit('update:referenceLineAngle', this.calculateAngle());
-      }
+      Plotly.react(this.$refs.graph, this.graphData.traces, layout, this.graphData.config);
 
     },
 
@@ -96,6 +89,17 @@ Vue.component('graph', {
       } else {
         return NaN;
       }
+    },
+
+    emitGraphAttributes() {
+      let graphOuterDiv = this.$refs.graph.querySelector(".main-svg").attributes;
+      this.$emit('update:width', graphOuterDiv.width.nodeValue)
+      this.$emit('update:height', graphOuterDiv.height.nodeValue)
+
+      let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
+      this.$emit('update:innerWidth', graphInnerDiv.width.nodeValue)
+      this.$emit('update:innerHeight', graphInnerDiv.height.nodeValue)
+      this.$emit('update:referenceLineAngle', this.calculateAngle());
     }
 
   },
@@ -107,11 +111,8 @@ Vue.component('graph', {
       this.updateGraph();
     }
 
-    let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
-    this.$emit('update:width', graphInnerDiv.width.nodeValue)
-    this.$emit('update:height', graphInnerDiv.height.nodeValue)
+    this.emitGraphAttributes();
     this.$emit('update:mounted', true)
-    this.$emit('update:referenceLineAngle', this.calculateAngle());
 
   },
 
@@ -123,14 +124,13 @@ Vue.component('graph', {
 
       handler(data, oldData) {
 
-        // if UI state changes
+        // if UI state changes, revert to auto range
         if (JSON.stringify(data.uistate) != JSON.stringify(oldData.uistate)) {
-          console.log('ui state changed');
-          this.userSetRange = false; // revert to auto range
-          this.updateGraph(true);    // update graph and recalculate angle for annotation label
-        } else {
-          this.updateGraph(); // update graph and don't recalculate angle for annotation label
+          this.userSetRange = false;
         }
+
+        this.updateGraph();
+        this.$emit('update:referenceLineAngle', this.calculateAngle());
 
       }
 
@@ -149,16 +149,6 @@ Vue.component('graph', {
       yrange: [], // stores user selected yrange
       userSetRange: false, // determines whether to use user selected range
       traceIndices: [],
-      config: {
-          responsive: true,
-          toImageButtonOptions: {
-            format: 'png', // one of png, svg, jpeg, webp
-            filename: 'Covid Trends',
-            height: 800,
-            width: 1200,
-            scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-          }
-        },
     }
   }
 
@@ -450,7 +440,7 @@ let app = new Vue({
       this.countries = this.covidData.map(e => e.country).sort();
       this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
-      const notableCountries = ['China', 'India', 'US', // Top 3 by population
+      const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
           'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
           'Hong Kong',            // Was previously included in China's numbers
           'Canada', 'Australia']; // These appear in the region selector
@@ -463,7 +453,6 @@ let app = new Vue({
       }
 
       this.firstLoad = false;
-      this.dataUpdateCount += 1;
     },
 
     preprocessNYTData(data, type) {
@@ -679,6 +668,7 @@ let app = new Vue({
         xshift: -50 * Math.cos(this.graphAttributes.referenceLineAngle),
         yshift: 50 * Math.sin(this.graphAttributes.referenceLineAngle),
         text: this.doublingTime + ' Day Doubling Time<br>of ' + this.selectedData,
+        align: 'right',
         showarrow: false,
         textangle: this.graphAttributes.referenceLineAngle * 180 / Math.PI,
         font: {
@@ -778,11 +768,12 @@ let app = new Vue({
             dash: 'dot',
           },
           marker: {
-            color: '#af8baf'
+            color: 'rgba(114, 27, 101, 0.7)'
           },
           hoverinfo: 'skip',
         }];
 
+        // reference line must be last trace for annotation angle to work out
         return [...trace1, ...trace2, ...trace3];
 
       } else {
@@ -790,6 +781,19 @@ let app = new Vue({
       }
 
 
+    },
+
+    config() {
+      return {
+        responsive: true,
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: 'Covid Trends',
+          height: 600,
+          width: 600 * this.graphAttributes.width / this.graphAttributes.height,
+          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        }
+      };
     },
 
     graphData() {
@@ -801,10 +805,10 @@ let app = new Vue({
           showLabels: this.showLabels,
           showTrendLine: this.showTrendLine,
           doublingTime: this.doublingTime,
-          dataUpdateCount: this.dataUpdateCount // hack to fix bug where graph updates too fast when we switch selectedData
         },
         traces: this.traces,
         layout: this.layout,
+        config: this.config
       };
     },
 
@@ -954,12 +958,12 @@ let app = new Vue({
     // inner size of graph
     graphAttributes: {
       mounted: false,
+      innerWidth: NaN,
+      innerHeight: NaN,
       width: NaN,
       height: NaN,
       referenceLineAngle: NaN
     },
-
-    dataUpdateCount: 0
 
   }
 
