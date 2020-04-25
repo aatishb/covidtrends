@@ -947,15 +947,12 @@ let app = new Vue({
 
     searchField: '',
 
-    //graphMounted: false,
-
     autoplay: true,
 
     copied: false,
 
     firstLoad: true,
 
-    // inner size of graph
     graphAttributes: {
       mounted: false,
       innerWidth: NaN,
