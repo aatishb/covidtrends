@@ -82,7 +82,7 @@
           </div>
 
           <div class="navelement">
-            <select v-model="selectedScale" @mousedown="pause" aria-Label="Select Data Set">
+            <select v-model="selectedScale" @mousedown="pause" aria-Label="Select Scale">
               <option v-for="s in scale" v-bind:value="s">
                 {{ s }}
               </option>
@@ -103,7 +103,7 @@
 
         <div>
           <h2>Customize</h2>
-          <label for="selectedData">Select Data Set</label>
+          <label for="selectedData">Select Parameter</label>
           <select id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
@@ -130,18 +130,18 @@
 
           <h2>{{regionType}}</h2>
 
-          <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
-
           <div class="search">
-            <input id="searchField" v-model="searchField" placeholder="Search For A Region" aria-label="Search For A Region">
+            <input id="searchField" v-model="searchField" placeholder="Search For A Location" aria-label="Search For A Region">
           </div>
 
           <div class="buttonwrapper">
-            <button @click="deselectAll">Deselect All</button>
-            <button @click="selectAll">Select All</button>
+            <button @click="deselectAll" aria-Label="Deselect All Regions">Deselect All</button>
+            <button @click="selectAll" aria-Label="Select All Regions">Select All</button>
           </div>
 
-          <ul style="padding-top: 0.5rem;">
+          <p style="padding-top: 1rem;">Showing {{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
+
+          <ul>
             <li v-for="country in visibleCountries">
               <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
