@@ -939,8 +939,6 @@ let app = new Vue({
 
     showTrendLine: true,
 
-    doublingTimes: Array(50).fill(0).map((e,i) => i + 1),
-
     doublingTime: 2,
 
     selectedCountries: [],
