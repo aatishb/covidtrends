@@ -253,16 +253,16 @@ button {
 
   transition-duration: 0.4s;
 
-  background-color: #b80d57;
+  background-color: #721b65;
   color: lightgoldenrodyellow;
-  border: 0.125rem solid #b80d57;
+  border: 0.125rem solid #721b65;
   border-radius: 0.25rem;
 }
 
 button:hover {
-  background-color: #fe346e;
-  border: 0.125rem solid #fe346e;
-  color: lightgoldenrodyellow;
+  background-color: rgb(69,10,76);
+  border: 0.125rem solid rgb(69,10,76);
+  color: lemonchiffon;
 }
 
 .countries button {
