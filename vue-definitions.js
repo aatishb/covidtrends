@@ -81,7 +81,7 @@ Vue.component('graph', {
     },
 
     calculateAngle() {
-      if (this.graphData.uistate.showTrendLine) {
+      if (this.graphData.uistate.showTrendLine && this.graphData.uistate.doublingTime > 0) {
         let element = this.$refs.graph.querySelector(".cartesianlayer").querySelector(".plot").querySelector(".scatterlayer").lastChild.querySelector(".lines").firstChild.getAttribute('d');
         let pts = element.split('M').join(',').split('L').join(',').split(',').filter(e => e != '');
         let angle = Math.atan2(pts[3] - pts[1], pts[2] - pts[0]);
@@ -660,7 +660,7 @@ let app = new Vue({
     annotations() {
 
      return [{
-        visible: this.showTrendLine,
+        visible: this.showTrendLine && this.doublingTime > 0,
         x: this.xAnnotation,
         y: this.yAnnotation,
         xref: 'x',
@@ -757,7 +757,7 @@ let app = new Vue({
        })
       );
 
-      if (this.showTrendLine) {
+      if (this.showTrendLine && this.doublingTime > 0) {
         let cases = [1, 10000000];
 
         let trace3 = [{
