@@ -97,7 +97,7 @@ p {
 
 header {
   color: white;
-  background-image: linear-gradient(to bottom, #2c003e, #721b65); /*#512b58*/
+  background-image: linear-gradient(to bottom, #2c003e, #721b65);
   position: relative;
   display: flex;
   padding: 0.75rem;
@@ -253,15 +253,15 @@ button {
 
   transition-duration: 0.4s;
 
-  background-color: #fe346e;
+  background-color: #b80d57;
   color: lightgoldenrodyellow;
-  border: 0.125rem solid #fe346e;
+  border: 0.125rem solid #b80d57;
   border-radius: 0.25rem;
 }
 
 button:hover {
-  background-color: #b80d57;
-  border: 0.125rem solid #b80d57;
+  background-color: #fe346e;
+  border: 0.125rem solid #fe346e;
   color: lightgoldenrodyellow;
 }
 
