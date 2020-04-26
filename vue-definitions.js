@@ -330,9 +330,15 @@ let app = new Vue({
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
       } else { // selectedRegion == 'US'
-        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
-        const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
+        let url;
+        if (selectedData == 'Confirmed Cases') {
+         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv';
+        } else if (selectedData == 'Reported Deaths') {
+         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv';
+        } else {
+          return;
+        }
+        Plotly.d3.csv(url, (data) => this.processData(this.preprocessUSData(data), selectedRegion, updateSelectedCountries));
       }
     },
 
@@ -402,7 +408,7 @@ let app = new Vue({
         .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
       }
 
-      let exclusions = ['Cruise Ship', 'Diamond Princess'];
+      let exclusions = ['Cruise Ship', 'Diamond Princess', 'Grand Princess'];
 
       let renames = {
         'Taiwan*': 'Taiwan',
@@ -455,18 +461,21 @@ let app = new Vue({
       this.firstLoad = false;
     },
 
-    preprocessNYTData(data, type) {
-      let recastData = {};
-      data.forEach(e => {
-        let st = recastData[e.state]  = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'US', 'Lat': null, 'Long': null});
-        st[fixNYTDate(e.date)] = parseInt(e[type]);
+    preprocessUSData(data) {
+      let result = {};
+      data.forEach(record => {
+        let region = record.Province_State
+        let temp = (result[region] || {'Province/State': region, 'Country/Region': 'US', 'Lat': null, 'Long': null})
+        Object.keys(record).forEach(key => {
+          // if they key starts with a digit we assume it is a date
+          if (/^\d/.test(key)) {
+            // each record is a county so we sum them up to get the state wide total
+            temp[key] = (temp[key] || 0) + parseInt(record[key])
+          }
+        });
+        result[region] = temp
       });
-      return Object.values(recastData);
-
-      function fixNYTDate(date) {
-        let tmp = date.split('-');
-        return `${tmp[1]}/${tmp[2]}/${tmp[0].substr(2)}`;
-      }
+      return Object.values(result);
     },
 
     formatDate(date) {
@@ -647,7 +656,7 @@ let app = new Vue({
           return 'Countries';
         case 'Australia':
         case 'US':
-          return 'States';
+          return 'States and Territories';
         case 'China':
           return 'Provinces';
         case 'Canada':
