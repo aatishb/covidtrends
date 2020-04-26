@@ -64,7 +64,7 @@
 
       <main id="main">
 
-        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
+        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" v-bind.sync="graphAttributes"></graph>
 
         <div v-if="covidData.length > 0" class="nav">
 
@@ -122,7 +122,18 @@
             </option>
           </select>
           <input type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
-          <label for="showLabels">Show labels</label>
+          <label for="showLabels">Show Labels</label>
+
+          <div>
+            <input type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
+            <label for="showTrendLine">Show
+                <select style="width: 3rem; min-width: 2rem; padding: 0rem; font-size: 0.75rem;" v-model="doublingTime" @mousedown="pause">
+                  <option v-for="d in doublingTimes" v-bind:value="d">
+                    {{ d }}
+                  </option>
+                </select>
+               Day Doubling Time</label>
+          </div>
 
         </div>
 
@@ -165,7 +176,7 @@
   </div>
 
   <!-- page code -->
-  <script src="vue-definitions.js?2"></script>
+  <script src="vue-definitions.js?3"></script>
 
 </body>
 
