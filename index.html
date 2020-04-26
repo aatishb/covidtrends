@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Covid Trends</title>
   <link rel="stylesheet" type="text/css" href="normalize.css">
-  <link rel="stylesheet" type="text/css" href="style.css?1">
+  <link rel="stylesheet" type="text/css" href="style.css?2">
   <script src="libraries/plotly-basic.min.js"></script>
   <script src="libraries/vue.min.js"></script>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -27,9 +27,9 @@
 
   <div id="root">
 
-    <div id="header">
+    <header>
 
-        <div id="explainer">
+        <div class="explainer">
           <p>This interactive charts the <b><i>new</i></b> {{selectedData.toLowerCase()}} of COVID-19 in the past week vs. the <b><i>total</i></b> {{selectedData.toLowerCase()}} to date. When plotted in this way, exponential growth is represented as a straight line that slopes upwards. Notice that almost all countries follow a very similar path of exponential growth. <i>We're all in this together.</i> <span v-if="isHidden"><a @click="toggleHide">Learn more.</a></span></p>
 
           <span v-if="!isHidden">
@@ -47,42 +47,42 @@
           </span>
         </div>
 
-        <div id="logowrapper">
+        <div class="logowrapper">
 
           <h1><a href="https://aatishb.com/covidtrends">Covid Trends</a></h1>
 
-          <div v-if="!isHidden" id="logos">
-            <a href="https://aatishb.com/"><img src="logos/aatishb-bw.png" height="40"></a>
-            <a href="https://www.youtube.com/user/minutephysics"><img src="logos/minutephysics-invert.png" height="40"></a>
+          <div v-if="!isHidden" class="logos">
+            <a href="https://aatishb.com/" aria-label="Visit the website of Aatish Bhatia"><img src="logos/aatishb-bw.png" height="40" alt="Avatar of Aatish Bhatia"></a>
+            <a href="https://www.youtube.com/user/minutephysics" aria-label="Visit the Youtube channel of Minute Physics"><img src="logos/minutephysics-invert.png" height="40" alt="Minute Physics Logo"></a>
           </div>
 
         </div>
 
-    </div>
+    </header>
 
-    <div id="content">
+    <div class="ctapp">
 
-      <div id="left-column">
+      <main id="main">
 
         <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" @graph-mounted="graphMounted = true"></graph>
 
-        <div v-if="covidData.length > 0" id="nav">
+        <div v-if="covidData.length > 0" class="nav">
 
           <div class="navelement">
-            <img v-if="paused" @click="play" src="icons/play.svg" style="width: 3rem;">
-            <img v-if="!paused" @click="play" src="icons/pause.svg" style="width: 3rem;">
+            <img v-if="paused" @click="play" src="icons/play.svg" alt="Play" style="width: 3rem;">
+            <img v-if="!paused" @click="play" src="icons/pause.svg" alt="Pause" style="width: 3rem;">
           </div>
 
           <div class="navelement">
-            <h2>{{ formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1]) }}</h2>
+            <time class="h2" :datetime="formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1])">{{ formatDate(minDay > 0 ? dates[day - 1] : dates[dates.length - 1]) }}</time>
           </div>
 
-          <div class="navelement" id="slidercontainer">
-            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" id="slider" @mousedown="pause">
+          <div class="navelement slidercontainer">
+            <input v-if="dates.length > 7" type="range" :min="minDay > 0 ? minDay : dates.length" :max="dates.length" step="1" v-model="day" class="slider" @mousedown="pause" aria-label="Choose the current observation day">
           </div>
 
           <div class="navelement">
-            <select v-model="selectedScale" @mousedown="pause">
+            <select v-model="selectedScale" @mousedown="pause" aria-Label="Select Scale">
               <option v-for="s in scale" v-bind:value="s">
                 {{ s }}
               </option>
@@ -91,58 +91,57 @@
 
         </div>
 
-        <div v-if="!firstLoad && covidData.length == 0" id="nodata"><span>Not enough data for these parameters.</span></div>
+        <div v-if="!firstLoad && covidData.length == 0" class="nodata"><span>Not enough data for these parameters.</span></div>
 
-        <div id="footer">
+        <footer>
           Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> (updated daily around 00:00 UTC / 20:00 ET) &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> (updated daily around 16:00 UTC / 12:00 ET)&middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
-        </div>
+        </footer>
 
-      </div>
+      </main>
 
-      <div id="right-column">
+      <aside>
 
         <div>
           <h2>Customize</h2>
-
-          <select v-model="selectedData" @mousedown="pause">
+          <label for="selectedData">Select Parameter</label>
+          <select id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
             </option>
           </select>
-
-          <select v-model="selectedRegion" @mousedown="pause">
+          <label for="selectedRegion">Select Region</label>
+          <select id="selectedRegion" v-model="selectedRegion" @mousedown="pause">
             <option v-for="s in regions" v-bind:value="s">
               {{ s }}
             </option>
           </select>
-
-          <select v-model="selectedScale" @mousedown="pause">
+          <label for="selectedScale">Select Scale</label>
+          <select id="selectedScale" v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
             </option>
           </select>
-
           <input type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
           <label for="showLabels">Show labels</label>
 
         </div>
 
-        <div id="countries">
+        <div class="countries">
 
           <h2>{{regionType}}</h2>
 
-          <p>{{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
-
-          <div id="search">
-            <input v-model="searchField" placeholder="Search">
+          <div class="search">
+            <input id="searchField" v-model="searchField" placeholder="Search For A Location" aria-label="Search For A Location">
           </div>
 
-          <div id="buttonwrapper">
-            <button @click="deselectAll">Deselect All</button>
-            <button @click="selectAll">Select All</button>
+          <div class="buttonwrapper">
+            <button @click="deselectAll" aria-Label="Deselect All Regions">Deselect All</button>
+            <button @click="selectAll" aria-Label="Select All Regions">Select All</button>
           </div>
 
-          <ul style="padding-top: 0.5rem;">
+          <p style="padding-top: 1rem;">Showing {{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
+
+          <ul>
             <li v-for="country in visibleCountries">
               <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
@@ -153,13 +152,13 @@
 
         <div>
 
-          <div id="buttonwrapper">
+          <div class="buttonwrapper">
             <button @click="createURL" @mousedown="pause">{{copied ? 'Link Copied to Clipboard!' : 'Create Shareable Link'}}</button>
           </div>
 
         </div>
 
-      </div>
+      </aside>
 
     </div>
 
