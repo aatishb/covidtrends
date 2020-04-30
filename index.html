@@ -127,11 +127,7 @@
           <div>
             <input type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
             <label for="showTrendLine">Show
-                <select style="width: 3rem; min-width: 2rem; padding: 0rem; font-size: 0.75rem;" v-model="doublingTime" @mousedown="pause">
-                  <option v-for="d in doublingTimes" v-bind:value="d">
-                    {{ d }}
-                  </option>
-                </select>
+              <input type="number" min="1" step="1" style="width: 3rem; padding: 0rem; font-size: inherit;" v-model.number="doublingTime" @focus="pause"  aria-label="Doubling Time in Days">
                Day Doubling Time</label>
           </div>
 
@@ -176,7 +172,7 @@
   </div>
 
   <!-- page code -->
-  <script src="vue-definitions.js?3"></script>
+  <script src="vue-definitions.js?4"></script>
 
 </body>
 
