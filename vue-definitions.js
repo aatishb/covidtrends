@@ -319,8 +319,10 @@ let app = new Vue({
 
     pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
 
+      let url;
+      let urlPostFix = '?' + Math.floor(Date.now() / (8 * 60 * 60 * 1000));
+
       if (selectedRegion != 'US') {
-        let url;
         if (selectedData == 'Confirmed Cases') {
          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
         } else if (selectedData == 'Reported Deaths') {
@@ -328,11 +330,11 @@ let app = new Vue({
         } else {
           return;
         }
-        Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
+        Plotly.d3.csv(url + urlPostFix, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
       } else { // selectedRegion == 'US'
         const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
-        const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
+        url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
+        Plotly.d3.csv(url + urlPostFix, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
       }
     },
 
