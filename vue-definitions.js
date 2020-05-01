@@ -489,6 +489,15 @@ let app = new Vue({
       return monthNames[m-1] + ' ' + d;
     },
 
+    setPlayIcon(){
+      this.paused = false;
+      this.icon = 'icons/pause.svg';
+    },
+    setPauseIcon(){
+      this.paused = true;
+      this.icon = 'icons/play.svg';
+    },
+
     // TODO: clean up play/pause logic
     play() {
       if (this.paused) {
@@ -497,21 +506,18 @@ let app = new Vue({
           this.day = this.minDay;
         }
 
-        this.paused = false;
-        this.icon = 'icons/pause.svg';
+        this.setPlayIcon()
         setTimeout(this.increment, 200);
 
       } else {
-        this.paused = true;
-        this.icon = 'icons/play.svg';
+        this.setPauseIcon()
       }
 
     },
 
     pause() {
       if(! this.paused) {
-        this.paused = true;
-        this.icon = 'icons/play.svg';
+        this.setPauseIcon()
       }
     },
 
@@ -519,8 +525,7 @@ let app = new Vue({
 
       if (this.day == this.dates.length || this.minDay < 0) {
         this.day = this.dates.length;
-        this.paused = true;
-        this.icon = 'icons/play.svg';
+        this.setPauseIcon()
       }
       else if (this.day < this.dates.length) {
         if (!this.paused) {
