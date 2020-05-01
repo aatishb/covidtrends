@@ -11,7 +11,7 @@ When plotted in this way, exponential growth is displayed as a straight line.
 
 Notice that most countries follow a similar straight line path, indicating that the growth rate is similar across countries. We're all in this together.
 
-**Tips:** Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom into graph, double click to zoom back out. Use dropdown menus to switch between Confirmed Cases ↔ Deaths, between regions, or between a logarithmic ↔ linear scale. And don't forget to wash your hands!
+**Tips:** Press Space (or the play button) to Play/Pause. Press +/- keys (or the slider) to see daily changes. Hover over the graph for more info. Drag cursor to zoom into graph, double-click to zoom back out. Use dropdown menus to switch between Confirmed Cases ↔ Deaths, between regions, or between a logarithmic ↔ linear scale. And don't forget to wash your hands!
 
 ## Credits
 
@@ -73,7 +73,7 @@ Special thanks to Ritwick Ghosh, Nicky Case, Shekhar Bhatia, and Igor Kholopov f
 
 If you would like to participate or contribute, please read our [Contributor's Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## License 
+## License
 
 Code in this repository which is not otherwise licensed is licensed under the MIT License; see [LICENSE.txt](LICENSE.txt) for complete text.
 
