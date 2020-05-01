@@ -205,6 +205,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "reaganch",
+      "name": "Reagan Chandramohan",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14113814?v=4",
+      "profile": "https://reaganc.bitbucket.io",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
