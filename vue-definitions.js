@@ -82,7 +82,7 @@ Vue.component('graph', {
 
     calculateAngle() {
       if (this.graphData.uistate.showTrendLine && this.graphData.uistate.doublingTime > 0) {
-        let element = this.$refs.graph.querySelector(".cartesianlayer").querySelector(".plot").querySelector(".scatterlayer").lastChild.querySelector(".lines").firstChild.getAttribute('d');
+        let element = this.$refs.graph.querySelector('.cartesianlayer').querySelector('.plot').querySelector('.scatterlayer').lastChild.querySelector('.lines').firstChild.getAttribute('d');
         let pts = element.split('M').join(',').split('L').join(',').split(',').filter(e => e != '');
         let angle = Math.atan2(pts[3] - pts[1], pts[2] - pts[0]);
         return angle;
@@ -92,11 +92,11 @@ Vue.component('graph', {
     },
 
     emitGraphAttributes() {
-      let graphOuterDiv = this.$refs.graph.querySelector(".main-svg").attributes;
+      let graphOuterDiv = this.$refs.graph.querySelector('.main-svg').attributes;
       this.$emit('update:width', graphOuterDiv.width.nodeValue);
       this.$emit('update:height', graphOuterDiv.height.nodeValue);
 
-      let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
+      let graphInnerDiv = this.$refs.graph.querySelector('.xy').firstChild.attributes;
       this.$emit('update:innerWidth', graphInnerDiv.width.nodeValue);
       this.$emit('update:innerHeight', graphInnerDiv.height.nodeValue);
       this.$emit('update:referenceLineAngle', this.calculateAngle());
