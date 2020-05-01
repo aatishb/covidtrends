@@ -475,7 +475,7 @@ let app = new Vue({
       }
 
       let [m, d, y] = date.split('/');
-      return new Date(2000 + (+y), m-1, d).toISOString().slice(0, 10);
+      return new Date(Date.UTC(2000 + (+y), m-1, d)).toISOString().slice(0, 10);
     },
 
     dateToText(date) {
