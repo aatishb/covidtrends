@@ -19,28 +19,28 @@ Vue.component('graph', {
 
     onHoverOn(data) {
 
-        let curveNumber = data.points[0].curveNumber;
-        let name = this.graphData.traces[curveNumber].name;
+      let curveNumber = data.points[0].curveNumber;
+      let name = this.graphData.traces[curveNumber].name;
 
-        if (name) {
+      if (name) {
 
-          this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
-          let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
+        this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
+        let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
 
-          for (let i of this.traceIndices) {
-            Plotly.restyle(this.$refs.graph, update, [i]);
-          }
+        for (let i of this.traceIndices) {
+          Plotly.restyle(this.$refs.graph, update, [i]);
         }
+      }
 
     },
 
     onHoverOff() {
 
-        let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
+      let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
 
-        for (let i of this.traceIndices) {
-          Plotly.restyle(this.$refs.graph, update, [i]);
-        }
+      for (let i of this.traceIndices) {
+        Plotly.restyle(this.$refs.graph, update, [i]);
+      }
 
     },
 
@@ -93,12 +93,12 @@ Vue.component('graph', {
 
     emitGraphAttributes() {
       let graphOuterDiv = this.$refs.graph.querySelector(".main-svg").attributes;
-      this.$emit('update:width', graphOuterDiv.width.nodeValue)
-      this.$emit('update:height', graphOuterDiv.height.nodeValue)
+      this.$emit('update:width', graphOuterDiv.width.nodeValue);
+      this.$emit('update:height', graphOuterDiv.height.nodeValue);
 
       let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
-      this.$emit('update:innerWidth', graphInnerDiv.width.nodeValue)
-      this.$emit('update:innerHeight', graphInnerDiv.height.nodeValue)
+      this.$emit('update:innerWidth', graphInnerDiv.width.nodeValue);
+      this.$emit('update:innerHeight', graphInnerDiv.height.nodeValue);
       this.$emit('update:referenceLineAngle', this.calculateAngle());
     }
 
@@ -112,7 +112,7 @@ Vue.component('graph', {
     }
 
     this.emitGraphAttributes();
-    this.$emit('update:mounted', true)
+    this.$emit('update:mounted', true);
 
   },
 
@@ -149,10 +149,10 @@ Vue.component('graph', {
       yrange: [], // stores user selected yrange
       userSetRange: false, // determines whether to use user selected range
       traceIndices: [],
-    }
+    };
   }
 
-})
+});
 
 // global data
 window.app = new Vue({
@@ -236,7 +236,7 @@ window.app = new Vue({
 
       else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
         this.paused = true;
-        this.day = Math.min(this.day + 1, this.dates.length)
+        this.day = Math.min(this.day + 1, this.dates.length);
       }
 
     });
@@ -298,21 +298,21 @@ window.app = new Vue({
     },
 
     myMax() { // https://stackoverflow.com/a/12957522
-      var par = []
+      var par = [];
       for (var i = 0; i < arguments.length; i++) {
-          if (!isNaN(arguments[i])) {
-              par.push(arguments[i]);
-          }
+        if (!isNaN(arguments[i])) {
+          par.push(arguments[i]);
+        }
       }
       return Math.max.apply(Math, par);
     },
 
     myMin() {
-      var par = []
+      var par = [];
       for (var i = 0; i < arguments.length; i++) {
-          if (!isNaN(arguments[i])) {
-              par.push(arguments[i]);
-          }
+        if (!isNaN(arguments[i])) {
+          par.push(arguments[i]);
+        }
       }
       return Math.min.apply(Math, par);
     },
@@ -322,15 +322,15 @@ window.app = new Vue({
       if (selectedRegion != 'US') {
         let url;
         if (selectedData == 'Confirmed Cases') {
-         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
         } else if (selectedData == 'Reported Deaths') {
-         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
+          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
         } else {
           return;
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
       } else { // selectedRegion == 'US'
-        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
+        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases';
         const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
       }
@@ -353,7 +353,7 @@ window.app = new Vue({
         let countryData = data.filter(e => e['Country/Region'] == country)
           .filter(e => !regionsToPullToCountryLevel.includes(e['Province/State']));
 
-        const row = {region: country}
+        const row = {region: country};
 
         for (let date of dates) {
           let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
@@ -369,12 +369,12 @@ window.app = new Vue({
 
     filterByCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Country/Region'] == selectedRegion)
-          .map(e => Object.assign({}, e, {region: e['Province/State']}));
+        .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     convertStateToCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Province/State'] == selectedRegion)
-          .map(e => Object.assign({}, e, {region: e['Province/State']}));
+        .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     processData(data, selectedRegion, updateSelectedCountries) {
@@ -382,7 +382,7 @@ window.app = new Vue({
       this.dates = dates;
       this.day = this.dates.length;
 
-      let regionsToPullToCountryLevel = ['Hong Kong', 'Macau']
+      let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
       let grouped;
 
@@ -399,7 +399,7 @@ window.app = new Vue({
 
       } else {
         grouped = this.filterByCountry(data, dates, selectedRegion)
-        .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
+          .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
       }
 
       let exclusions = ['Cruise Ship', 'Diamond Princess'];
@@ -419,7 +419,7 @@ window.app = new Vue({
             arr.push(row[date]);
           }
           let slope = arr.map((e,i,a) => e - a[i - this.lookbackTime]);
-          let region = row.region
+          let region = row.region;
 
           if (Object.keys(renames).includes(region)) {
             region = renames[region];
@@ -441,9 +441,9 @@ window.app = new Vue({
       this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
-          'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
-          'Hong Kong',            // Was previously included in China's numbers
-          'Canada', 'Australia']; // These appear in the region selector
+        'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
+        'Hong Kong',            // Was previously included in China's numbers
+        'Canada', 'Australia']; // These appear in the region selector
 
       // TODO: clean this logic up later
       // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
@@ -659,7 +659,7 @@ window.app = new Vue({
 
     annotations() {
 
-     return [{
+      return [{
         visible: this.showTrendLine && this.doublingTime > 0,
         x: this.xAnnotation,
         y: this.yAnnotation,
@@ -672,10 +672,10 @@ window.app = new Vue({
         showarrow: false,
         textangle: this.graphAttributes.referenceLineAngle * 180 / Math.PI,
         font: {
-                family: 'Open Sans, sans-serif',
-                color: 'black',
-                size: 14
-              },
+          family: 'Open Sans, sans-serif',
+          color: 'black',
+          size: 14
+        },
       }];
 
 
@@ -686,7 +686,7 @@ window.app = new Vue({
         title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         autorange: false,
-          xaxis: {
+        xaxis: {
           title: 'Total ' + this.selectedData,
           type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.selectedScale == 'Logarithmic Scale' ? this.logxrange : this.linearxrange,
@@ -706,10 +706,10 @@ window.app = new Vue({
         },
         hovermode: 'closest',
         font: {
-                family: 'Open Sans, sans-serif',
-                color: 'black',
-                size: 14
-              },
+          family: 'Open Sans, sans-serif',
+          color: 'black',
+          size: 14
+        },
         annotations: this.annotations
       };
     },
@@ -754,8 +754,7 @@ window.app = new Vue({
         },
         hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
 
-       })
-      );
+      }));
 
       if (this.showTrendLine && this.doublingTime > 0) {
         let cases = [1, 10000000];
@@ -837,7 +836,7 @@ window.app = new Vue({
     },
 
     logxrange() {
-      return [1, Math.ceil(Math.log10(1.5 * this.xmax))]
+      return [1, Math.ceil(Math.log10(1.5 * this.xmax))];
     },
 
     linearxrange() {
@@ -847,9 +846,9 @@ window.app = new Vue({
     logyrange() {
 
       if (this.ymin < 10) { // shift ymin on log scale if fewer than 10 cases
-        return [0, Math.ceil(Math.log10(1.5 * this.ymax))]
+        return [0, Math.ceil(Math.log10(1.5 * this.ymax))];
       } else {
-        return [1, Math.ceil(Math.log10(1.5 * this.ymax))]
+        return [1, Math.ceil(Math.log10(1.5 * this.ymax))];
       }
     },
 
@@ -962,4 +961,4 @@ window.app = new Vue({
 
   }
 
-})
+});
