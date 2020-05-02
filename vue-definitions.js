@@ -489,15 +489,6 @@ window.app = new Vue({
       return monthNames[m-1] + ' ' + d;
     },
 
-    setPlayIcon(){
-      this.paused = false;
-      this.icon = 'icons/pause.svg';
-    },
-    setPauseIcon(){
-      this.paused = true;
-      this.icon = 'icons/play.svg';
-    },
-
     // TODO: clean up play/pause logic
     play() {
       if (this.paused) {
@@ -506,18 +497,18 @@ window.app = new Vue({
           this.day = this.minDay;
         }
 
-        this.setPlayIcon()
+        this.paused = false;
         setTimeout(this.increment, 200);
 
       } else {
-        this.setPauseIcon()
+        this.paused = true;
       }
 
     },
 
     pause() {
       if(! this.paused) {
-        this.setPauseIcon()
+        this.paused = true;
       }
     },
 
@@ -525,7 +516,7 @@ window.app = new Vue({
 
       if (this.day == this.dates.length || this.minDay < 0) {
         this.day = this.dates.length;
-        this.setPauseIcon()
+        this.paused = true;
       }
       else if (this.day < this.dates.length) {
         if (!this.paused) {
@@ -920,8 +911,6 @@ window.app = new Vue({
     day: 7,
 
     lookbackTime: 7,
-
-    icon: 'icons/play.svg',
 
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
