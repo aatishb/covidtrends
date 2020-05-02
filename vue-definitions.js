@@ -24,8 +24,8 @@ Vue.component('graph', {
 
       if (name) {
 
-        this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
-        let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
+        this.traceIndices = this.graphData.traces.map((e, i) => e.name == name ? i : -1).filter(e => e >= 0);
+        let update = {'line': {color: 'rgba(254, 52, 110, 1)'}};
 
         for (let i of this.traceIndices) {
           Plotly.restyle(this.$refs.graph, update, [i]);
@@ -36,7 +36,7 @@ Vue.component('graph', {
 
     onHoverOff() {
 
-      let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
+      let update = {'line': {color: 'rgba(0,0,0,0.15)'}};
 
       for (let i of this.traceIndices) {
         Plotly.restyle(this.$refs.graph, update, [i]);
@@ -140,7 +140,6 @@ Vue.component('graph', {
       Plotly.Plots.resize(this.$refs.graph);
     },
 
-
   },
 
   data() {
@@ -220,7 +219,6 @@ window.app = new Vue({
         this.doublingTime = doublingTime;
       }
 
-
     }
 
     window.addEventListener('keydown', e => {
@@ -234,7 +232,7 @@ window.app = new Vue({
         this.day = Math.max(this.day - 1, this.minDay);
       }
 
-      else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
+      else if ((e.key == '+' || e.key == '=') && this.dates.length > 0) {
         this.paused = true;
         this.day = Math.min(this.day + 1, this.dates.length);
       }
@@ -242,7 +240,6 @@ window.app = new Vue({
     });
 
   },
-
 
   watch: {
     selectedData() {
@@ -346,7 +343,7 @@ window.app = new Vue({
       countries = this.removeRepeats(countries);
 
       let grouped = [];
-      for (let country of countries){
+      for (let country of countries) {
 
         // filter data for this country (& exclude regions we're pulling to country level)
         // e.g. Mainland China numbers should not include Hong Kong & Macau, to avoid double counting
@@ -356,7 +353,7 @@ window.app = new Vue({
         const row = {region: country};
 
         for (let date of dates) {
-          let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
+          let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a, b) => a + b);
           row[date] = sum;
         }
 
@@ -411,14 +408,14 @@ window.app = new Vue({
       };
 
       let covidData = [];
-      for (let row of grouped){
+      for (let row of grouped) {
 
         if (!exclusions.includes(row.region)) {
           const arr = [];
           for (let date of dates) {
             arr.push(row[date]);
           }
-          let slope = arr.map((e,i,a) => e - a[i - this.lookbackTime]);
+          let slope = arr.map((e, i, a) => e - a[i - this.lookbackTime]);
           let region = row.region;
 
           if (Object.keys(renames).includes(region)) {
@@ -429,7 +426,7 @@ window.app = new Vue({
           covidData.push({
             country: region,
             cases,
-            slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
+            slope: slope.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN),
             maxCases: this.myMax(...cases)
           });
 
@@ -458,7 +455,7 @@ window.app = new Vue({
     preprocessNYTData(data, type) {
       let recastData = {};
       data.forEach(e => {
-        let st = recastData[e.state]  = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'US', 'Lat': null, 'Long': null});
+        let st = recastData[e.state] = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'US', 'Lat': null, 'Long': null});
         st[fixNYTDate(e.date)] = parseInt(e[type]);
       });
       return Object.values(recastData);
@@ -475,7 +472,7 @@ window.app = new Vue({
       }
 
       let [m, d, y] = date.split('/');
-      return new Date(Date.UTC(2000 + (+y), m-1, d)).toISOString().slice(0, 10);
+      return new Date(Date.UTC(2000 + (+y), m - 1, d)).toISOString().slice(0, 10);
     },
 
     dateToText(date) {
@@ -486,7 +483,7 @@ window.app = new Vue({
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
       let [m, d] = date.split('/');
-      return monthNames[m-1] + ' ' + d;
+      return monthNames[m - 1] + ' ' + d;
     },
 
     // TODO: clean up play/pause logic
@@ -507,7 +504,7 @@ window.app = new Vue({
     },
 
     pause() {
-      if(! this.paused) {
+      if (!this.paused) {
         this.paused = true;
       }
     },
@@ -568,7 +565,7 @@ window.app = new Vue({
 
       for (let country of this.countries) {
         if (this.selectedCountries.includes(country)) {
-          if(Object.keys(renames).includes(country)) {
+          if (Object.keys(renames).includes(country)) {
             queryUrl.append('location', renames[country]);
           } else {
             queryUrl.append('location', country);
@@ -584,7 +581,7 @@ window.app = new Vue({
 
       let url = baseUrl + '?' + queryUrl.toString();
 
-      window.history.replaceState( {} , 'Covid Trends', '?'+queryUrl.toString() );
+      window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
 
       this.copyToClipboard(url);
 
@@ -630,7 +627,7 @@ window.app = new Vue({
 
     minDay() {
       let minDay = this.myMin(...(this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)).filter(x => x != -1)));
-      if (isFinite(minDay) && !isNaN(minDay)){
+      if (isFinite(minDay) && !isNaN(minDay)) {
         return minDay + 1;
       } else {
         return -1;
@@ -674,12 +671,11 @@ window.app = new Vue({
         },
       }];
 
-
     },
 
     layout() {
       return {
-        title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 ' + this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         autorange: false,
         xaxis: {
@@ -715,11 +711,11 @@ window.app = new Vue({
       let showDailyMarkers = this.filteredCovidData.length <= 2;
 
       // draws grey lines (line plot for each location)
-      let trace1 = this.filteredCovidData.map((e,i) => ({
+      let trace1 = this.filteredCovidData.map((e, i) => ({
         x: e.cases.slice(0, this.day),
         y: e.slope.slice(0, this.day),
         name: e.country,
-        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
+        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date)),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
@@ -730,13 +726,13 @@ window.app = new Vue({
         line: {
           color: 'rgba(0,0,0,0.15)'
         },
-        hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hoverinfo: 'x+y+text',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData + ': %{x:,}<br>Weekly ' + this.selectedData + ': %{y:,}<extra></extra>',
       })
       );
 
       // draws red dots (most recent data for each location)
-      let trace2 = this.filteredCovidData.map((e,i) => ({
+      let trace2 = this.filteredCovidData.map((e, i) => ({
         x: [e.cases[this.day - 1]],
         y: [e.slope[this.day - 1]],
         text: e.country,
@@ -748,7 +744,7 @@ window.app = new Vue({
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData + ': %{x:,}<br>Weekly ' + this.selectedData + ': %{y:,}<extra></extra>',
 
       }));
 
@@ -774,7 +770,6 @@ window.app = new Vue({
       } else {
         return [...trace1, ...trace2];
       }
-
 
     },
 
@@ -836,7 +831,7 @@ window.app = new Vue({
     },
 
     linearxrange() {
-      return [-0.49*Math.pow(10,Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
+      return [-0.49 * Math.pow(10, Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
     },
 
     logyrange() {
@@ -850,7 +845,7 @@ window.app = new Vue({
 
     linearyrange() {
       let ymax = Math.max(...this.filteredSlope, 50);
-      return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+      return [-Math.pow(10, Math.floor(Math.log10(ymax)) - 2), Math.round(1.05 * ymax)];
     },
 
     xAnnotation() {
