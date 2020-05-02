@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -59,6 +59,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/archiewood"><img src="https://avatars0.githubusercontent.com/u/58074498?v=4" width="100px;" alt=""/><br /><sub><b>archiewood</b></sub></a><br /><a href="#ideas-archiewood" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://reaganc.bitbucket.io"><img src="https://avatars1.githubusercontent.com/u/14113814?v=4" width="100px;" alt=""/><br /><sub><b>Reagan Chandramohan</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3Areaganch" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/CharsiBabu"><img src="https://avatars2.githubusercontent.com/u/4214491?v=4" width="100px;" alt=""/><br /><sub><b>CharsiBabu</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=CharsiBabu" title="Code">💻</a></td>
   </tr>
 </table>
 
