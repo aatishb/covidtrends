@@ -69,8 +69,8 @@
         <div v-if="covidData.length > 0" class="nav">
 
           <div class="navelement">
-            <img v-if="paused" @click="play" src="icons/play.svg" alt="Play" style="width: 3rem;">
-            <img v-if="!paused" @click="play" src="icons/pause.svg" alt="Pause" style="width: 3rem;">
+            <img v-show="paused" @click="play" src="icons/play.svg" alt="Play" style="width: 3rem;">
+            <img v-show="!paused" @click="play" src="icons/pause.svg" alt="Pause" style="width: 3rem;">
           </div>
 
           <div class="navelement">
@@ -172,7 +172,7 @@
   </div>
 
   <!-- page code -->
-  <script src="vue-definitions.js?5"></script>
+  <script src="vue-definitions.js?6"></script>
 
 </body>
 
