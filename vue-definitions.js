@@ -541,11 +541,11 @@ window.app = new Vue({
     },
 
     createURLFromCheckbox() {
-      return createURL(true);
+      this.createURL(true);
     },
     
     createURLFromSelect() {
-      return createURL(false);
+      this.createURL(false);
     },
     
     createURL(checkbox) {
