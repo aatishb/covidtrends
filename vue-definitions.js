@@ -540,7 +540,15 @@ window.app = new Vue({
       this.isHidden = !this.isHidden;
     },
 
-    createURL() {
+    createURLFromCheckbox() {
+      return createURL(true);
+    },
+    
+    createURLFromSelect() {
+      return createURL(false);
+    },
+    
+    createURL(checkbox) {
 
       let baseUrl = window.location.href.split('?')[0];
 
@@ -562,13 +570,17 @@ window.app = new Vue({
       let renames = {
         'China (Mainland)': 'China'
       };
-
-      for (let country of this.countries) {
-        if (this.selectedCountries.includes(country)) {
-          if (Object.keys(renames).includes(country)) {
-            queryUrl.append('location', renames[country]);
-          } else {
-            queryUrl.append('location', country);
+      
+      // only list all countries if a checkbox was changed
+      // this does not solve edgecases (default countries but changed labels/line) nor detect if the defaults were reached
+      if (checkbox) {
+        for (let country of this.countries) {
+          if (this.selectedCountries.includes(country)) {
+            if (Object.keys(renames).includes(country)) {
+              queryUrl.append('location', renames[country]);
+            } else {
+              queryUrl.append('location', country);
+            }
           }
         }
       }
