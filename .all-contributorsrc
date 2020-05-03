@@ -52,7 +52,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/180672?v=4",
       "profile": "https://github.com/edg2s",
       "contributions": [
-        "code"
+        "code",
+        "tool"
       ]
     },
     {
@@ -213,6 +214,15 @@
       "profile": "https://reaganc.bitbucket.io",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "login": "CharsiBabu",
+      "name": "CharsiBabu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4214491?v=4",
+      "profile": "https://github.com/CharsiBabu",
+      "contributions": [
+        "code"
       ]
     }
   ],

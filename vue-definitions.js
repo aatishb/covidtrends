@@ -19,28 +19,28 @@ Vue.component('graph', {
 
     onHoverOn(data) {
 
-        let curveNumber = data.points[0].curveNumber;
-        let name = this.graphData.traces[curveNumber].name;
+      let curveNumber = data.points[0].curveNumber;
+      let name = this.graphData.traces[curveNumber].name;
 
-        if (name) {
+      if (name) {
 
-          this.traceIndices = this.graphData.traces.map((e,i) => e.name == name ? i : -1).filter(e => e >= 0);
-          let update = {'line':{color: 'rgba(254, 52, 110, 1)'}};
-
-          for (let i of this.traceIndices) {
-            Plotly.restyle(this.$refs.graph, update, [i]);
-          }
-        }
-
-    },
-
-    onHoverOff(data) {
-
-        let update = {'line':{color: 'rgba(0,0,0,0.15)'}};
+        this.traceIndices = this.graphData.traces.map((e, i) => e.name == name ? i : -1).filter(e => e >= 0);
+        let update = {'line': {color: 'rgba(254, 52, 110, 1)'}};
 
         for (let i of this.traceIndices) {
           Plotly.restyle(this.$refs.graph, update, [i]);
         }
+      }
+
+    },
+
+    onHoverOff() {
+
+      let update = {'line': {color: 'rgba(0,0,0,0.15)'}};
+
+      for (let i of this.traceIndices) {
+        Plotly.restyle(this.$refs.graph, update, [i]);
+      }
 
     },
 
@@ -82,7 +82,7 @@ Vue.component('graph', {
 
     calculateAngle() {
       if (this.graphData.uistate.showTrendLine && this.graphData.uistate.doublingTime > 0) {
-        let element = this.$refs.graph.querySelector(".cartesianlayer").querySelector(".plot").querySelector(".scatterlayer").lastChild.querySelector(".lines").firstChild.getAttribute('d');
+        let element = this.$refs.graph.querySelector('.cartesianlayer').querySelector('.plot').querySelector('.scatterlayer').lastChild.querySelector('.lines').firstChild.getAttribute('d');
         let pts = element.split('M').join(',').split('L').join(',').split(',').filter(e => e != '');
         let angle = Math.atan2(pts[3] - pts[1], pts[2] - pts[0]);
         return angle;
@@ -92,13 +92,13 @@ Vue.component('graph', {
     },
 
     emitGraphAttributes() {
-      let graphOuterDiv = this.$refs.graph.querySelector(".main-svg").attributes;
-      this.$emit('update:width', graphOuterDiv.width.nodeValue)
-      this.$emit('update:height', graphOuterDiv.height.nodeValue)
+      let graphOuterDiv = this.$refs.graph.querySelector('.main-svg').attributes;
+      this.$emit('update:width', graphOuterDiv.width.nodeValue);
+      this.$emit('update:height', graphOuterDiv.height.nodeValue);
 
-      let graphInnerDiv = this.$refs.graph.querySelector(".xy").firstChild.attributes;
-      this.$emit('update:innerWidth', graphInnerDiv.width.nodeValue)
-      this.$emit('update:innerHeight', graphInnerDiv.height.nodeValue)
+      let graphInnerDiv = this.$refs.graph.querySelector('.xy').firstChild.attributes;
+      this.$emit('update:innerWidth', graphInnerDiv.width.nodeValue);
+      this.$emit('update:innerHeight', graphInnerDiv.height.nodeValue);
       this.$emit('update:referenceLineAngle', this.calculateAngle());
     }
 
@@ -112,7 +112,7 @@ Vue.component('graph', {
     }
 
     this.emitGraphAttributes();
-    this.$emit('update:mounted', true)
+    this.$emit('update:mounted', true);
 
   },
 
@@ -140,7 +140,6 @@ Vue.component('graph', {
       Plotly.Plots.resize(this.$refs.graph);
     },
 
-
   },
 
   data() {
@@ -149,13 +148,13 @@ Vue.component('graph', {
       yrange: [], // stores user selected yrange
       userSetRange: false, // determines whether to use user selected range
       traceIndices: [],
-    }
+    };
   }
 
-})
+});
 
 // global data
-let app = new Vue({
+window.app = new Vue({
 
   el: '#root',
 
@@ -220,7 +219,6 @@ let app = new Vue({
         this.doublingTime = doublingTime;
       }
 
-
     }
 
     window.addEventListener('keydown', e => {
@@ -234,15 +232,14 @@ let app = new Vue({
         this.day = Math.max(this.day - 1, this.minDay);
       }
 
-      else if ((e.key  == '+' || e.key == '=') && this.dates.length > 0) {
+      else if ((e.key == '+' || e.key == '=') && this.dates.length > 0) {
         this.paused = true;
-        this.day = Math.min(this.day + 1, this.dates.length)
+        this.day = Math.min(this.day + 1, this.dates.length);
       }
 
     });
 
   },
-
 
   watch: {
     selectedData() {
@@ -298,21 +295,21 @@ let app = new Vue({
     },
 
     myMax() { // https://stackoverflow.com/a/12957522
-      var par = []
+      var par = [];
       for (var i = 0; i < arguments.length; i++) {
-          if (!isNaN(arguments[i])) {
-              par.push(arguments[i]);
-          }
+        if (!isNaN(arguments[i])) {
+          par.push(arguments[i]);
+        }
       }
       return Math.max.apply(Math, par);
     },
 
     myMin() {
-      var par = []
+      var par = [];
       for (var i = 0; i < arguments.length; i++) {
-          if (!isNaN(arguments[i])) {
-              par.push(arguments[i]);
-          }
+        if (!isNaN(arguments[i])) {
+          par.push(arguments[i]);
+        }
       }
       return Math.min.apply(Math, par);
     },
@@ -322,15 +319,15 @@ let app = new Vue({
       if (selectedRegion != 'US') {
         let url;
         if (selectedData == 'Confirmed Cases') {
-         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
         } else if (selectedData == 'Reported Deaths') {
-         url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
+          url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
         } else {
           return;
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
       } else { // selectedRegion == 'US'
-        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases'
+        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases';
         const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
         Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
       }
@@ -346,17 +343,17 @@ let app = new Vue({
       countries = this.removeRepeats(countries);
 
       let grouped = [];
-      for (let country of countries){
+      for (let country of countries) {
 
         // filter data for this country (& exclude regions we're pulling to country level)
         // e.g. Mainland China numbers should not include Hong Kong & Macau, to avoid double counting
         let countryData = data.filter(e => e['Country/Region'] == country)
           .filter(e => !regionsToPullToCountryLevel.includes(e['Province/State']));
 
-        const row = {region: country}
+        const row = {region: country};
 
         for (let date of dates) {
-          let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a,b) => a+b);
+          let sum = countryData.map(e => parseInt(e[date]) || 0).reduce((a, b) => a + b);
           row[date] = sum;
         }
 
@@ -369,12 +366,12 @@ let app = new Vue({
 
     filterByCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Country/Region'] == selectedRegion)
-          .map(e => Object.assign({}, e, {region: e['Province/State']}));
+        .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     convertStateToCountry(data, dates, selectedRegion) {
       return data.filter(e => e['Province/State'] == selectedRegion)
-          .map(e => Object.assign({}, e, {region: e['Province/State']}));
+        .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
     processData(data, selectedRegion, updateSelectedCountries) {
@@ -382,7 +379,7 @@ let app = new Vue({
       this.dates = dates;
       this.day = this.dates.length;
 
-      let regionsToPullToCountryLevel = ['Hong Kong', 'Macau']
+      let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
       let grouped;
 
@@ -399,7 +396,7 @@ let app = new Vue({
 
       } else {
         grouped = this.filterByCountry(data, dates, selectedRegion)
-        .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
+          .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
       }
 
       let exclusions = ['Cruise Ship', 'Diamond Princess'];
@@ -411,15 +408,15 @@ let app = new Vue({
       };
 
       let covidData = [];
-      for (let row of grouped){
+      for (let row of grouped) {
 
         if (!exclusions.includes(row.region)) {
           const arr = [];
           for (let date of dates) {
             arr.push(row[date]);
           }
-          let slope = arr.map((e,i,a) => e - a[i - this.lookbackTime]);
-          let region = row.region
+          let slope = arr.map((e, i, a) => e - a[i - this.lookbackTime]);
+          let region = row.region;
 
           if (Object.keys(renames).includes(region)) {
             region = renames[region];
@@ -429,7 +426,7 @@ let app = new Vue({
           covidData.push({
             country: region,
             cases,
-            slope: slope.map((e,i) => arr[i] >= this.minCasesInCountry ? e : NaN),
+            slope: slope.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN),
             maxCases: this.myMax(...cases)
           });
 
@@ -441,9 +438,9 @@ let app = new Vue({
       this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
-          'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
-          'Hong Kong',            // Was previously included in China's numbers
-          'Canada', 'Australia']; // These appear in the region selector
+        'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
+        'Hong Kong',            // Was previously included in China's numbers
+        'Canada', 'Australia']; // These appear in the region selector
 
       // TODO: clean this logic up later
       // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
@@ -458,7 +455,7 @@ let app = new Vue({
     preprocessNYTData(data, type) {
       let recastData = {};
       data.forEach(e => {
-        let st = recastData[e.state]  = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'US', 'Lat': null, 'Long': null});
+        let st = recastData[e.state] = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'US', 'Lat': null, 'Long': null});
         st[fixNYTDate(e.date)] = parseInt(e[type]);
       });
       return Object.values(recastData);
@@ -475,7 +472,7 @@ let app = new Vue({
       }
 
       let [m, d, y] = date.split('/');
-      return new Date(Date.UTC(2000 + (+y), m-1, d)).toISOString().slice(0, 10);
+      return new Date(Date.UTC(2000 + (+y), m - 1, d)).toISOString().slice(0, 10);
     },
 
     dateToText(date) {
@@ -485,8 +482,8 @@ let app = new Vue({
 
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      let [m, d, y] = date.split('/');
-      return monthNames[m-1] + ' ' + d;
+      let [m, d] = date.split('/');
+      return monthNames[m - 1] + ' ' + d;
     },
 
     // TODO: clean up play/pause logic
@@ -498,20 +495,17 @@ let app = new Vue({
         }
 
         this.paused = false;
-        this.icon = 'icons/pause.svg';
         setTimeout(this.increment, 200);
 
       } else {
         this.paused = true;
-        this.icon = 'icons/play.svg';
       }
 
     },
 
     pause() {
-      if(! this.paused) {
+      if (!this.paused) {
         this.paused = true;
-        this.icon = 'icons/play.svg';
       }
     },
 
@@ -520,7 +514,6 @@ let app = new Vue({
       if (this.day == this.dates.length || this.minDay < 0) {
         this.day = this.dates.length;
         this.paused = true;
-        this.icon = 'icons/play.svg';
       }
       else if (this.day < this.dates.length) {
         if (!this.paused) {
@@ -572,7 +565,7 @@ let app = new Vue({
 
       for (let country of this.countries) {
         if (this.selectedCountries.includes(country)) {
-          if(Object.keys(renames).includes(country)) {
+          if (Object.keys(renames).includes(country)) {
             queryUrl.append('location', renames[country]);
           } else {
             queryUrl.append('location', country);
@@ -588,7 +581,7 @@ let app = new Vue({
 
       let url = baseUrl + '?' + queryUrl.toString();
 
-      window.history.replaceState( {} , 'Covid Trends', '?'+queryUrl.toString() );
+      window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
 
       this.copyToClipboard(url);
 
@@ -634,7 +627,7 @@ let app = new Vue({
 
     minDay() {
       let minDay = this.myMin(...(this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)).filter(x => x != -1)));
-      if (isFinite(minDay) && !isNaN(minDay)){
+      if (isFinite(minDay) && !isNaN(minDay)) {
         return minDay + 1;
       } else {
         return -1;
@@ -659,7 +652,7 @@ let app = new Vue({
 
     annotations() {
 
-     return [{
+      return [{
         visible: this.showTrendLine && this.doublingTime > 0,
         x: this.xAnnotation,
         y: this.yAnnotation,
@@ -672,21 +665,20 @@ let app = new Vue({
         showarrow: false,
         textangle: this.graphAttributes.referenceLineAngle * 180 / Math.PI,
         font: {
-                family: 'Open Sans, sans-serif',
-                color: 'black',
-                size: 14
-              },
+          family: 'Open Sans, sans-serif',
+          color: 'black',
+          size: 14
+        },
       }];
-
 
     },
 
     layout() {
       return {
-        title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 '+ this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
+        title: 'Trajectory of ' + this.selectedRegion + ' COVID-19 ' + this.selectedData + ' (' + this.formatDate(this.dates[this.day - 1]) + ')',
         showlegend: false,
         autorange: false,
-          xaxis: {
+        xaxis: {
           title: 'Total ' + this.selectedData,
           type: this.selectedScale == 'Logarithmic Scale' ? 'log' : 'linear',
           range: this.selectedScale == 'Logarithmic Scale' ? this.logxrange : this.linearxrange,
@@ -706,10 +698,10 @@ let app = new Vue({
         },
         hovermode: 'closest',
         font: {
-                family: 'Open Sans, sans-serif',
-                color: 'black',
-                size: 14
-              },
+          family: 'Open Sans, sans-serif',
+          color: 'black',
+          size: 14
+        },
         annotations: this.annotations
       };
     },
@@ -719,11 +711,11 @@ let app = new Vue({
       let showDailyMarkers = this.filteredCovidData.length <= 2;
 
       // draws grey lines (line plot for each location)
-      let trace1 = this.filteredCovidData.map((e,i) => ({
+      let trace1 = this.filteredCovidData.map((e, i) => ({
         x: e.cases.slice(0, this.day),
         y: e.slope.slice(0, this.day),
         name: e.country,
-        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date) ),
+        text: this.dates.map(date => e.country + '<br>' + this.formatDate(date)),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
         type: 'scatter',
         legendgroup: i,
@@ -734,13 +726,13 @@ let app = new Vue({
         line: {
           color: 'rgba(0,0,0,0.15)'
         },
-        hoverinfo:'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hoverinfo: 'x+y+text',
+        hovertemplate: '%{text}<br>Total ' + this.selectedData + ': %{x:,}<br>Weekly ' + this.selectedData + ': %{y:,}<extra></extra>',
       })
       );
 
       // draws red dots (most recent data for each location)
-      let trace2 = this.filteredCovidData.map((e,i) => ({
+      let trace2 = this.filteredCovidData.map((e, i) => ({
         x: [e.cases[this.day - 1]],
         y: [e.slope[this.day - 1]],
         text: e.country,
@@ -752,10 +744,9 @@ let app = new Vue({
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData +': %{x:,}<br>Weekly ' + this.selectedData +': %{y:,}<extra></extra>',
+        hovertemplate: '%{data.text}<br>Total ' + this.selectedData + ': %{x:,}<br>Weekly ' + this.selectedData + ': %{y:,}<extra></extra>',
 
-       })
-      );
+      }));
 
       if (this.showTrendLine && this.doublingTime > 0) {
         let cases = [1, 10000000];
@@ -779,7 +770,6 @@ let app = new Vue({
       } else {
         return [...trace1, ...trace2];
       }
-
 
     },
 
@@ -837,25 +827,25 @@ let app = new Vue({
     },
 
     logxrange() {
-      return [1, Math.ceil(Math.log10(1.5 * this.xmax))]
+      return [1, Math.ceil(Math.log10(1.5 * this.xmax))];
     },
 
     linearxrange() {
-      return [-0.49*Math.pow(10,Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
+      return [-0.49 * Math.pow(10, Math.floor(Math.log10(this.xmax))), Math.round(1.2 * this.xmax)];
     },
 
     logyrange() {
 
       if (this.ymin < 10) { // shift ymin on log scale if fewer than 10 cases
-        return [0, Math.ceil(Math.log10(1.5 * this.ymax))]
+        return [0, Math.ceil(Math.log10(1.5 * this.ymax))];
       } else {
-        return [1, Math.ceil(Math.log10(1.5 * this.ymax))]
+        return [1, Math.ceil(Math.log10(1.5 * this.ymax))];
       }
     },
 
     linearyrange() {
       let ymax = Math.max(...this.filteredSlope, 50);
-      return [-Math.pow(10,Math.floor(Math.log10(ymax))-2), Math.round(1.05 * ymax)];
+      return [-Math.pow(10, Math.floor(Math.log10(ymax)) - 2), Math.round(1.05 * ymax)];
     },
 
     xAnnotation() {
@@ -917,8 +907,6 @@ let app = new Vue({
 
     lookbackTime: 7,
 
-    icon: 'icons/play.svg',
-
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
     selectedScale: 'Logarithmic Scale',
@@ -962,4 +950,4 @@ let app = new Vue({
 
   }
 
-})
+});

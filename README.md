@@ -1,6 +1,6 @@
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is an [interactive graph / animation](https://aatishb.com/covidtrends/) that charts the trajectory of global COVID-19 cases.
@@ -34,7 +34,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://www.professormoose.com"><img src="https://avatars0.githubusercontent.com/u/22178?v=4" width="100px;" alt=""/><br /><sub><b>Mustafa "Moose" Paksoy</b></sub></a><br /><a href="#maintenance-mustpax" title="Maintenance">🚧</a></td>
     <td align="center"><a href="http://www.youtube.com/minutephysics"><img src="https://static1.squarespace.com/static/57c4aa39725e25ba4eb3ace1/t/57c4aeac20099e3efb1bf1c9/1583766666685/?format=1500w" width="100px;" alt=""/><br /><sub><b>Henry Reich</b></sub></a><br /><a href="#ideas" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/byteit101"><img src="https://avatars0.githubusercontent.com/u/577344?v=4" width="100px;" alt=""/><br /><sub><b>Patrick Plenefisch</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=byteit101" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/edg2s"><img src="https://avatars3.githubusercontent.com/u/180672?v=4" width="100px;" alt=""/><br /><sub><b>Ed S</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=edg2s" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/edg2s"><img src="https://avatars3.githubusercontent.com/u/180672?v=4" width="100px;" alt=""/><br /><sub><b>Ed S</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=edg2s" title="Code">💻</a> <a href="#tool-edg2s" title="Tools">🔧</a></td>
     <td align="center"><a href="https://github.com/exclipy"><img src="https://avatars1.githubusercontent.com/u/508799?v=4" width="100px;" alt=""/><br /><sub><b>exclipy</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=exclipy" title="Code">💻</a></td>
     <td align="center"><a href="https://aufrecht.org"><img src="https://avatars3.githubusercontent.com/u/43078751?v=4" width="100px;" alt=""/><br /><sub><b>S Aufrecht</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=saufrecht" title="Documentation">📖</a></td>
   </tr>
@@ -59,6 +59,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/archiewood"><img src="https://avatars0.githubusercontent.com/u/58074498?v=4" width="100px;" alt=""/><br /><sub><b>archiewood</b></sub></a><br /><a href="#ideas-archiewood" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://reaganc.bitbucket.io"><img src="https://avatars1.githubusercontent.com/u/14113814?v=4" width="100px;" alt=""/><br /><sub><b>Reagan Chandramohan</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/issues?q=author%3Areaganch" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/CharsiBabu"><img src="https://avatars2.githubusercontent.com/u/4214491?v=4" width="100px;" alt=""/><br /><sub><b>CharsiBabu</b></sub></a><br /><a href="https://github.com/aatishb/covidtrends/commits?author=CharsiBabu" title="Code">💻</a></td>
   </tr>
 </table>
 
