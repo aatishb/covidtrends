@@ -583,8 +583,6 @@ window.app = new Vue({
 
       window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
 
-      this.copyToClipboard(url);
-
     },
 
     // code to copy a string to the clipboard
