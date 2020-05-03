@@ -150,7 +150,7 @@
 
           <ul>
             <li v-for="country in visibleCountries">
-              <input type="checkbox" :id="country" :value="country" v-model="selectedCountries">
+              <input @change="createURL" type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
             </li>
           </ul>
