@@ -573,8 +573,16 @@ window.app = new Vue({
       };
       
       // check if the list of countries is identical to the current default
-      if (this.selectedCountries === this.defaultCountries) {
+      if (this.selectedCountries.length === this.defaultCountries.length) {
         defaultTag = true;
+        for (let country of this.countries) {
+          if (this.selectedCountries.includes(country)) {
+            if (!this.defaultCountries.includes(country)) {
+              defaultTag = false;
+              break;
+            }
+          }
+        }
       } else {
         defaultTag = false;
       }
