@@ -116,7 +116,7 @@
             </option>
           </select>
           <label for="selectedScale">Select Scale</label>
-          <select @change="createURLFromSelect" id="selectedScale" v-model="selectedScale" @mousedown="pause">
+          <select @change="createURLFromCheckbox" id="selectedScale" v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
             </option>
