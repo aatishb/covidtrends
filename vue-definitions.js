@@ -447,6 +447,7 @@ window.app = new Vue({
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
       if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+        this.defaultCountries = this.selectedCountries // Used for createURL default check
       }
 
       this.firstLoad = false;
@@ -571,9 +572,19 @@ window.app = new Vue({
         'China (Mainland)': 'China'
       };
       
-      // only list all countries if a checkbox was changed
-      // this does not solve edgecases (default countries but changed labels/line) nor detect if the defaults were reached
-      if (checkbox) {
+      // check if the list of countries is identical to the current default
+      defaultTag = true;
+      for (let country of this.countries) {
+        if (this.selectedCountries.includes(country)) {
+          if (!this.defaultCountries.includes(country)) {
+            defaultTag = false;
+            break;
+          }
+        }
+      }
+      
+      // only list all countries if a checkbox was changed and if the list of countries isn't in default
+      if (checkbox && !defaultTag) {
         for (let country of this.countries) {
           if (this.selectedCountries.includes(country)) {
             if (Object.keys(renames).includes(country)) {
@@ -915,6 +926,8 @@ window.app = new Vue({
     doublingTime: 2,
 
     selectedCountries: [],
+    
+    defaultCountries: [], // Used for createURL default check
 
     searchField: '',
 
