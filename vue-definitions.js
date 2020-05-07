@@ -571,6 +571,26 @@ window.app = new Vue({
       let renames = {
         'China (Mainland)': 'China'
       };
+            
+      if (!this.showTrendLine) {
+        queryUrl.append('trendline', this.showTrendLine);
+      } else if (this.doublingTime != 2) {
+        queryUrl.append('doublingtime', this.doublingTime);
+      }
+      
+      // check if the list of countries has all or none of the countries
+      // if all or none of the countries have been selected, then the later checks don't need to be done
+      if (this.selectedCountries.length === this.countries.length) {
+        queryUrl.append('select', 'all');
+        let url = baseUrl + '?' + queryUrl.toString();
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        return;
+      } else if (this.selectedCountries.length === 0) {
+        queryUrl.append('select', 'none');
+        let url = baseUrl + '?' + queryUrl.toString();
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        return;
+      }
       
       // check if the list of countries is identical to the current default
       if (this.selectedCountries.length === this.defaultCountries.length) {
@@ -599,13 +619,7 @@ window.app = new Vue({
           }
         }
       }
-
-      if (!this.showTrendLine) {
-        queryUrl.append('trendline', this.showTrendLine);
-      } else if (this.doublingTime != 2) {
-        queryUrl.append('doublingtime', this.doublingTime);
-      }
-
+      
       let url = baseUrl + '?' + queryUrl.toString();
 
       window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
