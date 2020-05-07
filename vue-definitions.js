@@ -964,6 +964,8 @@ window.app = new Vue({
     selectedCountries: [],
     
     defaultCountries: [], // Used for createURL default check
+    
+    mySelect: '',
 
     searchField: '',
 
