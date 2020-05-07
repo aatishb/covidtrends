@@ -593,8 +593,9 @@ window.app = new Vue({
       }
       
       // check if the list of countries is identical to the current default
+      let defaultTag;
       if (this.selectedCountries.length === this.defaultCountries.length) {
-        let defaultTag = true;
+        defaultTag = true;
         for (let country of this.countries) {
           if (this.selectedCountries.includes(country)) {
             if (!this.defaultCountries.includes(country)) {
@@ -604,7 +605,7 @@ window.app = new Vue({
           }
         }
       } else {
-        let defaultTag = false;
+        defaultTag = false;
       }
 
       // only list all countries if a checkbox was changed and if the list of countries isn't in default
