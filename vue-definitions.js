@@ -218,6 +218,10 @@ window.app = new Vue({
         let doublingTime = urlParameters.get('doublingtime');
         this.doublingTime = doublingTime;
       }
+      
+      if (urlParameters.has('select')) {
+      this.mySelect = urlParameters.get('select').toLowerCase();
+      }
 
     }
 
@@ -447,7 +451,16 @@ window.app = new Vue({
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
       if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+        
         this.defaultCountries = this.selectedCountries // Used for createURL default check
+        
+        if (this.mySelect == 'all') {
+        this.selectedCountries = this.countries;
+        } else if (this.mySelect == 'none') {
+        this.selectedCountries = [];
+        }
+        this.mySelect = '';
+      
       }
 
       this.firstLoad = false;
