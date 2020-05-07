@@ -531,10 +531,12 @@ window.app = new Vue({
 
     selectAll() {
       this.selectedCountries = this.countries;
+      this.createURL(false);
     },
 
     deselectAll() {
       this.selectedCountries = [];
+      this.createURL(false);
     },
 
     toggleHide() {
