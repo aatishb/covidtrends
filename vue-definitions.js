@@ -556,15 +556,15 @@ window.app = new Vue({
       this.isHidden = !this.isHidden;
     },
 
-    createURLFromCheckbox() {
+    createURLFromChange() {
       this.createURL(true);
     },
     
-    createURLFromSelect() {
+    createURLFromRegion() {
       this.createURL(false);
     },
     
-    createURL(checkbox) {
+    createURL(change) {
 
       let baseUrl = window.location.href.split('?')[0];
 
@@ -595,7 +595,7 @@ window.app = new Vue({
       
       // check if the list of countries has all or none of the countries
       // if all or none of the countries have been selected, then the later checks don't need to be done
-      if (checkbox) {
+      if (change) {
         if (this.selectedCountries.length === this.countries.length) {
           queryUrl.append('select', 'all');
           let url = baseUrl + '?' + queryUrl.toString();
@@ -626,7 +626,7 @@ window.app = new Vue({
       }
 
       // only list all countries if a checkbox was changed and if the list of countries isn't in default
-      if (checkbox && !defaultTag) {
+      if (change && !defaultTag) {
         for (let country of this.countries) {
           if (this.selectedCountries.includes(country)) {
             if (Object.keys(renames).includes(country)) {
