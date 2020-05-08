@@ -214,7 +214,8 @@ window.app = new Vue({
       if (urlParameters.has('trendline')) {
         let showTrendLine = urlParameters.get('trendline');
         this.showTrendLine = (showTrendLine == 'true');
-      } else if (urlParameters.has('doublingtime')) {
+      }      
+      if (urlParameters.has('doublingtime')) {
         let doublingTime = urlParameters.get('doublingtime');
         this.doublingTime = doublingTime;
       }
@@ -589,7 +590,8 @@ window.app = new Vue({
             
       if (!this.showTrendLine) {
         queryUrl.append('trendline', this.showTrendLine);
-      } else if (this.doublingTime != 2) {
+      }
+      if (this.doublingTime != 2) {
         queryUrl.append('doublingtime', this.doublingTime);
       }
       
