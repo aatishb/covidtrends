@@ -82,7 +82,7 @@
           </div>
 
           <div class="navelement">
-            <select v-model="selectedScale" @mousedown="pause" aria-Label="Select Scale">
+            <select @change="createURLFromChange" v-model="selectedScale" @mousedown="pause" aria-Label="Select Scale">
               <option v-for="s in scale" v-bind:value="s">
                 {{ s }}
               </option>
