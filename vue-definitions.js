@@ -374,10 +374,30 @@ window.app = new Vue({
         .map(e => Object.assign({}, e, {region: e['Province/State']}));
     },
 
+    // returns a function that takes two arrays and adds the corresponding places together for list of dates
+    addNumericRows(dates) {
+      return function(row1, row2) {
+        newRow = {}
+        for(let date of dates) { 
+          newRow[date] = Number(row1[date]) + Number(row2[date]);
+        }
+        return newRow;
+      }
+    },
+
+    // add a row to the end of the data that sums global data
+    addRowForWorld(data, dates) {
+      newRow = data.reduce(this.addNumericRows(dates));
+      newRow['Country/Region'] = 'World';
+      data.push(newRow); 
+    },
+
     processData(data, selectedRegion, updateSelectedCountries) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
       this.day = this.dates.length;
+
+      this.addRowForWorld(data, dates)
 
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
@@ -436,7 +456,7 @@ window.app = new Vue({
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
       this.visibleCountries = this.countries;
-      const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
+      const topCountries = this.covidData.filter((a) => a.country != 'World').sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
         'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
         'Hong Kong',            // Was previously included in China's numbers
