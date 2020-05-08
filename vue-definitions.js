@@ -387,7 +387,7 @@ window.app = new Vue({
 
     // add a row to the end of the data that sums global data
     addRowForWorld(data, dates) {
-      newRow = data.reduce(this.addNumericRows(dates));
+      var newRow = data.reduce(this.addNumericRows(dates));
       newRow['Country/Region'] = 'World';
       data.push(newRow); 
     },
