@@ -377,12 +377,12 @@ window.app = new Vue({
     // returns a function that takes two arrays and adds the corresponding places together for list of dates
     addNumericRows(dates) {
       return function(row1, row2) {
-        newRow = {}
-        for(let date of dates) { 
+        var newRow = {};
+        for (let date of dates) { 
           newRow[date] = Number(row1[date]) + Number(row2[date]);
         }
         return newRow;
-      }
+      };
     },
 
     // add a row to the end of the data that sums global data
@@ -397,7 +397,7 @@ window.app = new Vue({
       this.dates = dates;
       this.day = this.dates.length;
 
-      this.addRowForWorld(data, dates)
+      this.addRowForWorld(data, dates);
 
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
