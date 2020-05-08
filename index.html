@@ -104,28 +104,28 @@
         <div>
           <h2>Customize</h2>
           <label for="selectedData">Select Parameter</label>
-          <select @change="createURLFromSelect" id="selectedData" v-model="selectedData" @mousedown="pause">
+          <select @change="createURLFromChange" id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
             </option>
           </select>
           <label for="selectedRegion">Select Region</label>
-          <select @change="createURLFromSelect" id="selectedRegion" v-model="selectedRegion" @mousedown="pause">
+          <select @change="createURLFromRegion" id="selectedRegion" v-model="selectedRegion" @mousedown="pause">
             <option v-for="s in regions" v-bind:value="s">
               {{ s }}
             </option>
           </select>
           <label for="selectedScale">Select Scale</label>
-          <select @change="createURLFromCheckbox" id="selectedScale" v-model="selectedScale" @mousedown="pause">
+          <select @change="createURLFromChange" id="selectedScale" v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
             </option>
           </select>
-          <input @change="createURLFromCheckbox" type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
+          <input @change="createURLFromChange" type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
           <label for="showLabels">Show Labels</label>
 
           <div>
-            <input @change="createURLFromCheckbox" type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
+            <input @change="createURLFromChange" type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
             <label for="showTrendLine">Show
               <input type="number" min="1" step="1" style="width: 3rem; padding: 0rem; font-size: inherit;" v-model.number="doublingTime" @focus="pause"  aria-label="Doubling Time in Days">
                Day Doubling Time</label>
@@ -150,7 +150,7 @@
 
           <ul>
             <li v-for="country in visibleCountries">
-              <input @change="createURLFromCheckbox" type="checkbox" :id="country" :value="country" v-model="selectedCountries">
+              <input @change="createURLFromChange" type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
             </li>
           </ul>
