@@ -220,7 +220,7 @@ window.app = new Vue({
       }
       
       if (urlParameters.has('select')) {
-      this.mySelect = urlParameters.get('select').toLowerCase();
+        this.mySelect = urlParameters.get('select').toLowerCase();
       }
 
     }
@@ -452,12 +452,12 @@ window.app = new Vue({
       if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
         
-        this.defaultCountries = this.selectedCountries // Used for createURL default check
+        this.defaultCountries = this.selectedCountries; // Used for createURL default check
         
         if (this.mySelect == 'all') {
-        this.selectedCountries = this.countries;
+          this.selectedCountries = this.countries;
         } else if (this.mySelect == 'none') {
-        this.selectedCountries = [];
+          this.selectedCountries = [];
         }
         this.mySelect = '';
       
@@ -590,12 +590,10 @@ window.app = new Vue({
       // if all or none of the countries have been selected, then the later checks don't need to be done
       if (this.selectedCountries.length === this.countries.length) {
         queryUrl.append('select', 'all');
-        let url = baseUrl + '?' + queryUrl.toString();
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
         return;
       } else if (this.selectedCountries.length === 0) {
         queryUrl.append('select', 'none');
-        let url = baseUrl + '?' + queryUrl.toString();
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
         return;
       }
@@ -630,8 +628,6 @@ window.app = new Vue({
         }
       }
       
-      let url = baseUrl + '?' + queryUrl.toString();
-
       window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
 
     },
