@@ -82,7 +82,7 @@
           </div>
 
           <div class="navelement">
-            <select @change="createURLFromChange" v-model="selectedScale" @mousedown="pause" aria-Label="Select Scale">
+            <select @change="createURL" v-model="selectedScale" @mousedown="pause" aria-Label="Select Scale">
               <option v-for="s in scale" v-bind:value="s">
                 {{ s }}
               </option>
@@ -104,30 +104,30 @@
         <div>
           <h2>Customize</h2>
           <label for="selectedData">Select Parameter</label>
-          <select @change="createURLFromRegion" id="selectedData" v-model="selectedData" @mousedown="pause">
+          <select id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
               {{ d }}
             </option>
           </select>
           <label for="selectedRegion">Select Region</label>
-          <select @change="createURLFromRegion" id="selectedRegion" v-model="selectedRegion" @mousedown="pause">
+          <select id="selectedRegion" v-model="selectedRegion" @mousedown="pause">
             <option v-for="s in regions" v-bind:value="s">
               {{ s }}
             </option>
           </select>
           <label for="selectedScale">Select Scale</label>
-          <select @change="createURLFromChange" id="selectedScale" v-model="selectedScale" @mousedown="pause">
+          <select @change="createURL" id="selectedScale" v-model="selectedScale" @mousedown="pause">
             <option v-for="s in scale" v-bind:value="s">
               {{ s }}
             </option>
           </select>
-          <input @change="createURLFromChange" type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
+          <input @change="createURL" type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
           <label for="showLabels">Show Labels</label>
 
           <div>
-            <input @change="createURLFromChange" type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
+            <input @change="createURL" type="checkbox" style="margin-top: 0.75rem;" id="showTrendLine" v-model="showTrendLine">
             <label for="showTrendLine">Show
-              <input @change="createURLFromChange" type="number" min="1" step="1" style="width: 3rem; padding: 0rem; font-size: inherit;" v-model.number="doublingTime" @focus="pause"  aria-label="Doubling Time in Days">
+              <input @change="createURL" type="number" min="1" step="1" style="width: 3rem; padding: 0rem; font-size: inherit;" v-model.number="doublingTime" @focus="pause"  aria-label="Doubling Time in Days">
                Day Doubling Time</label>
           </div>
 
@@ -150,7 +150,7 @@
 
           <ul>
             <li v-for="country in visibleCountries">
-              <input @change="createURLFromChange" type="checkbox" :id="country" :value="country" v-model="selectedCountries">
+              <input @change="createURL" type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
             </li>
           </ul>
