@@ -625,7 +625,7 @@ window.app = new Vue({
         }
       }
       
-      if (queryUrl.toString() === "") {
+      if (queryUrl.toString() === '') {
         window.history.replaceState({}, 'Covid Trends', location.pathname);
       } else {
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
