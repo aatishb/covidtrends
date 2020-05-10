@@ -596,7 +596,6 @@ window.app = new Vue({
         return;
       }
       
-      
       // check if the list of countries is identical to the current default
       let defaultTag;
       if (this.selectedCountries.length === this.defaultCountries.length) {
@@ -613,7 +612,7 @@ window.app = new Vue({
         defaultTag = false;
       }
 
-      // only list all countries if a checkbox was changed and if the list of countries isn't in default
+      // only list all countries if the list of countries isn't in default
       if (!defaultTag) {
         for (let country of this.countries) {
           if (this.selectedCountries.includes(country)) {
@@ -626,7 +625,11 @@ window.app = new Vue({
         }
       }
       
-      window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+      if (queryUrl.toString() === "") {
+        window.history.replaceState({}, 'Covid Trends', location.pathname);
+      } else {
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+      }
 
     },
 
