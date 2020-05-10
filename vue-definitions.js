@@ -464,6 +464,7 @@ window.app = new Vue({
       }
 
       this.firstLoad = false;
+      this.createURLFromChange();
     },
 
     preprocessNYTData(data, type) {
