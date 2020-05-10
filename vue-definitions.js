@@ -558,9 +558,7 @@ window.app = new Vue({
     },
     
     createURL() {
-
-      let baseUrl = window.location.href.split('?')[0];
-
+      
       let queryUrl = new URLSearchParams();
 
       if (this.selectedScale == 'Linear Scale') {
