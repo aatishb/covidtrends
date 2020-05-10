@@ -464,7 +464,7 @@ window.app = new Vue({
       }
 
       this.firstLoad = false;
-      this.createURLFromChange();
+      this.createURL();
     },
 
     preprocessNYTData(data, type) {
@@ -545,27 +545,19 @@ window.app = new Vue({
 
     selectAll() {
       this.selectedCountries = this.countries;
-      this.createURL(true);
+      this.createURL();
     },
 
     deselectAll() {
       this.selectedCountries = [];
-      this.createURL(true);
+      this.createURL();
     },
 
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
-
-    createURLFromChange() {
-      this.createURL(true);
-    },
     
-    createURLFromRegion() {
-      this.createURL(false);
-    },
-    
-    createURL(change) {
+    createURL() {
 
       let baseUrl = window.location.href.split('?')[0];
 
@@ -596,19 +588,18 @@ window.app = new Vue({
       
       // check if the list of countries has all or none of the countries
       // if all or none of the countries have been selected, then the later checks don't need to be done
-      if (change) {
-        if (this.selectedCountries.length === this.countries.length) {
-          queryUrl.append('select', 'all');
-          let url = baseUrl + '?' + queryUrl.toString();
-          window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
-          return;
-        } else if (this.selectedCountries.length === 0) {
-          queryUrl.append('select', 'none');
-          let url = baseUrl + '?' + queryUrl.toString();
-          window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
-          return;
-        }
+      if (this.selectedCountries.length === this.countries.length) {
+        queryUrl.append('select', 'all');
+        let url = baseUrl + '?' + queryUrl.toString();
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        return;
+      } else if (this.selectedCountries.length === 0) {
+        queryUrl.append('select', 'none');
+        let url = baseUrl + '?' + queryUrl.toString();
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        return;
       }
+      
       
       // check if the list of countries is identical to the current default
       let defaultTag;
@@ -627,7 +618,7 @@ window.app = new Vue({
       }
 
       // only list all countries if a checkbox was changed and if the list of countries isn't in default
-      if (change && !defaultTag) {
+      if (!defaultTag) {
         for (let country of this.countries) {
           if (this.selectedCountries.includes(country)) {
             if (Object.keys(renames).includes(country)) {
