@@ -586,12 +586,28 @@ window.app = new Vue({
       
       // check if the list of countries has all or none of the countries
       // if all or none of the countries have been selected, then the later checks don't need to be done
-      if (this.selectedCountries.length === this.countries.length) {
-        queryUrl.append('select', 'all');
+      let noneTag = true;
+      for (let country of this.countries) {
+        if (this.selectedCountries.includes(country)) {
+          noneTag = false;
+          break;
+        }
+      }
+      if (noneTag) {
+        queryUrl.append('select', 'none');
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
         return;
-      } else if (this.selectedCountries.length === 0) {
-        queryUrl.append('select', 'none');
+      }
+      
+      let allTag = true;
+      for (let country of this.countries) {
+        if (!this.selectedCountries.includes(country)) {
+          allTag = false;
+          break;
+        }
+      }
+      if (allTag) {
+        queryUrl.append('select', 'all');
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
         return;
       }
