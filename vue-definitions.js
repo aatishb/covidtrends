@@ -218,6 +218,10 @@ window.app = new Vue({
         let doublingTime = urlParameters.get('doublingtime');
         this.doublingTime = doublingTime;
       }
+      
+      if (urlParameters.has('select')) {
+        this.mySelect = urlParameters.get('select').toLowerCase();
+      }
 
     }
 
@@ -447,9 +451,20 @@ window.app = new Vue({
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
       if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+        
+        this.defaultCountries = this.selectedCountries; // Used for createURL default check
+        
+        if (this.mySelect == 'all') {
+          this.selectedCountries = this.countries;
+        } else if (this.mySelect == 'none') {
+          this.selectedCountries = [];
+        }
+        this.mySelect = '';
+      
       }
 
       this.firstLoad = false;
+      this.createURL();
     },
 
     preprocessNYTData(data, type) {
@@ -530,20 +545,20 @@ window.app = new Vue({
 
     selectAll() {
       this.selectedCountries = this.countries;
+      this.createURL();
     },
 
     deselectAll() {
       this.selectedCountries = [];
+      this.createURL();
     },
 
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
-
+    
     createURL() {
-
-      let baseUrl = window.location.href.split('?')[0];
-
+      
       let queryUrl = new URLSearchParams();
 
       if (this.selectedScale == 'Linear Scale') {
@@ -562,54 +577,76 @@ window.app = new Vue({
       let renames = {
         'China (Mainland)': 'China'
       };
-
-      for (let country of this.countries) {
-        if (this.selectedCountries.includes(country)) {
-          if (Object.keys(renames).includes(country)) {
-            queryUrl.append('location', renames[country]);
-          } else {
-            queryUrl.append('location', country);
-          }
-        }
-      }
-
+            
       if (!this.showTrendLine) {
         queryUrl.append('trendline', this.showTrendLine);
       } else if (this.doublingTime != 2) {
         queryUrl.append('doublingtime', this.doublingTime);
       }
-
-      let url = baseUrl + '?' + queryUrl.toString();
-
-      window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
-
-      this.copyToClipboard(url);
-
-    },
-
-    // code to copy a string to the clipboard
-    // from https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f
-    copyToClipboard(str) {
-      const el = document.createElement('textarea');  // Create a <textarea> element
-      el.value = str;                                 // Set its value to the string that you want copied
-      el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
-      el.style.position = 'absolute';
-      el.style.left = '-9999px';                      // Move outside the screen to make it invisible
-      document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
-      const selected =
-        document.getSelection().rangeCount > 0        // Check if there is any content selected previously
-          ? document.getSelection().getRangeAt(0)     // Store selection if found
-          : false;                                    // Mark as false to know no selection existed before
-      el.select();                                    // Select the <textarea> content
-      document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
-      document.body.removeChild(el);                  // Remove the <textarea> element
-      if (selected) {                                 // If a selection existed before copying
-        document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
-        document.getSelection().addRange(selected);   // Restore the original selection
+      
+      // check if the list of countries has all or none of the countries
+      // if all or none of the countries have been selected, then the later checks don't need to be done
+      let noneTag = true;
+      for (let country of this.countries) {
+        if (this.selectedCountries.includes(country)) {
+          noneTag = false;
+          break;
+        }
+      }
+      if (noneTag) {
+        queryUrl.append('select', 'none');
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        return;
+      }
+      
+      let allTag = true;
+      for (let country of this.countries) {
+        if (!this.selectedCountries.includes(country)) {
+          allTag = false;
+          break;
+        }
+      }
+      if (allTag) {
+        queryUrl.append('select', 'all');
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        return;
+      }
+      
+      // check if the list of countries is identical to the current default
+      let defaultTag;
+      if (this.selectedCountries.length === this.defaultCountries.length) {
+        defaultTag = true;
+        for (let country of this.countries) {
+          if (this.selectedCountries.includes(country)) {
+            if (!this.defaultCountries.includes(country)) {
+              defaultTag = false;
+              break;
+            }
+          }
+        }
+      } else {
+        defaultTag = false;
       }
 
-      this.copied = true;
-      setTimeout(() => this.copied = false, 2500);
+      // only list all countries if the list of countries isn't in default
+      if (!defaultTag) {
+        for (let country of this.countries) {
+          if (this.selectedCountries.includes(country)) {
+            if (Object.keys(renames).includes(country)) {
+              queryUrl.append('location', renames[country]);
+            } else {
+              queryUrl.append('location', country);
+            }
+          }
+        }
+      }
+      
+      if (queryUrl.toString() === '') {
+        window.history.replaceState({}, 'Covid Trends', location.pathname);
+      } else {
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+      }
+
     },
 
     // reference line for exponential growth with a given doubling time
@@ -930,12 +967,14 @@ window.app = new Vue({
     doublingTime: 2,
 
     selectedCountries: [],
+    
+    defaultCountries: [], // Used for createURL default check
+    
+    mySelect: '',
 
     searchField: '',
 
     autoplay: true,
-
-    copied: false,
 
     firstLoad: true,
 
