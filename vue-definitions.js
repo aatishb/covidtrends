@@ -574,9 +574,7 @@ window.app = new Vue({
       }
 
       // since this rename came later, use the old name for URLs to avoid breaking existing URLs
-      let renames = {
-        'China (Mainland)': 'China'
-      };
+      let renames = {'China (Mainland)': 'China'};
             
       if (!this.showTrendLine) {
         queryUrl.append('trendline', this.showTrendLine);
@@ -587,27 +585,29 @@ window.app = new Vue({
       }
 
       // check if no countries selected
-      if (this.selectedCountries.length == 0) {
+      // edge case: since selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths), we can't simply check if selectedCountries is empty
+      // so instead we check if the countries list does not include any of the selected countries
+      if (!this.countries.some(country => this.selectedCountries.includes(country))) {
         queryUrl.append('select', 'none');
       } 
 
       // check if all countries selected
-      // since selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths), we can't just compare array contents
-      // so instead we check if the countries list is a subset of selectedCountries
-      else if (this.countries.every(e => this.selectedCountries.includes(e))) {
+      // edge case: since selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths), we can't simply compare array contents
+      // so instead we check if the countries list is a proper subset of selectedCountries
+      else if (this.countries.every(country => this.selectedCountries.includes(country))) {
         queryUrl.append('select', 'all');
       } 
 
       // else check if selection is different from default countries
       else if (JSON.stringify(this.selectedCountries.sort()) !== JSON.stringify(this.defaultCountries)) {
-        // append country list to query string
-        for (let country of this.selectedCountries) {
-          if (Object.keys(renames).includes(country)) {
-            queryUrl.append('location', renames[country]);
-          } else {
-            queryUrl.append('location', country);
-          }
-        }
+
+        // only append to URL the selected countries that are also in the currently displayed country list
+        // this is done because of the edge case where selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths)
+        let countriesToAppendToUrl = this.selectedCountries.filter(e => this.countries.includes(e));
+
+        // apply renames and append to queryUrl
+        countriesToAppendToUrl = countriesToAppendToUrl.map(country => Object.keys(renames).includes(country) ? renames[country] : country);
+        countriesToAppendToUrl.forEach(country => queryUrl.append('location', country));
       }
 
       if (queryUrl.toString() == '') {
