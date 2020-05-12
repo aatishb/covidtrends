@@ -586,30 +586,26 @@ window.app = new Vue({
         queryUrl.append('doublingtime', this.doublingTime);
       }
 
-      // used to compare against selected countries list      
-      let sortedSelectedCountries = JSON.stringify(this.selectedCountries.sort());
-
       // check if no countries selected
       if (this.selectedCountries.length == 0) {
         queryUrl.append('select', 'none');
       } 
 
+      // check if all countries selected
+      // since selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths), we can't just compare array contents
+      // so instead we check if the countries list is a subset of selectedCountries
+      else if (this.countries.every(e => this.selectedCountries.includes(e))) {
+        queryUrl.append('select', 'all');
+      } 
+
       // else check if selection is different from default countries
-      else if (sortedSelectedCountries !== JSON.stringify(this.defaultCountries)) {
-
-        // check if all countries selected
-        if (sortedSelectedCountries == JSON.stringify(this.countries)) {
-          queryUrl.append('select', 'all');
-        } 
-
-        // else append country list to query string
-        else {
-          for (let country of this.selectedCountries) {
-            if (Object.keys(renames).includes(country)) {
-              queryUrl.append('location', renames[country]);
-            } else {
-              queryUrl.append('location', country);
-            }
+      else if (JSON.stringify(this.selectedCountries.sort()) !== JSON.stringify(this.defaultCountries)) {
+        // append country list to query string
+        for (let country of this.selectedCountries) {
+          if (Object.keys(renames).includes(country)) {
+            queryUrl.append('location', renames[country]);
+          } else {
+            queryUrl.append('location', country);
           }
         }
       }
