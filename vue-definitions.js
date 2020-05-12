@@ -614,8 +614,9 @@ window.app = new Vue({
         }
       }
 
-      // only add query string if not empty      
-      if (queryUrl.toString() !== '') {
+      if (queryUrl.toString() == '') {
+        window.history.replaceState({}, 'Covid Trends', location.pathname);
+      } else {
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
       }
 
