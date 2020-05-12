@@ -592,7 +592,6 @@ window.app = new Vue({
       // check if no countries selected
       if (this.selectedCountries.length == 0) {
         queryUrl.append('select', 'none');
-        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
       } 
 
       // else check if selection is different from default countries
@@ -601,7 +600,6 @@ window.app = new Vue({
         // check if all countries selected
         if (sortedSelectedCountries == JSON.stringify(this.countries)) {
           queryUrl.append('select', 'all');
-          window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
         } 
 
         // else append country list to query string
