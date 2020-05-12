@@ -580,58 +580,33 @@ window.app = new Vue({
             
       if (!this.showTrendLine) {
         queryUrl.append('trendline', this.showTrendLine);
-      } else if (this.doublingTime != 2) {
+      } 
+
+      else if (this.doublingTime != 2) {
         queryUrl.append('doublingtime', this.doublingTime);
       }
-      
-      // check if the list of countries has all or none of the countries
-      // if all or none of the countries have been selected, then the later checks don't need to be done
-      let noneTag = true;
-      for (let country of this.countries) {
-        if (this.selectedCountries.includes(country)) {
-          noneTag = false;
-          break;
-        }
-      }
-      if (noneTag) {
+
+      // used to compare against selected countries list      
+      let sortedSelectedCountries = JSON.stringify(this.selectedCountries.sort());
+
+      // check if no countries selected
+      if (this.selectedCountries.length == 0) {
         queryUrl.append('select', 'none');
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
-        return;
-      }
-      
-      let allTag = true;
-      for (let country of this.countries) {
-        if (!this.selectedCountries.includes(country)) {
-          allTag = false;
-          break;
-        }
-      }
-      if (allTag) {
-        queryUrl.append('select', 'all');
-        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
-        return;
-      }
-      
-      // check if the list of countries is identical to the current default
-      let defaultTag;
-      if (this.selectedCountries.length === this.defaultCountries.length) {
-        defaultTag = true;
-        for (let country of this.countries) {
-          if (this.selectedCountries.includes(country)) {
-            if (!this.defaultCountries.includes(country)) {
-              defaultTag = false;
-              break;
-            }
-          }
-        }
-      } else {
-        defaultTag = false;
-      }
+      } 
 
-      // only list all countries if the list of countries isn't in default
-      if (!defaultTag) {
-        for (let country of this.countries) {
-          if (this.selectedCountries.includes(country)) {
+      // else check if selection is different from default countries
+      else if (sortedSelectedCountries !== JSON.stringify(this.defaultCountries)) {
+
+        // check if all countries selected
+        if (sortedSelectedCountries == JSON.stringify(this.countries)) {
+          queryUrl.append('select', 'all');
+          window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+        } 
+
+        // else append country list to query string
+        else {
+          for (let country of this.selectedCountries) {
             if (Object.keys(renames).includes(country)) {
               queryUrl.append('location', renames[country]);
             } else {
@@ -640,10 +615,9 @@ window.app = new Vue({
           }
         }
       }
-      
-      if (queryUrl.toString() === '') {
-        window.history.replaceState({}, 'Covid Trends', location.pathname);
-      } else {
+
+      // only add query string if not empty      
+      if (queryUrl.toString() !== '') {
         window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
       }
 
@@ -956,7 +930,11 @@ window.app = new Vue({
 
     countries: [],
 
-    visibleCountries: [],
+    visibleCountries: [], // used for search
+
+    selectedCountries: [], // used to manually select countries 
+    
+    defaultCountries: [], // used for createURL default check
 
     isHidden: true,
 
@@ -965,10 +943,6 @@ window.app = new Vue({
     showTrendLine: true,
 
     doublingTime: 2,
-
-    selectedCountries: [],
-    
-    defaultCountries: [], // Used for createURL default check
     
     mySelect: '',
 
