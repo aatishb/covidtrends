@@ -64,9 +64,9 @@
 
       <main id="main">
 
-        <graph v-if="covidData.length > 0" :graph-data="graphData" :day="day" :resize="isHidden" v-bind.sync="graphAttributes"></graph>
+        <graph v-if="covidData.length > 0 && countries.some(country => selectedCountries.includes(country))" :graph-data="graphData" :day="day" :resize="isHidden" v-bind.sync="graphAttributes"></graph>
 
-        <div v-if="covidData.length > 0" class="nav">
+        <div v-if="covidData.length > 0 && countries.some(country => selectedCountries.includes(country))" class="nav">
 
           <div class="navelement">
             <img v-show="paused" @click="play" src="icons/play.svg" alt="Play" style="width: 3rem;">
@@ -92,7 +92,8 @@
         </div>
 
         <div v-if="!firstLoad && covidData.length == 0" class="nodata"><span>Not enough data for these parameters.</span></div>
-
+        <div v-if="!firstLoad && covidData.length != 0 && !countries.some(country => selectedCountries.includes(country))" class="nodata"><span>Please select some countries to display.</span></div>
+        
         <footer>
           Created by <a href="https://aatishb.com/">Aatish Bhatia</a> in collaboration with <a href="https://www.youtube.com/user/minutephysics">Minute Physics</a> &middot; World data provided by <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> (updated daily around 00:00 UTC / 20:00 ET) &middot; US state data provided by <a href="https://github.com/nytimes/covid-19-data">NYTimes</a> (updated daily around 16:00 UTC / 12:00 ET)&middot; Shortcuts: +/- for daily changes, space to play/pause &middot; <a href="https://github.com/aatishb/covidtrends#credits">Credits & Source</a> &middot; <a href="https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html">Stay safe!</a>
         </footer>
