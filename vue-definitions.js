@@ -736,9 +736,9 @@ window.app = new Vue({
         hovertemplate: 
           '%{text}' + 
           '<br>' + 
-          'Weekly ' + this.selectedData + ': ' + '%{y:,}' + 
+          '%{y:,}' + ': ' + 'Weekly ' + this.selectedData + 
           '<br>' + 
-          'Total ' + this.selectedData + ': ' + '%{x:,}' + 
+          '%{x:,}' + ': ' +'Total ' + this.selectedData +
           '<extra></extra>' + 
           '',
       })
@@ -760,9 +760,9 @@ window.app = new Vue({
         hovertemplate: 
           '%{data.text}' + 
           '<br>' + 
-          'Weekly ' + this.selectedData + ': ' + '%{y:,}' + 
+          '%{y:,}' + ': ' + 'Weekly ' + this.selectedData + 
           '<br>' + 
-          'Total ' + this.selectedData + ': ' + '%{x:,}' + 
+          '%{x:,}' + ': ' + 'Total ' + this.selectedData + 
           '<extra></extra>' + 
           '',
 
