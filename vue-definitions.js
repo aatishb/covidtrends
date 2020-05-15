@@ -431,11 +431,13 @@ window.app = new Vue({
             region = renames[region];
           }
 
+          // Suppress values below this.minCasesInCountry (replace with NaN)
           const cases = arr.map(e => e >= this.minCasesInCountry ? e : NaN);
+          const deltaNaN = delta.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN); // suppress same as cases, Why??
           covidData.push({
             country: region,
             cases,
-            delta: delta.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN),
+            delta: deltaNaN,  // An array?
             maxCases: this.myMax(...cases)
           });
 
@@ -738,6 +740,9 @@ window.app = new Vue({
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo: 'x+y+text',
+        hoverlabel: {
+          align: 'left'
+        },
         hovertemplate: 
           '%{text}' + 
           '<br>' + 
@@ -761,6 +766,9 @@ window.app = new Vue({
         marker: {
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
+        },
+        hoverlabel: {
+          align: 'left'
         },
         hovertemplate: 
           '%{data.text}' + 
