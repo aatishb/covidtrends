@@ -419,7 +419,7 @@ window.app = new Vue({
           for (let date of dates) {
             arr.push(row[date]);
           }
-          let slope = arr.map((e, i, a) => e - a[i - this.lookbackTime]);
+          let delta = arr.map((e, i, a) => e - a[i - this.lookbackTime]);
           let region = row.region;
 
           if (Object.keys(renames).includes(region)) {
@@ -430,7 +430,7 @@ window.app = new Vue({
           covidData.push({
             country: region,
             cases,
-            slope: slope.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN),
+            delta: delta.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN),
             maxCases: this.myMax(...cases)
           });
 
@@ -632,7 +632,7 @@ window.app = new Vue({
     },
 
     minDay() {
-      let minDay = this.myMin(...(this.filteredCovidData.map(e => e.slope.findIndex(f => f > 0)).filter(x => x != -1)));
+      let minDay = this.myMin(...(this.filteredCovidData.map(e => e.delta.findIndex(f => f > 0)).filter(x => x != -1)));
       if (isFinite(minDay) && !isNaN(minDay)) {
         return minDay + 1;
       } else {
@@ -719,7 +719,7 @@ window.app = new Vue({
       // draws grey lines (line plot for each location)
       let trace1 = this.filteredCovidData.map((e, i) => ({
         x: e.cases.slice(0, this.day),
-        y: e.slope.slice(0, this.day),
+        y: e.delta.slice(0, this.day),
         name: e.country,
         text: this.dates.map(date => e.country + '<br>' + this.formatDate(date)),
         mode: showDailyMarkers ? 'lines+markers' : 'lines',
@@ -747,7 +747,7 @@ window.app = new Vue({
       // draws red dots (most recent data for each location)
       let trace2 = this.filteredCovidData.map((e, i) => ({
         x: [e.cases[this.day - 1]],
-        y: [e.slope[this.day - 1]],
+        y: [e.delta[this.day - 1]],
         text: e.country,
         name: e.country,
         mode: this.showLabels ? 'markers+text' : 'markers',
@@ -831,19 +831,19 @@ window.app = new Vue({
     },
 
     ymax() {
-      return Math.max(...this.filteredSlope, 50);
+      return Math.max(...this.filteredDelta, 50);
     },
 
     ymin() {
-      return Math.min(...this.filteredSlope);
+      return Math.min(...this.filteredDelta);
     },
 
     filteredCases() {
       return Array.prototype.concat(...this.filteredCovidData.map(e => e.cases)).filter(e => !isNaN(e));
     },
 
-    filteredSlope() {
-      return Array.prototype.concat(...this.filteredCovidData.map(e => e.slope)).filter(e => !isNaN(e));
+    filteredDelta() {
+      return Array.prototype.concat(...this.filteredCovidData.map(e => e.delta)).filter(e => !isNaN(e));
     },
 
     logxrange() {
@@ -864,7 +864,7 @@ window.app = new Vue({
     },
 
     linearyrange() {
-      let ymax = Math.max(...this.filteredSlope, 50);
+      let ymax = Math.max(...this.filteredDelta, 50);
       return [-Math.pow(10, Math.floor(Math.log10(ymax)) - 2), Math.round(1.05 * ymax)];
     },
 
