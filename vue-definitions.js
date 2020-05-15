@@ -227,20 +227,25 @@ window.app = new Vue({
 
     window.addEventListener('keydown', e => {
 
-      if ((e.key == ' ') && this.dates.length > 0) {
-        this.play();
+      if (this.dates.length > 0) {
+        switch (e.key) {
+          case ' ':
+            this.play();
+            break;
+          case '-':
+          case '_': // That is, shifted '-'
+            this.paused = true;
+            this.day = Math.max(this.day - 1, this.minDay);
+            break;
+          case '+':
+          case '=': // That is, unshifted '+'
+            this.paused = true;
+            this.day = Math.min(this.day + 1, this.dates.length);
+            break;
+          default:
+            break;
+        }
       }
-
-      else if ((e.key == '-' || e.key == '_') && this.dates.length > 0) {
-        this.paused = true;
-        this.day = Math.max(this.day - 1, this.minDay);
-      }
-
-      else if ((e.key == '+' || e.key == '=') && this.dates.length > 0) {
-        this.paused = true;
-        this.day = Math.min(this.day + 1, this.dates.length);
-      }
-
     });
 
   },
@@ -400,7 +405,7 @@ window.app = new Vue({
 
       } else {
         grouped = this.filterByCountry(data, dates, selectedRegion)
-          .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter our Hong Kong and Macau as subregions of Mainland China
+          .filter(e => !regionsToPullToCountryLevel.includes(e.region)); // also filter out Hong Kong and Macau as subregions of Mainland China
       }
 
       let exclusions = ['Cruise Ship', 'Diamond Princess'];
