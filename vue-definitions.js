@@ -338,7 +338,7 @@ window.app = new Vue({
         }
         if (selectedRegion == 'Brazil') {
           const type = (selectedData == 'Reported Deaths') ? 'last_available_deaths' : 'last_available_confirmed';
-          const url = 'https://brasil.io/dataset/covid19/caso_full/?format=csv';
+          const url = 'https://brasil.io/dataset/covid19/caso_full/?place_type=state&format=csv';
           Plotly.d3.csv(url, (data) => this.processData(this.preprocessBrasilIOData(data, type), selectedRegion, updateSelectedCountries));
         }
       }
@@ -506,12 +506,8 @@ window.app = new Vue({
         'TO': 'Tocantins'
       };
       data.reverse().forEach(e => {
-        // the Brasil.io dataset lists every city with reported cases
-        // to aggregate data for an entire state, there's always a null city
-        if (e.place_type == 'state') {
-          let st = recastData[states[e.state]] = (recastData[states[e.state]] || {'Province/State': states[e.state], 'Country/Region': 'Brazil', 'Lat': null, 'Long': null});
-          st[fixBrasilIODate(e.date)] = parseInt(e[type]); 
-        }
+        let st = recastData[states[e.state]] = (recastData[states[e.state]] || {'Province/State': states[e.state], 'Country/Region': 'Brazil', 'Lat': null, 'Long': null});
+        st[fixBrasilIODate(e.date)] = parseInt(e[type]); 
       });
       return Object.values(recastData);
       
