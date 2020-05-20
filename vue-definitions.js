@@ -476,11 +476,40 @@ window.app = new Vue({
 
     preprocessBrasilIOData(data, type) {
       let recastData = {};
+      let states = {
+        'AC': 'Acre',
+        'AL': 'Alagoas',
+        'AP': 'Amapá',
+        'AM': 'Amazonas',
+        'BA': 'Bahia',
+        'CE': 'Ceará',
+        'DF': 'Distrito Federal',
+        'ES': 'Espírito Santo',
+        'GO': 'Goiás',
+        'MA': 'Maranhão',
+        'MT': 'Mato Grosso',
+        'MS': 'Mato Grosso do Sul',
+        'MG': 'Minas Gerais',
+        'PA': 'Pará',
+        'PB': 'Paraíba',
+        'PR': 'Paraná',
+        'PE': 'Pernambuco',
+        'PI': 'Piauí',
+        'RJ': 'Rio de Janeiro',
+        'RN': 'Rio Grande do Norte',
+        'RS': 'Rio Grande do Sul',
+        'RO': 'Rondônia',
+        'RR': 'Roraima',
+        'SC': 'Santa Catarina',
+        'SP': 'São Paulo',
+        'SE': 'Sergipe',
+        'TO': 'Tocantins'
+      };
       data.reverse().forEach(e => {
         // the Brasil.io dataset lists every city with reported cases
         // to aggregate data for an entire state, there's always a null city
         if (e.place_type == 'state') {
-          let st = recastData[e.state] = (recastData[e.state] || {'Province/State': e.state, 'Country/Region': 'Brazil', 'Lat': null, 'Long': null});
+          let st = recastData[states[e.state]] = (recastData[states[e.state]] || {'Province/State': states[e.state], 'Country/Region': 'Brazil', 'Lat': null, 'Long': null});
           st[fixBrasilIODate(e.date)] = parseInt(e[type]); 
         }
       });
