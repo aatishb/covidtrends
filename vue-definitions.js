@@ -716,6 +716,11 @@ window.app = new Vue({
 
       let showDailyMarkers = this.filteredCovidData.length <= 2;
 
+      let hovertemplateBody =
+        '<br>%{y:10,}: Weekly ' + this.selectedData +
+        '<br>%{x:10,}: Total ' + this.selectedData +
+        '<extra></extra>';
+
       // draws grey lines (line plot for each location)
       let trace1 = this.filteredCovidData.map((e, i) => ({
         x: e.cases.slice(0, this.day),
@@ -733,7 +738,7 @@ window.app = new Vue({
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo: 'x+y+text',
-        hovertemplate: '%{text}<br>Total ' + this.selectedData + ': %{x:,}<br>Weekly ' + this.selectedData + ': %{y:,}<extra></extra>',
+        hovertemplate: '%{text}' + hovertemplateBody,
       })
       );
 
@@ -750,7 +755,7 @@ window.app = new Vue({
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}<br>Total ' + this.selectedData + ': %{x:,}<br>Weekly ' + this.selectedData + ': %{y:,}<extra></extra>',
+        hovertemplate: '%{data.text}' + hovertemplateBody,
 
       }));
 
