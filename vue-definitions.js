@@ -716,9 +716,9 @@ window.app = new Vue({
 
       let showDailyMarkers = this.filteredCovidData.length <= 2;
 
-      let weeklyTotalExtra =
-        '<br>%{y:8,}: Weekly ' + this.selectedData +
-        '<br>%{x:8,}: Total ' + this.selectedData +
+      let hovertemplateBody =
+        '<br>%{y:10,}: Weekly ' + this.selectedData +
+        '<br>%{x:10,}: Total ' + this.selectedData +
         '<extra></extra>';
 
       // draws grey lines (line plot for each location)
@@ -738,7 +738,7 @@ window.app = new Vue({
           color: 'rgba(0,0,0,0.15)'
         },
         hoverinfo: 'x+y+text',
-        hovertemplate: '%{text}' + weeklyTotalExtra,
+        hovertemplate: '%{text}' + hovertemplateBody,
       })
       );
 
@@ -755,7 +755,7 @@ window.app = new Vue({
           size: 6,
           color: 'rgba(254, 52, 110, 1)'
         },
-        hovertemplate: '%{data.text}' +  weeklyTotalExtra,
+        hovertemplate: '%{data.text}' +  hovertemplateBody,
 
       }));
 
