@@ -735,8 +735,8 @@ window.app = new Vue({
         hoverinfo: 'x+y+text',
         hovertemplate:
           '%{text}' +
-          '<br>Total ' + this.selectedData + ': %{x:,}' +
           '<br>Weekly ' + this.selectedData + ': %{y:,}' +
+          '<br>Total ' + this.selectedData + ': %{x:,}' +
           '<extra></extra>',
       })
       );
