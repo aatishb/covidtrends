@@ -320,7 +320,7 @@ window.app = new Vue({
 
     pullData(selectedData, selectedRegion, updateSelectedCountries = true) {
 
-      if (selectedRegion != 'US') {
+      if (selectedRegion != 'US' && selectedRegion != 'Brazil') {
         let url;
         if (selectedData == 'Confirmed Cases') {
           url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
@@ -330,10 +330,17 @@ window.app = new Vue({
           return;
         }
         Plotly.d3.csv(url, (data) => this.processData(data, selectedRegion, updateSelectedCountries));
-      } else { // selectedRegion == 'US'
-        const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases';
-        const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
-        Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
+      } else { // selectedRegion == 'US' or selectedRegion == 'Brazil
+        if (selectedRegion == 'US') {
+          const type = (selectedData == 'Reported Deaths') ? 'deaths' : 'cases';
+          const url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv';
+          Plotly.d3.csv(url, (data) => this.processData(this.preprocessNYTData(data, type), selectedRegion, updateSelectedCountries));
+        }
+        if (selectedRegion == 'Brazil') {
+          const type = (selectedData == 'Reported Deaths') ? 'last_available_deaths' : 'last_available_confirmed';
+          const url = 'https://brasil.io/dataset/covid19/caso_full/?place_type=state&format=csv';
+          Plotly.d3.csv(url, (data) => this.processData(this.preprocessBrasilIOData(data, type), selectedRegion, updateSelectedCountries));
+        }
       }
     },
 
@@ -444,7 +451,7 @@ window.app = new Vue({
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
         'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
         'Hong Kong',            // Was previously included in China's numbers
-        'Canada', 'Australia']; // These appear in the region selector
+        'Canada', 'Australia', 'Brazil']; // These appear in the region selector
 
       // TODO: clean this logic up later
       // expected behavior: generate/overwrite selected locations if: 1. data loaded from URL, but no selected locations are loaded. 2. data refreshed (e.g. changing region)
@@ -467,6 +474,49 @@ window.app = new Vue({
       this.createURL();
     },
 
+    preprocessBrasilIOData(data, type) {
+      let recastData = {};
+      let states = {
+        'AC': 'Acre',
+        'AL': 'Alagoas',
+        'AP': 'Amapá',
+        'AM': 'Amazonas',
+        'BA': 'Bahia',
+        'CE': 'Ceará',
+        'DF': 'Distrito Federal',
+        'ES': 'Espírito Santo',
+        'GO': 'Goiás',
+        'MA': 'Maranhão',
+        'MT': 'Mato Grosso',
+        'MS': 'Mato Grosso do Sul',
+        'MG': 'Minas Gerais',
+        'PA': 'Pará',
+        'PB': 'Paraíba',
+        'PR': 'Paraná',
+        'PE': 'Pernambuco',
+        'PI': 'Piauí',
+        'RJ': 'Rio de Janeiro',
+        'RN': 'Rio Grande do Norte',
+        'RS': 'Rio Grande do Sul',
+        'RO': 'Rondônia',
+        'RR': 'Roraima',
+        'SC': 'Santa Catarina',
+        'SP': 'São Paulo',
+        'SE': 'Sergipe',
+        'TO': 'Tocantins'
+      };
+      data.reverse().forEach(e => {
+        let st = recastData[states[e.state]] = (recastData[states[e.state]] || {'Province/State': states[e.state], 'Country/Region': 'Brazil', 'Lat': null, 'Long': null});
+        st[fixBrasilIODate(e.date)] = parseInt(e[type]); 
+      });
+      return Object.values(recastData);
+      
+      // same format as NYT - but I needed to access that function here...
+      function fixBrasilIODate(date) {
+        let tmp = date.split('-');
+        return `${tmp[1]}/${tmp[2]}/${tmp[0].substr(2)}`;
+      }
+    },
     preprocessNYTData(data, type) {
       let recastData = {};
       data.forEach(e => {
@@ -644,6 +694,7 @@ window.app = new Vue({
       switch (this.selectedRegion) {
         case 'World':
           return 'Countries';
+        case 'Brazil':
         case 'Australia':
         case 'US':
           return 'States / Territories';
@@ -903,7 +954,7 @@ window.app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'US', 'China', 'Australia', 'Canada', 'Brazil'],
 
     selectedRegion: 'World',
 
