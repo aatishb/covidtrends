@@ -476,7 +476,7 @@ window.app = new Vue({
 
     preprocessBrasilIOData(data, type) {
       let recastData = {};
-      data.reverse().forEach(e =>{
+      data.reverse().forEach(e => {
         // the Brasil.io dataset lists every city with reported cases
         // to aggregate data for an entire state, there's always a null city
         if (e.place_type == 'state') {
