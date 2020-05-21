@@ -156,7 +156,7 @@ aside {
   padding: 1rem;
   min-width: 10rem;
 
-  overflow-y: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -165,7 +165,13 @@ aside {
 }
 
 .countries {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
 
+.country-list {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }

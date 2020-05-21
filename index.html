@@ -149,7 +149,7 @@
 
           <p style="padding-top: 1rem;">Showing {{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
-          <ul>
+          <ul class="country-list">
             <li v-for="country in visibleCountries">
               <input @change="createURL" type="checkbox" :id="country" :value="country" v-model="selectedCountries">
               <label :for="country">{{country}}</label>
