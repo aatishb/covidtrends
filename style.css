@@ -169,8 +169,6 @@ aside > div:last-child {
 }
 
 .countries {
-
-  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
