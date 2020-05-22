@@ -168,13 +168,18 @@ aside > div:last-child {
   margin-bottom: 0;
 }
 
-.countries {
-  -webkit-overflow-scrolling: touch;
-}
-
 aside h2 {
   font-size: 1.5rem;
   text-align: center;
+}
+
+.countriestopwrapper {
+  position: sticky;
+  top: -1rem; /* Same as aside padding-top */
+  padding-top: 1rem;
+  padding-bottom: 0.75rem;
+  
+  background-color: #fcf8e8;
 }
 
 footer {
@@ -268,6 +273,9 @@ button:hover {
 }
 .countries p {
   margin-bottom: 0.75rem;
+}
+.countriestopwrapper p {
+  margin-bottom: 0;
 }
 
 select {
