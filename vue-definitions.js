@@ -621,6 +621,18 @@ window.app = new Vue({
     // reference line for exponential growth with a given doubling time
     referenceLine(x) {
       return x * (1 - Math.pow(2, -this.lookbackTime / this.doublingTime));
+    },
+    
+    scrollToCustomize() {
+      const ctw = document.getElementsByClassName("customizetopwrapper")[0];
+      document.getElementsByClassName('customize')[0].scrollIntoView();
+      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)["height"])-parseFloat(getComputedStyle(ctw)["padding-top"]));
+    },
+
+    scrollToCountries() {
+      const ctw = document.getElementsByClassName("customizetopwrapper")[0];
+      document.getElementsByClassName('countries')[0].scrollIntoView();
+      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)["height"])-parseFloat(getComputedStyle(ctw)["padding-top"]));
     }
 
   },
