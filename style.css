@@ -154,6 +154,7 @@ aside {
 
   background-color: #fcf8e8;
   padding: 1rem;
+  padding-top: 0; /* Letting customizetopwrapper take care of this */
   min-width: 10rem;
 
   overflow-y: auto;
@@ -173,12 +174,27 @@ aside h2 {
   text-align: center;
 }
 
+.customizetopwrapper {
+  margin: 0;
+
+  position: sticky;
+  top:  0; /* Same as aside padding-top */
+  padding-top: 1rem;
+  background-color: #fcf8e8;
+}
+
+.separator {
+  position: sticky;
+  top: 3.5rem;
+  border: 0.1rem solid #333;
+}
+
 .countriestopwrapper {
   position: sticky;
-  top: -1rem; /* Same as aside padding-top */
+  top: 3.6rem; /* Enough to fit the element before (3.5rem) and a separator */
   padding-top: 1rem;
   padding-bottom: 0.75rem;
-  
+
   background-color: #fcf8e8;
 }
 
@@ -227,7 +243,6 @@ svg {
   width: 100%;
   display: flex;
   flex-direction: row;
-  min-width: 10rem;
 }
 
 .search > input {
@@ -279,7 +294,6 @@ button:hover {
 }
 
 select {
-  min-width: 12rem;
   font-size: 1rem;
   padding: 0.5rem;
   width: 100%;
