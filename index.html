@@ -136,18 +136,22 @@
 
         <div class="countries">
 
-          <h2>{{regionType}}</h2>
+          <div class="countriestopwrapper">
 
-          <div class="search">
-            <input id="searchField" v-model="searchField" placeholder="Search For A Location" aria-label="Search For A Location">
+            <h2>{{regionType}}</h2>
+
+            <div class="search">
+              <input id="searchField" v-model="searchField" placeholder="Search For A Location" aria-label="Search For A Location">
+            </div>
+
+            <div class="buttonwrapper">
+              <button @click="deselectAll" aria-Label="Deselect All Regions">Deselect All</button>
+              <button @click="selectAll" aria-Label="Select All Regions">Select All</button>
+            </div>
+
+            <p style="padding-top: 1rem;">Showing {{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
+
           </div>
-
-          <div class="buttonwrapper">
-            <button @click="deselectAll" aria-Label="Deselect All Regions">Deselect All</button>
-            <button @click="selectAll" aria-Label="Select All Regions">Select All</button>
-          </div>
-
-          <p style="padding-top: 1rem;">Showing {{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
           <ul>
             <li v-for="country in visibleCountries">
