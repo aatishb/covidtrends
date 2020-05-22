@@ -624,15 +624,15 @@ window.app = new Vue({
     },
     
     scrollToCustomize() {
-      const ctw = document.getElementsByClassName("customizetopwrapper")[0];
+      const ctw = document.getElementsByClassName('customizetopwrapper')[0];
       document.getElementsByClassName('customize')[0].scrollIntoView();
-      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)["height"])-parseFloat(getComputedStyle(ctw)["padding-top"]));
+      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)['height'])-parseFloat(getComputedStyle(ctw)['padding-top']));
     },
 
     scrollToCountries() {
-      const ctw = document.getElementsByClassName("customizetopwrapper")[0];
+      const ctw = document.getElementsByClassName('customizetopwrapper')[0];
       document.getElementsByClassName('countries')[0].scrollIntoView();
-      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)["height"])-parseFloat(getComputedStyle(ctw)["padding-top"]));
+      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)['height'])-parseFloat(getComputedStyle(ctw)['padding-top']));
     }
 
   },
