@@ -102,7 +102,7 @@
 
       <aside>
         <div class="customizetopwrapper">
-          <h2>Customize</h2>
+          <h2 @click="scrollToCustomize">Customize</h2>
         </div>
         <div>
           <label for="selectedData">Select Parameter</label>
@@ -141,7 +141,7 @@
 
           <div class="countriestopwrapper">
 
-            <h2>{{regionType}}</h2>
+            <h2 @click="scrollToCountries">{{regionType}}</h2>
 
             <div class="search">
               <input id="searchField" v-model="searchField" placeholder="Search For A Location" aria-label="Search For A Location">
