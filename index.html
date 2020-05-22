@@ -101,9 +101,10 @@
       </main>
 
       <aside>
-
-        <div>
+        <div class="customizetopwrapper">
           <h2>Customize</h2>
+        </div>
+        <div>
           <label for="selectedData">Select Parameter</label>
           <select id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
@@ -133,6 +134,8 @@
           </div>
 
         </div>
+
+        <div class="separator"></div>
 
         <div class="countries">
 
