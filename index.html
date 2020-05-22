@@ -104,7 +104,7 @@
         <div class="customizetopwrapper">
           <h2 @click="scrollToCustomize">Customize</h2>
         </div>
-        <div>
+        <div class="customize">
           <label for="selectedData">Select Parameter</label>
           <select id="selectedData" v-model="selectedData" @mousedown="pause">
             <option v-for="d in dataTypes" v-bind:value="d">
