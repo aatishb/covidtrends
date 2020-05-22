@@ -177,6 +177,7 @@ aside h2 {
 .customizetopwrapper {
   margin: 0;
 
+  position: -webkit-sticky;
   position: sticky;
   top:  0; /* Same as aside padding-top */
   padding-top: 1rem;
@@ -184,12 +185,14 @@ aside h2 {
 }
 
 .separator {
+  position: -webkit-sticky;
   position: sticky;
   top: 3.5rem;
   border: 0.1rem solid #333;
 }
 
 .countriestopwrapper {
+  position: -webkit-sticky;
   position: sticky;
   top: 3.6rem; /* Enough to fit the element before (3.5rem) and a separator */
   padding-top: 1rem;
