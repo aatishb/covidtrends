@@ -154,6 +154,7 @@ aside {
 
   background-color: #fcf8e8;
   padding: 1rem;
+  padding-top: 0; /* Letting customizetopwrapper take care of this */
   min-width: 10rem;
 
   overflow-y: auto;
@@ -168,15 +169,47 @@ aside > div:last-child {
   margin-bottom: 0;
 }
 
-.countries {
-
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
 aside h2 {
   font-size: 1.5rem;
   text-align: center;
+  
+  transition-duration: 0.4s;
+}
+
+aside h2:hover {
+  color: #FF4C00;
+}
+
+.customizetopwrapper {
+  margin: 0;
+
+  position: -webkit-sticky;
+  position: sticky;
+  top:  0; /* Same as aside padding-top */
+  padding-top: 1rem;
+  background-color: #fcf8e8;
+}
+
+.customize {
+  margin-bottom: 1rem;
+}
+
+.separator {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 3.5rem;
+  border: 1px solid #333;
+  margin: 0;
+}
+
+.countriestopwrapper {
+  position: -webkit-sticky;
+  position: sticky;
+  top: calc(3.5rem + 2px); /* Enough to fit the element before (3.5rem) and a separator */
+  padding-top: 1rem;
+  padding-bottom: 0.75rem;
+
+  background-color: #fcf8e8;
 }
 
 footer {
@@ -224,7 +257,6 @@ svg {
   width: 100%;
   display: flex;
   flex-direction: row;
-  min-width: 10rem;
 }
 
 .search > input {
@@ -271,9 +303,11 @@ button:hover {
 .countries p {
   margin-bottom: 0.75rem;
 }
+.countriestopwrapper p {
+  margin-bottom: 0;
+}
 
 select {
-  min-width: 12rem;
   font-size: 1rem;
   padding: 0.5rem;
   width: 100%;
