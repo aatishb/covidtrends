@@ -199,6 +199,7 @@ aside h2:hover {
   position: sticky;
   top: 3.5rem;
   border: 1px solid #333;
+  margin: 0;
 }
 
 .countriestopwrapper {
