@@ -622,7 +622,7 @@ window.app = new Vue({
     referenceLine(x) {
       return x * (1 - Math.pow(2, -this.lookbackTime / this.doublingTime));
     },
-    
+
     scrollToCustomize() {
       const ctw = document.getElementsByClassName('customizetopwrapper')[0];
       document.getElementsByClassName('customize')[0].scrollIntoView();
@@ -632,7 +632,7 @@ window.app = new Vue({
     scrollToCountries() {
       const ctw = document.getElementsByClassName('customizetopwrapper')[0];
       document.getElementsByClassName('countries')[0].scrollIntoView();
-      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)['height'])-parseFloat(getComputedStyle(ctw)['padding-top']));
+      document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)['top'])+1); // the +1 avoids a weird (fractional) scrolling issue
     }
 
   },
