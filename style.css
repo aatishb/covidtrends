@@ -172,6 +172,12 @@ aside > div:last-child {
 aside h2 {
   font-size: 1.5rem;
   text-align: center;
+  
+  transition-duration: 0.4s;
+}
+
+aside h2:hover {
+  color: #FF4C00;
 }
 
 .customizetopwrapper {
@@ -184,17 +190,21 @@ aside h2 {
   background-color: #fcf8e8;
 }
 
+.customize {
+  margin-bottom: 1rem;
+}
+
 .separator {
   position: -webkit-sticky;
   position: sticky;
   top: 3.5rem;
-  border: 0.1rem solid #333;
+  border: 1px solid #333;
 }
 
 .countriestopwrapper {
   position: -webkit-sticky;
   position: sticky;
-  top: 3.6rem; /* Enough to fit the element before (3.5rem) and a separator */
+  top: calc(3.5rem + 2px); /* Enough to fit the element before (3.5rem) and a separator */
   padding-top: 1rem;
   padding-bottom: 0.75rem;
 
