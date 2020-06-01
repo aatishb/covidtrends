@@ -630,7 +630,7 @@ window.app = new Vue({
     },
 
     scrollToCountries() {
-      const ctw = document.getElementsByClassName('customizetopwrapper')[0];
+      const ctw = document.getElementsByClassName('countriestopwrapper')[0];
       document.getElementsByClassName('countries')[0].scrollIntoView();
       document.getElementsByTagName('aside')[0].scrollBy(0,-parseFloat(getComputedStyle(ctw)['top'])+1); // the +1 avoids a weird (fractional) scrolling issue
     }
