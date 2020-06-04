@@ -544,7 +544,7 @@ window.app = new Vue({
     },
 
     selectAll() {
-      this.selectedCountries = this.countries;
+      this.selectedCountries = this.visibleCountries; // Select only visible countries
       this.createURL();
     },
 
