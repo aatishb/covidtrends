@@ -122,6 +122,12 @@
               {{ s }}
             </option>
           </select>
+          <label for="selectedSpeed">Select Playback Speed</label>
+          <select @change="createURL" id="selectedSpeed" v-model="selectedSpeed" @mousedown="pause">
+            <option v-for="s in speeds" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
           <input type="checkbox" style="margin-top: 0.75rem;" id="showLabels" v-model="showLabels">
           <label for="showLabels">Show Labels</label>
 

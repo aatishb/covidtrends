@@ -198,6 +198,13 @@ window.app = new Vue({
         }
       }
 
+      if (urlParameters.has('speed')) {
+        let mySpeed = urlParameters.get('speed');
+        if (this.speeds.includes(mySpeed)) {
+          this.selectedSpeed = mySpeed;
+        }
+      }
+
       // since this rename came later, use the old name to not break existing URLs
       let renames = {
         'China': 'China (Mainland)'
@@ -502,6 +509,25 @@ window.app = new Vue({
     },
 
     // TODO: clean up play/pause logic
+
+    getSpeed() {
+      switch (this.selectedSpeed) {
+        case 'Normal':
+          return 200;
+        case 'Slow':
+          return 500;
+        case 'Super Slow':
+          return 1000;
+        case 'Fast':
+          return 100;
+        case 'Super Fast':
+          return 50;
+        default:
+          return 200;
+      }
+
+    },
+
     play() {
       if (this.paused) {
 
@@ -510,7 +536,7 @@ window.app = new Vue({
         }
 
         this.paused = false;
-        setTimeout(this.increment, 200);
+        setTimeout(this.increment, this.getSpeed());
 
       } else {
         this.paused = true;
@@ -533,7 +559,7 @@ window.app = new Vue({
       else if (this.day < this.dates.length) {
         if (!this.paused) {
           this.day++;
-          setTimeout(this.increment, 200);
+          setTimeout(this.increment, this.getSpeed());
         }
       }
 
@@ -571,6 +597,10 @@ window.app = new Vue({
 
       if (this.selectedRegion != 'World') {
         queryUrl.append('region', this.selectedRegion);
+      }
+
+      if (this.selectedSpeed != 'Normal') {
+        queryUrl.append('speed', this.selectedSpeed);
       }
 
       // since this rename came later, use the old name for URLs to avoid breaking existing URLs
@@ -898,6 +928,10 @@ window.app = new Vue({
   data: {
 
     paused: true,
+
+    selectedSpeed: 'Normal',
+
+    speeds: ['Super Fast', 'Fast', 'Normal', 'Slow', 'Super Slow'],
 
     dataTypes: ['Confirmed Cases', 'Reported Deaths'],
 
