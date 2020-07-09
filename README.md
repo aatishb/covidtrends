@@ -4,7 +4,7 @@ The purpose of this fork is to provide visualizations for the
 trajectory of COVID-19 growth at a global scale. It plots a global
 trajectory as well as a trajectory for each of the continents.
 
-"The Earth is one country and mankind its citizens" ~~ Baha'u'llah
+"The Earth is but one country and mankind its citizens" ~~ Baha'u'llah
 
 ### Geographical Notes
 
