@@ -408,9 +408,11 @@ window.app = new Vue({
         }
       }
 
-      var newRow = selectData.reduce(this.addNumericRows(dates));
-      newRow['Country/Region'] = geography;
-      data.push(newRow); 
+      if(selectData.length > 0) {
+        var newRow = selectData.reduce(this.addNumericRows(dates));
+        newRow['Country/Region'] = geography;
+        data.push(newRow); 
+      }
     },
 
 		getContinentNames() {
@@ -649,16 +651,15 @@ window.app = new Vue({
 
       let grouped;
 
-			// add rows for world and for each continent
-      this.addRowForWorld(data, dates);
-			var geographyInfo = this.getGeographyInfo();
-		  var continentNames = this.getContinentNames();
-			for (var continent of continentNames) {
-	      this.addRowForGeography(data, dates, continent, geographyInfo[continent])
-			}
-
-
       if (selectedRegion == 'World') {
+        // add rows for world and for each continent
+        this.addRowForWorld(data, dates);
+        var geographyInfo = this.getGeographyInfo();
+        var continentNames = this.getContinentNames();
+        for (var continent of continentNames) {
+          this.addRowForGeography(data, dates, continent, geographyInfo[continent])
+        }
+
         grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
 
         // pull Hong Kong and Macau to Country level
@@ -711,8 +712,10 @@ window.app = new Vue({
 
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
-      this.visibleCountries = this.countries;
-      const topCountries = this.covidData.filter((a) => a.country != 'World').sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
+      this.continentNames = this.getContinentNames()
+      this.continentNames.push("World")
+      this.visibleCountries = this.countries.filter((a) => !this.continentNames.includes(a))
+      const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
         'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
         'Hong Kong',            // Was previously included in China's numbers

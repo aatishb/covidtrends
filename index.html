@@ -136,6 +136,16 @@
 
         <div class="countries">
 
+          <div id="continents" v-if="selectedRegion == 'World'">
+          <h2>Continents</h2>
+          <ul>
+            <li v-for="continent in continentNames">
+              <input @change="createURL" type="checkbox" :id="continent" :value="continent" v-model="selectedCountries">
+              <label :for="continent">{{continent}}</label>
+            </li>
+          </ul>
+          </div>
+          
           <h2>{{regionType}}</h2>
 
           <div class="search">
