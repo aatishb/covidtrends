@@ -398,11 +398,12 @@ window.app = new Vue({
 
     // add a row to the end of the data that sums global data
     addRowForGeography(data, dates, geography, countries) {
-      countries = ['Spain','France','Germany','UK','Switzerland','Italy']
       selectData = []
       for(i = 0; i < data.length; i++) {
         var name = data[i]['Country/Region']
         if(countries.includes(name)) {
+          // for debugging
+				  //console.log("Adding " + name + " to " + geography + ".")
           selectData.push(data[i])
         }
       }
@@ -412,6 +413,231 @@ window.app = new Vue({
       data.push(newRow); 
     },
 
+		getContinentNames() {
+			return ["Africa","Asia","Europe","North America","South America", "Oceanica"]
+		},
+
+    getGeographyInfo() {
+      return {
+        "Africa": 
+							["Algeria",
+							 "Angola",
+							 "Benin",
+							 "Botswana",
+							 "Burkina Faso",
+							 "Burundi",
+							 "Cabo Verde",
+							 "Cameroon",
+							 "Central African Republic",
+							 "Chad",
+							 "Comoros",
+							 "Congo (Brazzaville)",
+							 "Congo (Kinshasa)",
+							 "Cote d'Ivoire",
+							 "Djibouti",
+							 "Egypt",
+							 "Equatorial Guinea",
+							 "Eritrea",
+							 "Eswatini",
+							 "Ethiopia",
+							 "Gabon",
+							 "Gambia",
+							 "Ghana",
+							 "Guinea",
+							 "Guinea-Bissau",
+							 "Kenya",
+							 "Lesotho",
+							 "Liberia",
+							 "Libya",
+							 "Madagascar",
+							 "Malawi",
+							 "Mali",
+							 "Mauritania",
+							 "Mauritius",
+							 "Morocco",
+							 "Mozambique",
+							 "Namibia",
+							 "Niger",
+							 "Nigeria",
+							 "Rwanda",
+							 "Sao Tome and Principe",
+							 "Senegal",
+							 "Seychelles",
+							 "Sierra Leone",
+							 "Somalia",
+							 "South Africa",
+							 "South Sudan",
+							 "Sudan",
+							 "Tanzania",
+							 "Togo",
+							 "Tunisia",
+							 "Uganda",
+							 "Zambia",
+							 "Zimbabwe"
+				],
+        "Asia": [
+     						"Afghanistan",
+								"Armenia",
+								"Azerbaijan*",
+								"Bahrain",
+								"Bangladesh",
+								"Bhutan",
+								"Brunei",
+								"Burma",
+								"Cambodia",
+								"China",
+								"Cyprus",
+								"Georgia",
+								"Hong Kong",
+								"India",
+								"Indonesia",
+								"Iran",
+								"Iraq",
+								"Israel",
+								"Japan",
+								"Jordan",
+								"Kazakhstan",
+								"North Korea",
+								"Korea, South",
+								"Kuwait",
+								"Kyrgyzstan",
+								"Laos",
+								"Lebanon",
+								"Malaysia",
+								"Maldives",
+								"Mongolia",
+								"Nepal",
+								"Oman",
+								"Pakistan",
+								"Philippines",
+								"Qatar",
+								"Russia",
+								"Saudi Arabia",
+								"Singapore",
+								"Sri Lanka",
+								"Syria",
+								"Taiwan*",
+								"Tajikistan",
+								"Thailand",
+								"Timor-Leste",
+								"Turkey",
+								"Turkmenistan",
+								"United Arab Emirates",
+								"Uzbekistan",
+								"Vietnam",
+								"West Bank and Gaza",
+								"Yemen"
+				],
+        "Europe": [
+              "Albania",
+              "Andorra",
+              "Austria",
+              "Azerbaijan",
+              "Belarus",
+              "Belgium",
+              "Bosnia and Herzegovina",
+              "Bulgaria",
+              "Croatia",
+              "Czechia",
+							"Czech Republic",
+              "Denmark",
+              "Estonia",
+              "Finland",
+              "France",
+              "Georgia",
+              "Germany",
+              "Greece",
+              "Holy See (Vatican City)",
+              "Hungary",
+              "Iceland",
+              "Ireland",
+              "Italy",
+              "Kazakhstan",
+              "Kosovo",
+              "Latvia",
+              "Liechtenstein",
+              "Lithuania",
+              "Luxembourg",
+              "Malta",
+              "Moldova",
+              "Monaco",
+              "Montenegro",
+              "Netherlands",
+              "North Macedonia",
+              "Norway",
+              "Poland",
+              "Portugal",
+              "Romania",
+              "Russia",
+              "San Marino",
+              "Serbia",
+              "Slovakia",
+              "Slovenia",
+              "Spain",
+              "Sweden",
+              "Switzerland",
+              "Turkey",
+              "Ukraine",
+              "United Kingdom"
+        ],
+        "North America": [
+							"Antigua and Barbuda",
+							"Bahamas",
+							"Barbados",
+							"Belize",
+							"Canada",
+							"Costa Rica",
+							"Cuba",
+							"Dominica",
+							"Dominican Republic",
+							"El Salvador",
+							"Grenada",
+							"Guatemala",
+							"Haiti",
+							"Honduras",
+							"Jamaica",
+							"Mexico",
+							"Nicaragua",
+							"Panama",
+							"Saint Kitts and Nevis",
+							"Saint Lucia",
+							"Saint Vincent and the Grenadines",
+							"Trinidad and Tobago",
+							"US"
+				],
+        "South America": [
+								"Argentina",
+								"Bolivia",
+								"Brazil",
+								"Chile",
+								"Colombia",
+								"Ecuador",
+								"Guyana",
+								"Paraguay",
+								"Peru",
+								"Suriname",
+								"Uruguay",
+								"Venezuela"
+				],
+        "Oceanica": [
+								"Australia",
+								"Fiji",
+								"Kiribati",
+								"Marshall Islands",
+								"Federated States of Micronesia",
+								"Nauru",
+								"New Zealand",
+								"Palau",
+								"Papua New Guinea",
+								"Samoa",
+								"Solomon Islands",
+								"Tonga",
+								"Tuvalu",
+								"Vanuatu"
+				]
+      }
+    },
+
 
 
     processData(data, selectedRegion, updateSelectedCountries) {
@@ -419,12 +645,18 @@ window.app = new Vue({
       this.dates = dates;
       this.day = this.dates.length;
 
-      this.addRowForWorld(data, dates);
-      this.addRowForGeography(data, dates, "Europe", ['Spain','France','Germany','UK','Switzerland','Italy'])
-
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
       let grouped;
+
+			// add rows for world and for each continent
+      this.addRowForWorld(data, dates);
+			var geographyInfo = this.getGeographyInfo();
+		  var continentNames = this.getContinentNames();
+			for (var continent of continentNames) {
+	      this.addRowForGeography(data, dates, continent, geographyInfo[continent])
+			}
+
 
       if (selectedRegion == 'World') {
         grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
@@ -449,6 +681,7 @@ window.app = new Vue({
         'Korea, South': 'South Korea',
         'China': 'China (Mainland)'
       };
+
 
       let covidData = [];
       for (let row of grouped) {
