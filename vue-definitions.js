@@ -396,12 +396,31 @@ window.app = new Vue({
       data.push(newRow); 
     },
 
+    // add a row to the end of the data that sums global data
+    addRowForGeography(data, dates, geography, countries) {
+      countries = ['Spain','France','Germany','UK','Switzerland','Italy']
+      selectData = []
+      for(i = 0; i < data.length; i++) {
+        var name = data[i]['Country/Region']
+        if(countries.includes(name)) {
+          selectData.push(data[i])
+        }
+      }
+
+      var newRow = selectData.reduce(this.addNumericRows(dates));
+      newRow['Country/Region'] = geography;
+      data.push(newRow); 
+    },
+
+
+
     processData(data, selectedRegion, updateSelectedCountries) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
       this.day = this.dates.length;
 
       this.addRowForWorld(data, dates);
+      this.addRowForGeography(data, dates, "Europe", ['Spain','France','Germany','UK','Switzerland','Italy'])
 
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
