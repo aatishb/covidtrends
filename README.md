@@ -1,3 +1,25 @@
+## About this fork
+
+The purpose of this fork is to provide visualizations for the
+trajectory of COVID-19 growth at a global scale. It plots a global
+trajectory as well as a trajectory for each of the continents.
+
+"The Earth is one country and mankind its citizens" ~~ Baha'u'llah
+
+### Geographical Notes
+
+The division of locations/countries into
+continents is based on the [CIA World Facebook](
+https://www.cia.gov/library/publications/the-world-factbook/geos/xx.h
+tml). In cases where countries belong to two continents, they
+are double-counted. For example, both the 'Europe' and the 'Asia'
+trajectories include the data for Russia and Turkey (among others).  I'm open to other suggestions as well.
+
+The names of the "countries" are based on those of the original
+codebase -- they are not mine. In all cases I have avoid introducing
+any changes to names to avoid any suggestion of partiality toward any
+kind of regional or territorial dispute.
+
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-25-orange.svg?style=flat-square)](#contributors-)
