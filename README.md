@@ -17,8 +17,9 @@ trajectories include the data for Russia and Turkey (among others).  I'm open to
 
 The names of the "countries" are based on those of the original
 codebase -- they are not mine. In all cases I have avoid introducing
-any changes to names to avoid any suggestion of partiality toward any
-kind of regional or territorial dispute.
+any changes to names to avoid any suggestion of partiality toward
+any kind of regional or territorial dispute. Any changes should be
+suggested to the upstream project.
 
 ## What is this?
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
