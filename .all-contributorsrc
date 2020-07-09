@@ -224,6 +224,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "MrSpiffyClean",
+      "name": "Ricardo Gonçalves",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/63736648?v=4",
+      "profile": "https://github.com/MrSpiffyClean",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bchurchill",
+      "name": "Berkeley Churchill",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/640745?v=4",
+      "profile": "http://www.berkeleychurchill.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
