@@ -218,6 +218,10 @@ window.app = new Vue({
         let doublingTime = urlParameters.get('doublingtime');
         this.doublingTime = doublingTime;
       }
+      
+      if (urlParameters.has('select')) {
+        this.mySelect = urlParameters.get('select').toLowerCase();
+      }
 
     }
 
@@ -392,18 +396,270 @@ window.app = new Vue({
       data.push(newRow); 
     },
 
+    // add a row to the end of the data that sums global data
+    addRowForGeography(data, dates, geography, countries) {
+      selectData = []
+      for(i = 0; i < data.length; i++) {
+        var name = data[i]['Country/Region']
+        if(countries.includes(name)) {
+          // for debugging
+				  //console.log("Adding " + name + " to " + geography + ".")
+          selectData.push(data[i])
+        }
+      }
+
+      if(selectData.length > 0) {
+        var newRow = selectData.reduce(this.addNumericRows(dates));
+        newRow['Country/Region'] = geography;
+        data.push(newRow); 
+      }
+    },
+
+		getContinentNames() {
+			return ["Africa","Asia","Europe","North America","South America", "Oceanica"]
+		},
+
+    getGeographyInfo() {
+      return {
+        "Africa": 
+							["Algeria",
+							 "Angola",
+							 "Benin",
+							 "Botswana",
+							 "Burkina Faso",
+							 "Burundi",
+							 "Cabo Verde",
+							 "Cameroon",
+							 "Central African Republic",
+							 "Chad",
+							 "Comoros",
+							 "Congo (Brazzaville)",
+							 "Congo (Kinshasa)",
+							 "Cote d'Ivoire",
+							 "Djibouti",
+							 "Egypt",
+							 "Equatorial Guinea",
+							 "Eritrea",
+							 "Eswatini",
+							 "Ethiopia",
+							 "Gabon",
+							 "Gambia",
+							 "Ghana",
+							 "Guinea",
+							 "Guinea-Bissau",
+							 "Kenya",
+							 "Lesotho",
+							 "Liberia",
+							 "Libya",
+							 "Madagascar",
+							 "Malawi",
+							 "Mali",
+							 "Mauritania",
+							 "Mauritius",
+							 "Morocco",
+							 "Mozambique",
+							 "Namibia",
+							 "Niger",
+							 "Nigeria",
+							 "Rwanda",
+							 "Sao Tome and Principe",
+							 "Senegal",
+							 "Seychelles",
+							 "Sierra Leone",
+							 "Somalia",
+							 "South Africa",
+							 "South Sudan",
+							 "Sudan",
+							 "Tanzania",
+							 "Togo",
+							 "Tunisia",
+							 "Uganda",
+							 "Zambia",
+							 "Zimbabwe"
+				],
+        "Asia": [
+     						"Afghanistan",
+								"Armenia",
+								"Azerbaijan*",
+								"Bahrain",
+								"Bangladesh",
+								"Bhutan",
+								"Brunei",
+								"Burma",
+								"Cambodia",
+								"China",
+								"Cyprus",
+								"Georgia",
+								"Hong Kong",
+								"India",
+								"Indonesia",
+								"Iran",
+								"Iraq",
+								"Israel",
+								"Japan",
+								"Jordan",
+								"Kazakhstan",
+								"North Korea",
+								"Korea, South",
+								"Kuwait",
+								"Kyrgyzstan",
+								"Laos",
+								"Lebanon",
+								"Malaysia",
+								"Maldives",
+								"Mongolia",
+								"Nepal",
+								"Oman",
+								"Pakistan",
+								"Philippines",
+								"Qatar",
+								"Russia",
+								"Saudi Arabia",
+								"Singapore",
+								"Sri Lanka",
+								"Syria",
+								"Taiwan*",
+								"Tajikistan",
+								"Thailand",
+								"Timor-Leste",
+								"Turkey",
+								"Turkmenistan",
+								"United Arab Emirates",
+								"Uzbekistan",
+								"Vietnam",
+								"West Bank and Gaza",
+								"Yemen"
+				],
+        "Europe": [
+              "Albania",
+              "Andorra",
+              "Austria",
+              "Azerbaijan",
+              "Belarus",
+              "Belgium",
+              "Bosnia and Herzegovina",
+              "Bulgaria",
+              "Croatia",
+              "Czechia",
+							"Czech Republic",
+              "Denmark",
+              "Estonia",
+              "Finland",
+              "France",
+              "Georgia",
+              "Germany",
+              "Greece",
+              "Holy See (Vatican City)",
+              "Hungary",
+              "Iceland",
+              "Ireland",
+              "Italy",
+              "Kazakhstan",
+              "Kosovo",
+              "Latvia",
+              "Liechtenstein",
+              "Lithuania",
+              "Luxembourg",
+              "Malta",
+              "Moldova",
+              "Monaco",
+              "Montenegro",
+              "Netherlands",
+              "North Macedonia",
+              "Norway",
+              "Poland",
+              "Portugal",
+              "Romania",
+              "Russia",
+              "San Marino",
+              "Serbia",
+              "Slovakia",
+              "Slovenia",
+              "Spain",
+              "Sweden",
+              "Switzerland",
+              "Turkey",
+              "Ukraine",
+              "United Kingdom"
+        ],
+        "North America": [
+							"Antigua and Barbuda",
+							"Bahamas",
+							"Barbados",
+							"Belize",
+							"Canada",
+							"Costa Rica",
+							"Cuba",
+							"Dominica",
+							"Dominican Republic",
+							"El Salvador",
+							"Grenada",
+							"Guatemala",
+							"Haiti",
+							"Honduras",
+							"Jamaica",
+							"Mexico",
+							"Nicaragua",
+							"Panama",
+							"Saint Kitts and Nevis",
+							"Saint Lucia",
+							"Saint Vincent and the Grenadines",
+							"Trinidad and Tobago",
+							"US"
+				],
+        "South America": [
+								"Argentina",
+								"Bolivia",
+								"Brazil",
+								"Chile",
+								"Colombia",
+								"Ecuador",
+								"Guyana",
+								"Paraguay",
+								"Peru",
+								"Suriname",
+								"Uruguay",
+								"Venezuela"
+				],
+        "Oceanica": [
+								"Australia",
+								"Fiji",
+								"Kiribati",
+								"Marshall Islands",
+								"Federated States of Micronesia",
+								"Nauru",
+								"New Zealand",
+								"Palau",
+								"Papua New Guinea",
+								"Samoa",
+								"Solomon Islands",
+								"Tonga",
+								"Tuvalu",
+								"Vanuatu"
+				]
+      }
+    },
+
+
+
     processData(data, selectedRegion, updateSelectedCountries) {
       let dates = Object.keys(data[0]).slice(4);
       this.dates = dates;
       this.day = this.dates.length;
-
-      this.addRowForWorld(data, dates);
 
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
       let grouped;
 
       if (selectedRegion == 'World') {
+        // add rows for world and for each continent
+        this.addRowForWorld(data, dates);
+        var geographyInfo = this.getGeographyInfo();
+        var continentNames = this.getContinentNames();
+        for (var continent of continentNames) {
+          this.addRowForGeography(data, dates, continent, geographyInfo[continent])
+        }
+
         grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
 
         // pull Hong Kong and Macau to Country level
@@ -426,6 +682,7 @@ window.app = new Vue({
         'Korea, South': 'South Korea',
         'China': 'China (Mainland)'
       };
+
 
       let covidData = [];
       for (let row of grouped) {
@@ -455,8 +712,10 @@ window.app = new Vue({
 
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
-      this.visibleCountries = this.countries;
-      const topCountries = this.covidData.filter((a) => a.country != 'World').sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
+      this.continentNames = this.getContinentNames()
+      this.continentNames.push("World")
+      this.visibleCountries = this.countries.filter((a) => !this.continentNames.includes(a))
+      const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
         'South Korea', 'Japan', 'Taiwan', 'Singapore', // Observed success so far
         'Hong Kong',            // Was previously included in China's numbers
@@ -467,9 +726,20 @@ window.app = new Vue({
       // but do not overwrite selected locations if 1. selected locations loaded from URL. 2. We switch between confirmed cases <-> deaths
       if ((this.selectedCountries.length === 0 || !this.firstLoad) && updateSelectedCountries) {
         this.selectedCountries = this.countries.filter(e => topCountries.includes(e) || notableCountries.includes(e));
+        
+        this.defaultCountries = this.selectedCountries; // Used for createURL default check
+        
+        if (this.mySelect == 'all') {
+          this.selectedCountries = this.countries;
+        } else if (this.mySelect == 'none') {
+          this.selectedCountries = [];
+        }
+        this.mySelect = '';
+      
       }
 
       this.firstLoad = false;
+      this.createURL();
     },
 
     preprocessNYTData(data, type) {
@@ -550,20 +820,20 @@ window.app = new Vue({
 
     selectAll() {
       this.selectedCountries = this.countries;
+      this.createURL();
     },
 
     deselectAll() {
       this.selectedCountries = [];
+      this.createURL();
     },
 
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
-
+    
     createURL() {
-
-      let baseUrl = window.location.href.split('?')[0];
-
+      
       let queryUrl = new URLSearchParams();
 
       if (this.selectedScale == 'Linear Scale') {
@@ -579,57 +849,48 @@ window.app = new Vue({
       }
 
       // since this rename came later, use the old name for URLs to avoid breaking existing URLs
-      let renames = {
-        'China (Mainland)': 'China'
-      };
-
-      for (let country of this.countries) {
-        if (this.selectedCountries.includes(country)) {
-          if (Object.keys(renames).includes(country)) {
-            queryUrl.append('location', renames[country]);
-          } else {
-            queryUrl.append('location', country);
-          }
-        }
-      }
-
+      let renames = {'China (Mainland)': 'China'};
+            
       if (!this.showTrendLine) {
         queryUrl.append('trendline', this.showTrendLine);
-      } else if (this.doublingTime != 2) {
+      } 
+
+      else if (this.doublingTime != 2) {
         queryUrl.append('doublingtime', this.doublingTime);
       }
 
-      let url = baseUrl + '?' + queryUrl.toString();
+      // check if no countries selected
+      // edge case: since selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths), we can't simply check if selectedCountries is empty
+      // so instead we check if the countries list does not include any of the selected countries
+      if (!this.countries.some(country => this.selectedCountries.includes(country))) {
+        queryUrl.append('select', 'none');
+      } 
 
-      window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+      // check if all countries selected
+      // edge case: since selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths), we can't simply compare array contents
+      // so instead we check if the countries list is a proper subset of selectedCountries
+      else if (this.countries.every(country => this.selectedCountries.includes(country))) {
+        queryUrl.append('select', 'all');
+      } 
 
-      this.copyToClipboard(url);
+      // else check if selection is different from default countries
+      else if (JSON.stringify(this.selectedCountries.sort()) !== JSON.stringify(this.defaultCountries)) {
 
-    },
+        // only append to URL the selected countries that are also in the currently displayed country list
+        // this is done because of the edge case where selectedCountries may be larger than the country list (e.g. when switching from Confirmed Cases to Deaths)
+        let countriesToAppendToUrl = this.selectedCountries.filter(e => this.countries.includes(e));
 
-    // code to copy a string to the clipboard
-    // from https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f
-    copyToClipboard(str) {
-      const el = document.createElement('textarea');  // Create a <textarea> element
-      el.value = str;                                 // Set its value to the string that you want copied
-      el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
-      el.style.position = 'absolute';
-      el.style.left = '-9999px';                      // Move outside the screen to make it invisible
-      document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
-      const selected =
-        document.getSelection().rangeCount > 0        // Check if there is any content selected previously
-          ? document.getSelection().getRangeAt(0)     // Store selection if found
-          : false;                                    // Mark as false to know no selection existed before
-      el.select();                                    // Select the <textarea> content
-      document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
-      document.body.removeChild(el);                  // Remove the <textarea> element
-      if (selected) {                                 // If a selection existed before copying
-        document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
-        document.getSelection().addRange(selected);   // Restore the original selection
+        // apply renames and append to queryUrl
+        countriesToAppendToUrl = countriesToAppendToUrl.map(country => Object.keys(renames).includes(country) ? renames[country] : country);
+        countriesToAppendToUrl.forEach(country => queryUrl.append('location', country));
       }
 
-      this.copied = true;
-      setTimeout(() => this.copied = false, 2500);
+      if (queryUrl.toString() == '') {
+        window.history.replaceState({}, 'Covid Trends', location.pathname);
+      } else {
+        window.history.replaceState({}, 'Covid Trends', '?' + queryUrl.toString());
+      }
+
     },
 
     // reference line for exponential growth with a given doubling time
@@ -939,7 +1200,11 @@ window.app = new Vue({
 
     countries: [],
 
-    visibleCountries: [],
+    visibleCountries: [], // used for search
+
+    selectedCountries: [], // used to manually select countries 
+    
+    defaultCountries: [], // used for createURL default check
 
     isHidden: true,
 
@@ -948,14 +1213,12 @@ window.app = new Vue({
     showTrendLine: true,
 
     doublingTime: 2,
-
-    selectedCountries: [],
+    
+    mySelect: '',
 
     searchField: '',
 
     autoplay: true,
-
-    copied: false,
 
     firstLoad: true,
 
