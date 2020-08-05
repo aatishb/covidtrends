@@ -547,7 +547,21 @@ window.app = new Vue({
       this.selectedCountries = this.countries;
       this.createURL();
     },
+    
+    selectIncreasing() {
+      const reducer = (accumulator, currentValue) => currentValue ? accumulator + currentValue : accumulator;
+      // const topCountries = this.covidData.sort((a, b) => b.slope.slice(this.daysOfIncrease).reduce(reducer) - a.slope.slice(this.daysOfIncrease).reduce(reducer)).slice(0, 9).map(e => e.country);
+      this.selectedCountries = this.covidData.filter((e) => e.cases.length > this.daysOfIncrease ? e.slope.slice(-1 * this.daysOfIncrease).reduce(reducer) > e.slope.slice(-2 * this.daysOfIncrease, -1 * this.daysOfIncrease).reduce(reducer) : false).map((e) => e.country);
+      this.createURL();
+    },
 
+    selectDecreasing() {
+      const reducer = (accumulator, currentValue) => currentValue ? accumulator + currentValue : accumulator;
+      // const topCountries = this.covidData.sort((a, b) => b.slope.slice(this.daysOfIncrease).reduce(reducer) - a.slope.slice(this.daysOfIncrease).reduce(reducer)).slice(0, 9).map(e => e.country);
+      this.selectedCountries = this.covidData.filter((e) => e.cases.length > this.daysOfIncrease ? e.slope.slice(-1 * this.daysOfIncrease).reduce(reducer) <= e.slope.slice(-2 * this.daysOfIncrease, -1 * this.daysOfIncrease).reduce(reducer) : false).map((e) => e.country);
+      this.createURL();
+    },
+    
     deselectAll() {
       this.selectedCountries = [];
       this.createURL();
@@ -955,7 +969,7 @@ window.app = new Vue({
       height: NaN,
       referenceLineAngle: NaN
     },
-
+    daysOfIncrease: 4
   }
 
 });
