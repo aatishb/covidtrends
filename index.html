@@ -147,6 +147,12 @@
             <button @click="selectAll" aria-Label="Select All Regions">Select All</button>
           </div>
 
+          <select @change="sortCountries" v-model="sort" @mousedown="pause" aria-Label="Sort Countries">
+            <option v-for="s in sortOptions" v-bind:value="s">
+              {{ s }}
+            </option>
+          </select>
+
           <p style="padding-top: 1rem;">Showing {{regionType}} with at least {{minCasesInCountry}} {{selectedData}}</p>
 
           <ul>

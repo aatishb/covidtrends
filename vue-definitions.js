@@ -553,6 +553,26 @@ window.app = new Vue({
       this.createURL();
     },
 
+    sortCountries() {
+      if (this.sort == 'Alphabetic') {
+        this.visibleCountries = this.visibleCountries.sort();
+      } else if (this.sort == 'New Cases') {
+        const countriesByNewCases = this.covidData
+          .filter(c => this.visibleCountries.includes(c.country))
+          .sort((a, b) => {
+            return b.slope[b.slope.length-1] - a.slope[a.slope.length-1];
+          })
+          .map(e => e.country);
+        this.visibleCountries = countriesByNewCases;
+      } else if (this.sort == 'Confirmed Cases') {
+        const countriesByMaxCases = this.covidData
+          .filter(c => this.visibleCountries.includes(c.country))
+          .sort((a, b) => b.maxCases - a.maxCases)
+          .map(e => e.country);
+        this.visibleCountries = countriesByMaxCases;
+      }
+    },
+
     toggleHide() {
       this.isHidden = !this.isHidden;
     },
@@ -916,6 +936,10 @@ window.app = new Vue({
     scale: ['Logarithmic Scale', 'Linear Scale'],
 
     selectedScale: 'Logarithmic Scale',
+
+    sortOptions: ['Alphabetic', 'New Cases', 'Confirmed Cases'],
+
+    sort: 'Alphabetic',
 
     minCasesInCountry: 50,
 
