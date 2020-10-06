@@ -559,9 +559,7 @@ window.app = new Vue({
       } else if (this.sort == 'New Cases') {
         const countriesByNewCases = this.covidData
           .filter(c => this.visibleCountries.includes(c.country))
-          .sort((a, b) => {
-            return b.slope[b.slope.length-1] - a.slope[a.slope.length-1];
-          })
+          .sort((a, b) => b.slope[b.slope.length - 1] - a.slope[a.slope.length - 1])
           .map(e => e.country);
         this.visibleCountries = countriesByNewCases;
       } else if (this.sort == 'Confirmed Cases') {
