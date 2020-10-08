@@ -439,6 +439,8 @@ window.app = new Vue({
 
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
+      this.sortOptions = this.selectedData == 'Confirmed Cases' ? ['Alphabetic', 'New Cases', 'Confirmed Cases'] : ['Alphabetic', 'New Deaths', 'Total Deaths'];
+      this.sort = this.sortOptions[0];
       this.visibleCountries = this.countries;
       const topCountries = this.covidData.sort((a, b) => b.maxCases - a.maxCases).slice(0, 9).map(e => e.country);
       const notableCountries = ['China (Mainland)', 'India', 'US', // Top 3 by population
@@ -554,20 +556,27 @@ window.app = new Vue({
     },
 
     sortCountries() {
-      if (this.sort == 'Alphabetic') {
-        this.visibleCountries = this.visibleCountries.sort();
-      } else if (this.sort == 'New Cases') {
-        const countriesByNewCases = this.covidData
-          .filter(c => this.visibleCountries.includes(c.country))
-          .sort((a, b) => b.slope[b.slope.length - 1] - a.slope[a.slope.length - 1])
-          .map(e => e.country);
-        this.visibleCountries = countriesByNewCases;
-      } else if (this.sort == 'Confirmed Cases') {
-        const countriesByMaxCases = this.covidData
-          .filter(c => this.visibleCountries.includes(c.country))
-          .sort((a, b) => b.maxCases - a.maxCases)
-          .map(e => e.country);
-        this.visibleCountries = countriesByMaxCases;
+      switch (this.sortOptions.indexOf(this.sort)) {
+        case 0:
+          //Alphabetic
+          this.visibleCountries = this.visibleCountries.sort();
+          break;
+        case 1:
+          //New Cases / Deaths
+          const countriesByNewCases = this.covidData
+            .filter(c => this.visibleCountries.includes(c.country))
+            .sort((a, b) => b.slope[b.slope.length - 1] - a.slope[a.slope.length - 1])
+            .map(e => e.country);
+          this.visibleCountries = countriesByNewCases;
+          break;
+        case 2:
+          //Max Cases / Deaths
+          const countriesByMaxCases = this.covidData
+            .filter(c => this.visibleCountries.includes(c.country))
+            .sort((a, b) => b.maxCases - a.maxCases)
+            .map(e => e.country);
+          this.visibleCountries = countriesByMaxCases;
+        default: console.error("Sort index not found");
       }
     },
 
@@ -576,7 +585,7 @@ window.app = new Vue({
     },
     
     createURL() {
-      
+
       let queryUrl = new URLSearchParams();
 
       if (this.selectedScale == 'Linear Scale') {
