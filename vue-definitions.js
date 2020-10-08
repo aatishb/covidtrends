@@ -556,27 +556,24 @@ window.app = new Vue({
     },
 
     sortCountries() {
-      switch (this.sortOptions.indexOf(this.sort)) {
-        case 0:
-          //Alphabetic
-          this.visibleCountries = this.visibleCountries.sort();
-          break;
-        case 1:
-          //New Cases / Deaths
-          const countriesByNewCases = this.covidData
-            .filter(c => this.visibleCountries.includes(c.country))
-            .sort((a, b) => b.slope[b.slope.length - 1] - a.slope[a.slope.length - 1])
-            .map(e => e.country);
-          this.visibleCountries = countriesByNewCases;
-          break;
-        case 2:
-          //Max Cases / Deaths
-          const countriesByMaxCases = this.covidData
-            .filter(c => this.visibleCountries.includes(c.country))
-            .sort((a, b) => b.maxCases - a.maxCases)
-            .map(e => e.country);
-          this.visibleCountries = countriesByMaxCases;
-        default: console.error("Sort index not found");
+      let sortIx = this.sortOptions.indexOf(this.sort);
+      if (sortIx == 0) {
+        //Alphabetic
+        this.visibleCountries = this.visibleCountries.sort();
+      } else if (sortIx == 0) {
+        //New Cases / Deaths
+        const countriesByNewCases = this.covidData
+          .filter(c => this.visibleCountries.includes(c.country))
+          .sort((a, b) => b.slope[b.slope.length - 1] - a.slope[a.slope.length - 1])
+          .map(e => e.country);
+        this.visibleCountries = countriesByNewCases;
+      } else if (sortIx == 2) {
+        //Max Cases / Deaths
+        const countriesByMaxCases = this.covidData
+          .filter(c => this.visibleCountries.includes(c.country))
+          .sort((a, b) => b.maxCases - a.maxCases)
+          .map(e => e.country);
+        this.visibleCountries = countriesByMaxCases;
       }
     },
 
