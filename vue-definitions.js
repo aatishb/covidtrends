@@ -560,7 +560,7 @@ window.app = new Vue({
       if (sortIx == 0) {
         //Alphabetic
         this.visibleCountries = this.visibleCountries.sort();
-      } else if (sortIx == 0) {
+      } else if (sortIx == 1) {
         //New Cases / Deaths
         const countriesByNewCases = this.covidData
           .filter(c => this.visibleCountries.includes(c.country))
@@ -599,7 +599,7 @@ window.app = new Vue({
 
       // since this rename came later, use the old name for URLs to avoid breaking existing URLs
       let renames = {'China (Mainland)': 'China'};
-            
+      
       if (!this.showTrendLine) {
         queryUrl.append('trendline', this.showTrendLine);
       } 
