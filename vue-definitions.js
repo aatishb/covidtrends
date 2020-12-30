@@ -413,7 +413,7 @@ window.app = new Vue({
 
       let covidData = [];
       let totalData = {
-        country: "Total",
+        country: 'Total',
         cases: [],
         slope: [],
         maxCases: 0
@@ -444,18 +444,18 @@ window.app = new Vue({
           cases.forEach((c, ix) => {
             if (isNaN(totalData.cases[ix]) && !isNaN(c)) {
               totalData.cases[ix] = Number(c);
-            } else if (!isNaN(c)){
+            } else if (!isNaN(c)) {
               totalData.cases[ix] += Number(c);
             }
-          })
+          });
 
           slope.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN).forEach((c, ix) => {
             if (isNaN(totalData.slope[ix])) {
               totalData.slope[ix] = c;
-            } else if (!isNaN(c)){
+            } else if (!isNaN(c)) {
               totalData.slope[ix] += c;
             }
-          })
+          });
         }
       }
       totalData.maxCases = this.myMax(...totalData.cases);
