@@ -412,6 +412,13 @@ window.app = new Vue({
       };
 
       let covidData = [];
+      let totalData = {
+        country: 'Total',
+        cases: [],
+        slope: [],
+        maxCases: 0
+      };
+
       for (let row of grouped) {
 
         if (!exclusions.includes(row.region)) {
@@ -434,9 +441,26 @@ window.app = new Vue({
             maxCases: this.myMax(...cases)
           });
 
+          cases.forEach((c, ix) => {
+            if (isNaN(totalData.cases[ix]) && !isNaN(c)) {
+              totalData.cases[ix] = Number(c);
+            } else if (!isNaN(c)) {
+              totalData.cases[ix] += Number(c);
+            }
+          });
+
+          slope.map((e, i) => arr[i] >= this.minCasesInCountry ? e : NaN).forEach((c, ix) => {
+            if (isNaN(totalData.slope[ix])) {
+              totalData.slope[ix] = c;
+            } else if (!isNaN(c)) {
+              totalData.slope[ix] += c;
+            }
+          });
         }
       }
+      totalData.maxCases = this.myMax(...totalData.cases);
 
+      covidData.push(totalData);
       this.covidData = covidData.filter(e => e.maxCases > this.minCasesInCountry);
       this.countries = this.covidData.map(e => e.country).sort();
       this.visibleCountries = this.countries;
