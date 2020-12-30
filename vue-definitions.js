@@ -543,6 +543,7 @@ window.app = new Vue({
 
     search() {
       this.visibleCountries = this.countries.filter(e => e.toLowerCase().includes(this.searchField.toLowerCase()));
+      this.sortCountries();
     },
 
     selectAll() {
