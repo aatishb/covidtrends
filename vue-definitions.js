@@ -386,6 +386,10 @@ window.app = new Vue({
       let regionsToPullToCountryLevel = ['Hong Kong', 'Macau'];
 
       let grouped;
+      if (selectedRegion == 'World (All regions)') {
+        grouped = data.map(e => ({...e, region: e["Province/State"] || e["Country/Region"]}))
+      } else if (selectedRegion == 'World') {
+        grouped = this.groupByCountry(data, dates);
 
       if (selectedRegion == 'World') {
         grouped = this.groupByCountry(data, dates, regionsToPullToCountryLevel);
@@ -642,6 +646,8 @@ window.app = new Vue({
 
     regionType() {
       switch (this.selectedRegion) {
+        case 'World (All regions)':
+          return 'Countries/Regions';
         case 'World':
           return 'Countries';
         case 'Australia':
@@ -903,7 +909,7 @@ window.app = new Vue({
 
     selectedData: 'Confirmed Cases',
 
-    regions: ['World', 'US', 'China', 'Australia', 'Canada'],
+    regions: ['World', 'World (All regions)', 'US', 'China', 'Australia', 'Canada'],
 
     selectedRegion: 'World',
 
